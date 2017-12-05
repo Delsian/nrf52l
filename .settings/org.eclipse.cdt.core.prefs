@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537/NRF52_SDK/delimiter=;
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537/NRF52_SDK/operation=replace
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537/NRF52_SDK/value=${NRF52_SDK}
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537/append=true
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537/appendContributed=true
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.118716653/NRF52_SDK/delimiter=;
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.118716653/NRF52_SDK/operation=append
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.118716653/NRF52_SDK/value=${NRF52_SDK}
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.118716653/append=true
+environment/project/ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.118716653/appendContributed=true
