@@ -25,25 +25,120 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>FreeRTOS</name>
+			<type>2</type>
+			<locationURI>$%7BSDK%7D/external/freertos/source</locationURI>
+		</link>
+		<link>
+			<name>SDK</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>Toolchain</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>SDK/BSP</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>SDK/Drivers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>SDK/SoftDevice</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>Toolchain/gcc_startup_nrf52.S</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/NRF52/SDK/components/toolchain/gcc/gcc_startup_nrf52.S</locationURI>
+			<locationURI>$%7BSDK%7D/components/toolchain/gcc/gcc_startup_nrf52.S</locationURI>
 		</link>
 		<link>
 			<name>Toolchain/system_nrf52.c</name>
 			<type>1</type>
-			<locationURI>SDK/components/toolchain/system_nrf52.c</locationURI>
+			<locationURI>$%7BSDK%7D/components/toolchain/system_nrf52.c</locationURI>
+		</link>
+		<link>
+			<name>FreeRTOS/portable/port.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/GCC/nrf52/port.c</locationURI>
+		</link>
+		<link>
+			<name>FreeRTOS/portable/port_cmsis.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis.c</locationURI>
+		</link>
+		<link>
+			<name>FreeRTOS/portable/port_cmsis_systick.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BSP/boards.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/boards/boards.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BSP/bsp.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Drivers/nrf_drv_clock.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/drivers_nrf/clock/nrf_drv_clock.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Drivers/nrf_drv_common.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/drivers_nrf/common/nrf_drv_common.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/app_error.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/util/app_error.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/app_error_weak.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/util/app_error_weak.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/app_util_platform.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/util/app_util_platform.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_section_iter.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_section_vars/nrf_section_iter.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/SoftDevice/nrf_sdh.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/SoftDevice/nrf_sdh_freertos.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_freertos.c</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>file:/E:/work/NRF52/SDK</value>
+			<value>file:/D:/Eug/NRF</value>
 		</variable>
 	</variableList>
 </projectDescription>
