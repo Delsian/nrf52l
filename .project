@@ -40,6 +40,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>SDK/BSP</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -51,11 +56,6 @@
 		</link>
 		<link>
 			<name>SDK/Libraries</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>SDK/SoftDevice</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -85,6 +85,36 @@
 			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/ble_advertising.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_advertising/ble_advertising.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_db_discovery.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_db_discovery/ble_db_discovery.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_lbs_c.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_lbs_c/ble_lbs_c.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/nrf_ble_gatt.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/nrf_ble_gatt/nrf_ble_gatt.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/nrf_sdh.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/nrf_sdh_freertos.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_freertos.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BSP/boards.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/boards/boards.c</locationURI>
@@ -110,6 +140,11 @@
 			<locationURI>$%7BSDK%7D/components/drivers_nrf/systick/nrf_drv_systick.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/Log</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_error.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error.c</locationURI>
@@ -125,19 +160,64 @@
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_util_platform.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/bsp_btn_ble.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp_btn_ble.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_pwr_mgmt.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_section_iter.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/experimental_section_vars/nrf_section_iter.c</locationURI>
 		</link>
 		<link>
-			<name>SDK/SoftDevice/nrf_sdh.c</name>
+			<name>SDK/Libraries/Log/SEGGER_RTT.c</name>
 			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh.c</locationURI>
+			<locationURI>$%7BSDK%7D/external/segger_rtt/SEGGER_RTT.c</locationURI>
 		</link>
 		<link>
-			<name>SDK/SoftDevice/nrf_sdh_freertos.c</name>
+			<name>SDK/Libraries/Log/SEGGER_RTT_Syscalls_GCC.c</name>
 			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_freertos.c</locationURI>
+			<locationURI>$%7BSDK%7D/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/SEGGER_RTT_printf.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/segger_rtt/SEGGER_RTT_printf.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_backend_rtt.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_backend_rtt.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_backend_serial.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_backend_serial.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_backend_uart.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_backend_uart.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_default_backends.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_default_backends.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_frontend.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_frontend.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/Log/nrf_log_str_formatter.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_log/src/nrf_log_str_formatter.c</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

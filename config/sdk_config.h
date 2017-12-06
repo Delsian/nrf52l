@@ -3924,7 +3924,7 @@
 // <e> NRF_PWR_MGMT_ENABLED - nrf_pwr_mgmt - Power management module
 //==========================================================
 #ifndef NRF_PWR_MGMT_ENABLED
-#define NRF_PWR_MGMT_ENABLED 0
+#define NRF_PWR_MGMT_ENABLED 1
 #endif
 // <e> NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED - Enables pin debug in the module.
 
@@ -4196,7 +4196,7 @@
  
 
 #ifndef NRF_CLI_RTT_ENABLED
-#define NRF_CLI_RTT_ENABLED 0
+#define NRF_CLI_RTT_ENABLED 1
 #endif
 
 // <o> NRF_CLI_RTT_TERMINAL_ID - RTT terminal ID for CLI. 
@@ -4216,7 +4216,7 @@
 // <e> NRF_LOG_BACKEND_RTT_ENABLED - nrf_log_backend_rtt - Log RTT backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_RTT_ENABLED
-#define NRF_LOG_BACKEND_RTT_ENABLED 0
+#define NRF_LOG_BACKEND_RTT_ENABLED 1
 #endif
 // <o> NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
 // <i> Size of the buffer is a trade-off between RAM usage and processing.
@@ -8044,7 +8044,7 @@
 // <2=> BLOCK_IF_FIFO_FULL 
 
 #ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
-#define SEGGER_RTT_CONFIG_DEFAULT_MODE 0
+#define SEGGER_RTT_CONFIG_DEFAULT_MODE 1
 #endif
 
 // </h> 
@@ -8168,7 +8168,7 @@
 // <e> NRF_SDH_BLE_ENABLED - nrf_sdh_ble - SoftDevice BLE event handler
 //==========================================================
 #ifndef NRF_SDH_BLE_ENABLED
-#define NRF_SDH_BLE_ENABLED 0
+#define NRF_SDH_BLE_ENABLED 1
 #endif
 // <h> BLE Stack configuration - Stack configuration parameters
 
