@@ -76,7 +76,7 @@ static void led_toggle_task_function (void * pvParameter)
     UNUSED_PARAMETER(pvParameter);
     while (true)
     {
-        bsp_board_led_invert(LED_2);
+        bsp_board_led_invert(LED_1);
 
         /* Delay a task for a given number of ticks */
         vTaskDelay(TASK_DELAY);
@@ -97,22 +97,16 @@ static void led_toggle_timer_callback (void * pvParameter)
 
 int main(void)
 {
-    ret_code_t err_code;
-
-    /* Initialize clock driver for better time accuracy in FREERTOS */
-    err_code = nrf_drv_clock_init();
-    APP_ERROR_CHECK(err_code);
-
     /* Configure LED-pins as outputs */
     bsp_board_leds_init();
     bsp_board_leds_off();
 
     /* Create task for LED0 blinking with priority set to 2 */
-    UNUSED_VARIABLE(xTaskCreate(led_toggle_task_function, "LED2", configMINIMAL_STACK_SIZE + 200, NULL, 2, &led_toggle_task_handle));
+    UNUSED_VARIABLE(xTaskCreate(led_toggle_task_function, "LED1", configMINIMAL_STACK_SIZE + 200, NULL, 2, &led_toggle_task_handle));
 
     /* Start timer for LED1 blinking */
-    led_toggle_timer_handle = xTimerCreate( "LED1", TIMER_PERIOD, pdTRUE, NULL, led_toggle_timer_callback);
-    UNUSED_VARIABLE(xTimerStart(led_toggle_timer_handle, 0));
+    //led_toggle_timer_handle = xTimerCreate( "LED1", TIMER_PERIOD, pdTRUE, NULL, led_toggle_timer_callback);
+    //UNUSED_VARIABLE(xTimerStart(led_toggle_timer_handle, 0));
 
     /* Activate deep sleep mode */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
