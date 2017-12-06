@@ -105,6 +105,11 @@
 			<locationURI>$%7BSDK%7D/components/drivers_nrf/common/nrf_drv_common.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Drivers/nrf_drv_systick.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/drivers_nrf/systick/nrf_drv_systick.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_error.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error.c</locationURI>
@@ -138,7 +143,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>file:/D:/Eug/NRF</value>
+			<value>file:/E:/work/NRF52/SDK</value>
 		</variable>
 	</variableList>
 </projectDescription>

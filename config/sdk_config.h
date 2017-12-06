@@ -56,6 +56,9 @@
 #define BSP_BTN_BLE_ENABLED 0
 #endif
 
+#ifndef SYSTICK_ENABLED
+#define SYSTICK_ENABLED 1
+#endif
 // </h> 
 //==========================================================
 
