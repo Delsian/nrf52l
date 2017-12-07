@@ -223,6 +223,14 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
+			<value>$%7BSDK1%7D</value>
+		</variable>
+		<variable>
+			<name>SDK1</name>
+			<value>file:/D:/Eug/NRF</value>
+		</variable>
+		<variable>
+			<name>SDK2</name>
 			<value>file:/E:/work/NRF52/SDK</value>
 		</variable>
 	</variableList>
