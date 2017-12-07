@@ -55,6 +55,7 @@
 									<listOptionValue builtIn="false" value="S132"/>
 									<listOptionValue builtIn="false" value="BLE_STACK_SUPPORT_REQD"/>
 									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=5"/>
+									<listOptionValue builtIn="false" value="NRF_LOG_USES_RTT=1"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.1465730393" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
@@ -90,6 +91,11 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -103,6 +109,7 @@
 									<listOptionValue builtIn="false" value="S132"/>
 									<listOptionValue builtIn="false" value="BLE_STACK_SUPPORT_REQD"/>
 									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=4"/>
+									<listOptionValue builtIn="false" value="NRF_LOG_USES_RTT=1"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.653441933" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -138,13 +145,19 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
 								</option>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.1252137993" name="Cross ARM GNU C++ Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker.1345546899" name="Cross ARM GNU C Linker" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections.1096850746" name="Remove unused sections (-Xlinker --gc-sections)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other.766619778" name="Other linker flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other" useByScannerDiscovery="false" value="--specs=rdimon.specs -Wl,--start-group -lgcc -lc -lc -lm -lrdimon -Wl,--end-group" valueType="string"/>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other.766619778" name="Other linker flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other" useByScannerDiscovery="false" value="--specs=rdimon.specs -Wl,--start-group -lgcc -lm -lrdimon -Wl,--end-group" valueType="string"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.scriptfile.954998544" name="Script files (-T)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.scriptfile" useByScannerDiscovery="false" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/FreeRTOS_gcc_nrf52.ld}&quot;"/>
 								</option>
@@ -171,15 +184,10 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.44748637" name="nrf_log_backend_rtt.c" rcbsApplicability="disable" resourcePath="SDK/Libraries/Log/nrf_log_backend_rtt.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1039632040">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1039632040" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1317106006" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -266,6 +274,7 @@
 									<listOptionValue builtIn="false" value="S132"/>
 									<listOptionValue builtIn="false" value="BLE_STACK_SUPPORT_REQD"/>
 									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=4"/>
+									<listOptionValue builtIn="false" value="NRF_LOG_USES_RTT=1"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.328872940" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -301,6 +310,11 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.417154629" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -315,6 +329,7 @@
 									<listOptionValue builtIn="false" value="S132"/>
 									<listOptionValue builtIn="false" value="BLE_STACK_SUPPORT_REQD"/>
 									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=4"/>
+									<listOptionValue builtIn="false" value="NRF_LOG_USES_RTT=1"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.1173983047" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -350,6 +365,11 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2031137071" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
@@ -381,7 +401,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

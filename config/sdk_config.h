@@ -56,6 +56,9 @@
 #define BSP_BTN_BLE_ENABLED 0
 #endif
 
+#ifndef RETARGET_ENABLED
+#define RETARGET_ENABLED 0
+#endif
 #ifndef SYSTICK_ENABLED
 #define SYSTICK_ENABLED 1
 #endif
@@ -3748,7 +3751,7 @@
 // <e> NRF_BALLOC_ENABLED - nrf_balloc - Block allocator module
 //==========================================================
 #ifndef NRF_BALLOC_ENABLED
-#define NRF_BALLOC_ENABLED 0
+#define NRF_BALLOC_ENABLED 1
 #endif
 // <e> NRF_BALLOC_CONFIG_DEBUG_ENABLED - Enables debug mode in the module.
 //==========================================================
@@ -3872,7 +3875,7 @@
  
 
 #ifndef NRF_FPRINTF_ENABLED
-#define NRF_FPRINTF_ENABLED 0
+#define NRF_FPRINTF_ENABLED 1
 #endif
 
 // <e> NRF_FSTORAGE_ENABLED - nrf_fstorage - Flash abstraction library
@@ -4123,7 +4126,7 @@
  
 
 #ifndef NRF_CLI_ENABLED
-#define NRF_CLI_ENABLED 0
+#define NRF_CLI_ENABLED 1
 #endif
 
 // <o> NRF_CLI_ARGC_MAX - Maximum number of parameters passed to command handler. 
@@ -4131,6 +4134,9 @@
 #define NRF_CLI_ARGC_MAX 12
 #endif
 
+#ifndef NRF_CLI_ECHO_STATUS
+#define NRF_CLI_ECHO_STATUS 1
+#endif
 // <q> NRF_CLI_BUILD_IN_CMDS_ENABLED  - CLI build in commands.
  
 
@@ -4281,7 +4287,7 @@
 // <e> NRF_LOG_ENABLED - Logging module for nRF5 SDK
 //==========================================================
 #ifndef NRF_LOG_ENABLED
-#define NRF_LOG_ENABLED 0
+#define NRF_LOG_ENABLED 1
 #endif
 // <e> NRF_LOG_USES_COLORS - If enabled then ANSI escape code for colors is prefixed to every string
 //==========================================================
@@ -4347,7 +4353,7 @@
 // <4=> Debug 
 
 #ifndef NRF_LOG_DEFAULT_LEVEL
-#define NRF_LOG_DEFAULT_LEVEL 3
+#define NRF_LOG_DEFAULT_LEVEL 4
 #endif
 
 // <q> NRF_LOG_DEFERRED  - Enable deffered logger.
@@ -8044,7 +8050,7 @@
 // <2=> BLOCK_IF_FIFO_FULL 
 
 #ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
-#define SEGGER_RTT_CONFIG_DEFAULT_MODE 1
+#define SEGGER_RTT_CONFIG_DEFAULT_MODE 0
 #endif
 
 // </h> 

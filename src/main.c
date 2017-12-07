@@ -22,6 +22,7 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
+#include "SEGGER_RTT.h"
 
 
 /**@brief Function for initializing the log.
@@ -53,9 +54,9 @@ int main(void)
 
     NRF_LOG_INFO("Blinky example started.");
 
-    while (true)
+    while (1)
     {
-
+    	printf(".");
     }
 }
 

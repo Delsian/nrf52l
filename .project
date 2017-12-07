@@ -155,6 +155,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error_weak.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/app_uart.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/uart/app_uart.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_util_platform.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_util_platform.c</locationURI>
@@ -165,14 +170,54 @@
 			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp_btn_ble.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/nrf_balloc.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/balloc/nrf_balloc.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_cli.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/cli/nrf_cli.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_cli_rtt.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/cli/rtt/nrf_cli_rtt.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_fprintf.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/fprintf/nrf_fprintf.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_fprintf_format.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/fprintf/nrf_fprintf_format.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_memobj.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_memobj/nrf_memobj.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_pwr_mgmt.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/nrf_queue.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/queue/nrf_queue.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_section_iter.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/experimental_section_vars/nrf_section_iter.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/retarget.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/uart/retarget.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/Log/SEGGER_RTT.c</name>
@@ -223,7 +268,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK1%7D</value>
+			<value>$%7BSDK2%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
