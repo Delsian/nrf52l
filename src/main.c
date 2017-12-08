@@ -43,8 +43,8 @@ static void hw_init(void)
     bsp_board_leds_off();
 
     /* initializing the Power manager. */
-    err_code = nrf_pwr_mgmt_init();
-    APP_ERROR_CHECK(err_code);
+    //err_code = nrf_pwr_mgmt_init();
+    //APP_ERROR_CHECK(err_code);
 }
 
 int main(void)
@@ -56,7 +56,7 @@ int main(void)
 
     while (1)
     {
-    	printf(".");
+    	SEGGER_RTT_WriteString(0, "1\r\n");
     }
 }
 
