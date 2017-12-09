@@ -2,61 +2,46 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "nrf_sdh.h"
-#include "nrf_sdh_ble.h"
-#include "nrf_sdh_soc.h"
+#include "bluetooth.h"
+
 #include "nrf_pwr_mgmt.h"
 #include "app_timer.h"
 #include "boards.h"
 #include "bsp.h"
-#include "bsp_btn_ble.h"
-#include "ble.h"
-#include "ble_hci.h"
-#include "ble_advdata.h"
-#include "ble_advertising.h"
-#include "ble_conn_params.h"
-#include "ble_db_discovery.h"
-#include "ble_lbs_c.h"
-#include "nrf_ble_gatt.h"
 
-#include "nrf_log.h"
-#include "nrf_log_ctrl.h"
-#include "nrf_log_default_backends.h"
-#include "SEGGER_RTT.h"
-
-
-/**@brief Function for initializing the log.
- */
-static void log_init(void)
-{
-    ret_code_t err_code = NRF_LOG_INIT(NULL);
-    APP_ERROR_CHECK(err_code);
-
-    NRF_LOG_DEFAULT_BACKENDS_INIT();
-}
+void swo_init(void);
 
 static void hw_init(void)
 {
 	ret_code_t err_code;
 
+	swo_init(); // logging
+
     bsp_board_leds_init();
     bsp_board_leds_off();
 
     /* initializing the Power manager. */
-    //err_code = nrf_pwr_mgmt_init();
-    //APP_ERROR_CHECK(err_code);
+    err_code = nrf_pwr_mgmt_init();
+    APP_ERROR_CHECK(err_code);
+    // Initialize timer module, making it use the scheduler
+    err_code = app_timer_init();
+    APP_ERROR_CHECK(err_code);
 }
 
 int main(void)
 {
-	log_init();
+	ret_code_t err_code;
+
     hw_init();
+    printf("Blinky");
+    if ((err_code = ble_init()) == NRF_SUCCESS) {
+    	printf("Blinky example started.");
 
-    NRF_LOG_INFO("Blinky example started.");
+		while (1) {
 
-    while (1)
-    {
-    	SEGGER_RTT_WriteString(0, "1\r\n");
+		}
+    } else {
+    	printf("Ble error 0x%x", err_code);
     }
 }
 

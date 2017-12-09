@@ -110,6 +110,11 @@
 			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/nrf_sdh_ble.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_ble.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/nrf_sdh_freertos.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_freertos.c</locationURI>
@@ -153,6 +158,11 @@
 			<name>SDK/Libraries/app_error_weak.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error_weak.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/app_timer.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/timer/app_timer.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/app_uart.c</name>
@@ -215,6 +225,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/experimental_section_vars/nrf_section_iter.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/nrf_strerror.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/strerror/nrf_strerror.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/retarget.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/uart/retarget.c</locationURI>
@@ -268,7 +283,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK1%7D</value>
+			<value>$%7BSDK2%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
