@@ -39,6 +39,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
   $(SDK_ROOT)/components/drivers_nrf/gpiote/nrf_drv_gpiote.c \
   $(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
+  $(SDK_ROOT)/components/ble/nrf_ble_gatt/nrf_ble_gatt.c \
   $(SDK_ROOT)/components/ble/common/ble_advdata.c \
   $(SDK_ROOT)/components/ble/common/ble_conn_params.c \
   $(SDK_ROOT)/components/ble/common/ble_conn_state.c \
@@ -76,9 +77,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/experimental_memobj \
   $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/ble/ble_advertising \
-  $(SDK_ROOT)/components/ble\ble_db_discovery \
-  $(SDK_ROOT)/components/ble/ble_services/ble_bas_c \
-  $(SDK_ROOT)/components/ble/ble_services/ble_hrs_c \
+  $(SDK_ROOT)/components/ble/ble_db_discovery \
   $(SDK_ROOT)/components/libraries/queue \
   $(SDK_ROOT)/components/libraries/pwr_mgmt \
   $(SDK_ROOT)/components/ble/ble_dtm \
@@ -110,8 +109,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components \
   $(SDK_ROOT)/components/libraries/scheduler \
   $(SDK_ROOT)/components/libraries/cli \
-  $(SDK_ROOT)/components/ble/ble_services/ble_lbs \
-  $(SDK_ROOT)/components/ble/ble_services/ble_hts \
   $(SDK_ROOT)/components/drivers_nrf/delay \
   $(SDK_ROOT)/components/libraries/crc16 \
   $(SDK_ROOT)/components/drivers_nrf/timer \
@@ -123,12 +120,9 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/balloc \
   $(SDK_ROOT)/components/libraries/low_power_pwm \
   $(SDK_ROOT)/components/libraries/hardfault \
-  $(SDK_ROOT)/components/ble/ble_services/ble_cscs \
   $(SDK_ROOT)/components/libraries/uart \
   $(SDK_ROOT)/components/libraries/hci \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/kbd \
-  $(SDK_ROOT)/components/drivers_nrf/spi_slave \
-  $(SDK_ROOT)/components/drivers_nrf/lpcomp \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/drivers_nrf/rng \
   $(SDK_ROOT)/components/drivers_nrf/power \
@@ -138,13 +132,17 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/qdec \
   $(SDK_ROOT)/components/ble/ble_services/ble_cts_c \
   $(SDK_ROOT)/components/drivers_nrf/spi_master \
-  $(SDK_ROOT)/components/ble/ble_services/ble_nus \
   $(SDK_ROOT)/components/libraries/twi_mngr \
-  $(SDK_ROOT)/components/ble/ble_services/ble_hids \
   $(SDK_ROOT)/components/libraries/strerror \
-  $(SDK_ROOT)/components/drivers_nrf/pdm \
   $(SDK_ROOT)/components/libraries/crc32 \
+  $(SDK_ROOT)/components/libraries/fds \
+  $(SDK_ROOT)/components/libraries/twi \
   $(SDK_ROOT)/components/libraries/usbd/class/audio \
+  $(SDK_ROOT)/components/drivers_nrf/pdm \
+  $(SDK_ROOT)/components/drivers_nrf/usbd \
+  $(SDK_ROOT)/components/drivers_nrf/clock \
+  $(SDK_ROOT)/components/drivers_nrf/spi_slave \
+  $(SDK_ROOT)/components/drivers_nrf/lpcomp \
   $(SDK_ROOT)/components/ble/peer_manager \
   $(SDK_ROOT)/components/drivers_nrf/swi \
   $(SDK_ROOT)/components/ble/ble_services/ble_tps \
@@ -156,15 +154,18 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/usbd \
   $(SDK_ROOT)/components/drivers_nrf/saadc \
   $(SDK_ROOT)/components/libraries/atomic_fifo \
-  $(SDK_ROOT)/components/ble/ble_services/ble_lbs_c \
   $(SDK_ROOT)/components/ble/ble_racp \
   $(SDK_ROOT)/components/toolchain/gcc \
-  $(SDK_ROOT)/components/libraries/fds \
-  $(SDK_ROOT)/components/libraries/twi \
-  $(SDK_ROOT)/components/drivers_nrf/clock \
+  $(SDK_ROOT)/components/ble/ble_services/ble_bas_c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_hrs_c \
   $(SDK_ROOT)/components/ble/ble_services/ble_rscs \
-  $(SDK_ROOT)/components/drivers_nrf/usbd \
+  $(SDK_ROOT)/components/ble/ble_services/ble_cscs \
+  $(SDK_ROOT)/components/ble/ble_services/ble_hids \
   $(SDK_ROOT)/components/ble/ble_services/ble_hrs \
+  $(SDK_ROOT)/components/ble/ble_services/ble_lbs_c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_lbs \
+  $(SDK_ROOT)/components/ble/ble_services/ble_hts \
+  $(SDK_ROOT)/components/ble/ble_services/ble_nus \
 
 # Libraries common to all targets
 LIB_FILES += \

@@ -142,13 +142,89 @@
 
 
 //========== BT
+// <q> NRF_BLE_GATT_ENABLED  - nrf_ble_gatt - GATT module
 
+
+#ifndef NRF_BLE_GATT_ENABLED
+#define NRF_BLE_GATT_ENABLED 1
+#endif
+
+// <e> NRF_BLE_CONN_PARAMS_ENABLED - ble_conn_params - Initiating and executing a connection parameters negotiation procedure
+//==========================================================
+#ifndef NRF_BLE_CONN_PARAMS_ENABLED
+#define NRF_BLE_CONN_PARAMS_ENABLED 1
+#endif
+// <o> NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION - The largest acceptable deviation in slave latency.
+// <i> The largest deviation (+ or -) from the requested slave latency that will not be renegotiated.
+
+#ifndef NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION
+#define NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION 499
+#endif
+
+// <o> NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION - The largest acceptable deviation (in 10 ms units) in supervision timeout.
+// <i> The largest deviation (+ or -, in 10 ms units) from the requested supervision timeout that will not be renegotiated.
+
+#ifndef NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION
+#define NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION 65535
+#endif
+
+// </e>
 
 // <e> NRF_SDH_BLE_ENABLED - nrf_sdh_ble - SoftDevice BLE event handler
 //==========================================================
 #ifndef NRF_SDH_BLE_ENABLED
 #define NRF_SDH_BLE_ENABLED 1
 #endif
+
+// <h> BLE Stack configuration - Stack configuration parameters
+
+// <i> These values are not used directly by the SoftDevice handler but the application or other libraries might depend on them.
+// <i> Keep them up-to-date with the desired configuration.
+//==========================================================
+// <o> NRF_SDH_BLE_PERIPHERAL_LINK_COUNT - Maximum number of peripheral links.
+#ifndef NRF_SDH_BLE_PERIPHERAL_LINK_COUNT
+#define NRF_SDH_BLE_PERIPHERAL_LINK_COUNT 2
+#endif
+
+// <o> NRF_SDH_BLE_CENTRAL_LINK_COUNT - Maximum number of central links.
+#ifndef NRF_SDH_BLE_CENTRAL_LINK_COUNT
+#define NRF_SDH_BLE_CENTRAL_LINK_COUNT 1
+#endif
+
+// <o> NRF_SDH_BLE_TOTAL_LINK_COUNT - Maximum number of total concurrent connections using the default configuration.
+#ifndef NRF_SDH_BLE_TOTAL_LINK_COUNT
+#define NRF_SDH_BLE_TOTAL_LINK_COUNT 1
+#endif
+
+// <o> NRF_SDH_BLE_GAP_EVENT_LENGTH - The time set aside for this connection on every connection interval in 1.25 ms units.
+#ifndef NRF_SDH_BLE_GAP_EVENT_LENGTH
+#define NRF_SDH_BLE_GAP_EVENT_LENGTH 3
+#endif
+
+// <o> NRF_SDH_BLE_GATT_MAX_MTU_SIZE - Static maximum MTU size.
+#ifndef NRF_SDH_BLE_GATT_MAX_MTU_SIZE
+#define NRF_SDH_BLE_GATT_MAX_MTU_SIZE 23
+#endif
+
+// <o> NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE - Attribute Table size in bytes. The size must be a multiple of 4.
+#ifndef NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE
+#define NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE 1408
+#endif
+
+// <o> NRF_SDH_BLE_VS_UUID_COUNT - The number of vendor-specific UUIDs.
+#ifndef NRF_SDH_BLE_VS_UUID_COUNT
+#define NRF_SDH_BLE_VS_UUID_COUNT 1
+#endif
+
+// <q> NRF_SDH_BLE_SERVICE_CHANGED  - Include the Service Changed characteristic in the Attribute Table.
+
+
+#ifndef NRF_SDH_BLE_SERVICE_CHANGED
+#define NRF_SDH_BLE_SERVICE_CHANGED 0
+#endif
+
+// </h>
+//==========================================================
 // <h> BLE Stack configuration - Stack configuration parameters
 
 // <i> These values are not used directly by the SoftDevice handler but the application or other libraries might depend on them.
@@ -972,5 +1048,19 @@
 
 // </h>
 //==========================================================
+
+// <q> BLE_LBS_C_ENABLED  - ble_lbs_c - Nordic LED Button Service Client
+
+
+#ifndef BLE_LBS_C_ENABLED
+#define BLE_LBS_C_ENABLED 1
+#endif
+
+// <q> BLE_LBS_ENABLED  - ble_lbs - LED Button Service
+
+
+#ifndef BLE_LBS_ENABLED
+#define BLE_LBS_ENABLED 1
+#endif
 
 #endif // SDK_CONFIG_H

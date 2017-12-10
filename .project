@@ -90,9 +90,19 @@
 			<locationURI>$%7BSDK%7D/components/ble/ble_advertising/ble_advertising.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/ble_conn_params.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/common/ble_conn_params.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/ble_db_discovery.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/ble_db_discovery/ble_db_discovery.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_lbs.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_lbs/ble_lbs.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/BLE/ble_lbs_c.c</name>

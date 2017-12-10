@@ -8,6 +8,7 @@
 #include "app_timer.h"
 #include "boards.h"
 #include "bsp.h"
+#include "nrf_soc.h"
 
 void swo_init(void);
 
@@ -39,7 +40,8 @@ int main(void)
     	printf("Starting...\r\n");
 
 		while (1) {
-
+			err_code = sd_app_evt_wait();
+			APP_ERROR_CHECK(err_code);
 		}
     } else {
     	printf("Ble error 0x%lx", err_code);

@@ -100,6 +100,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -156,6 +157,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -190,6 +192,11 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.1054981508" name="ble_lbs.c" rcbsApplicability="disable" resourcePath="SDK/BLE/ble_lbs.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.651263543">
+						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.651263543" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
+							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1609884020" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
 						<entry excluding="Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
@@ -323,6 +330,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.417154629" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -380,6 +388,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2031137071" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
