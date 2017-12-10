@@ -19,18 +19,26 @@ void swo_init()
 
 int __putchar(int ch, FILE * p_file)
 {
-    ITM_SendChar(ch);
+    ITM_SendChar((uint8_t)ch);
     return ch;
 }
 
 int _write(int file, const char * p_char, int len)
 {
     int i;
-
     for (i = 0; i < len; i++)
-    {
     	ITM_SendChar(*p_char++);
-    }
-
     return len;
+}
+
+int _write_r(struct _reent *r, int file, char *ptr, int len) {
+    for (int i = 0; i < len; i++)
+        ITM_SendChar(ptr[i]);
+    return len;
+}
+
+int fputc(int ch, FILE * p_file)
+{
+	ITM_SendChar((uint8_t)ch);
+    return ch;
 }

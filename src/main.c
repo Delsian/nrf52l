@@ -36,7 +36,7 @@ int main(void)
     printf("Blinky");
 
     if ((err_code = ble_init()) == NRF_SUCCESS) {
-    	printf("Blinky example started.");
+    	printf("Starting...\r\n");
 
 		while (1) {
 
