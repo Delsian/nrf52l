@@ -21,8 +21,8 @@ static void hw_init(void)
     bsp_board_leds_off();
 
     /* initializing the Power manager. */
-    err_code = nrf_pwr_mgmt_init();
-    APP_ERROR_CHECK(err_code);
+    //err_code = nrf_pwr_mgmt_init();
+    //APP_ERROR_CHECK(err_code);
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
@@ -34,6 +34,7 @@ int main(void)
 
     hw_init();
     printf("Blinky");
+
     if ((err_code = ble_init()) == NRF_SUCCESS) {
     	printf("Blinky example started.");
 
@@ -41,7 +42,7 @@ int main(void)
 
 		}
     } else {
-    	printf("Ble error 0x%x", err_code);
+    	printf("Ble error 0x%lx", err_code);
     }
 }
 

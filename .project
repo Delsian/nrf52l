@@ -230,11 +230,6 @@
 			<locationURI>$%7BSDK%7D/components/libraries/strerror/nrf_strerror.c</locationURI>
 		</link>
 		<link>
-			<name>SDK/Libraries/retarget.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/libraries/uart/retarget.c</locationURI>
-		</link>
-		<link>
 			<name>SDK/Libraries/Log/SEGGER_RTT.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/external/segger_rtt/SEGGER_RTT.c</locationURI>

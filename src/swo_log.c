@@ -22,3 +22,15 @@ int __putchar(int ch, FILE * p_file)
     ITM_SendChar(ch);
     return ch;
 }
+
+int _write(int file, const char * p_char, int len)
+{
+    int i;
+
+    for (i = 0; i < len; i++)
+    {
+    	ITM_SendChar(*p_char++);
+    }
+
+    return len;
+}
