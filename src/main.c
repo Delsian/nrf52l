@@ -4,6 +4,11 @@
 #include <string.h>
 #include "bluetooth.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
+#include "semphr.h"
+
 #include "nrf_pwr_mgmt.h"
 #include "app_timer.h"
 #include "boards.h"
@@ -11,6 +16,9 @@
 #include "nrf_soc.h"
 
 void swo_init(void);
+
+static SemaphoreHandle_t m_ble_event_ready;  /**< Semaphore raised if there is a new event to be processed in the BLE thread. */
+static TaskHandle_t  m_ble_stack_thread;     /**< Definition of BLE stack thread. */
 
 static void hw_init(void)
 {
@@ -31,21 +39,22 @@ static void hw_init(void)
 
 int main(void)
 {
-	ret_code_t err_code;
-
     hw_init();
     printf("Blinky");
 
-    if ((err_code = ble_init()) == NRF_SUCCESS) {
-    	printf("Starting...\r\n");
-
-		while (1) {
-			err_code = sd_app_evt_wait();
-			APP_ERROR_CHECK(err_code);
-		}
-    } else {
-    	printf("Ble error 0x%lx", err_code);
+    m_ble_event_ready = xSemaphoreCreateBinary();
+    if(NULL == m_ble_event_ready)
+    {
+        APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
     }
+
+    if(pdPASS != xTaskCreate(ble_stack_thread, "BLE", 256, NULL, 1, &m_ble_stack_thread))
+    {
+        APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
+    }
+
+    // Start FreeRTOS scheduler.
+    vTaskStartScheduler();
 }
 
 void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)

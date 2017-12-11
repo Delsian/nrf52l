@@ -6,6 +6,7 @@
  */
 
 #include "bluetooth.h"
+#include "ble_bas.h"
 #include "app_timer.h"
 
 #include "nrf_sdh.h"
@@ -23,9 +24,34 @@
 #define LEDBUTTON_LED 1
 #define CONNECTED_LED 2
 
-BLE_LBS_DEF(m_lbs);                                                             /**< LED Button Service instance. */
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
+
+// Used UUIDs
+BLE_LBS_DEF(m_lbs);                                                             /**< LED Button Service instance. */
+BLE_BAS_DEF(m_bas);
+//====
+
+/**@brief Function for performing battery measurement and updating the Battery Level characteristic
+ *        in Battery Service.
+ */
+static void battery_level_update(void)
+{
+    ret_code_t err_code;
+    uint8_t  battery_level;
+
+    battery_level = 50;
+
+    err_code = ble_bas_battery_level_update(&m_bas, battery_level);
+    if ((err_code != NRF_SUCCESS) &&
+        (err_code != NRF_ERROR_INVALID_STATE) &&
+        (err_code != NRF_ERROR_RESOURCES) &&
+        (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
+       )
+    {
+        APP_ERROR_HANDLER(err_code);
+    }
+}
 
 /**@brief Function for initializing the Advertising functionality.
  *
@@ -38,7 +64,11 @@ static void advertising_init(void)
     ble_advdata_t advdata;
     ble_advdata_t srdata;
 
-    ble_uuid_t adv_uuids[] = {{LBS_UUID_SERVICE, m_lbs.uuid_type}};
+    ble_uuid_t adv_uuids[] = {
+    		{LBS_UUID_SERVICE, m_lbs.uuid_type},
+		    {BLE_UUID_BATTERY_SERVICE,              BLE_UUID_TYPE_BLE},
+//		    {BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
+    };
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -226,10 +256,29 @@ static void services_init(void)
 {
     ret_code_t     err_code;
     ble_lbs_init_t init;
+    ble_bas_init_t bas_init;
 
     init.led_write_handler = led_write_handler;
 
     err_code = ble_lbs_init(&m_lbs, &init);
+    APP_ERROR_CHECK(err_code);
+
+    // Initialize Battery Service.
+    memset(&bas_init, 0, sizeof(bas_init));
+
+    // Here the sec level for the Battery Service can be changed/increased.
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&bas_init.battery_level_char_attr_md.write_perm);
+
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_report_read_perm);
+
+    bas_init.evt_handler          = NULL;
+    bas_init.support_notification = true;
+    bas_init.p_report_ref         = NULL;
+    bas_init.initial_batt_level   = 100;
+
+    err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
 }
 
@@ -242,29 +291,10 @@ static void conn_params_error_handler(uint32_t nrf_error)
     APP_ERROR_HANDLER(nrf_error);
 }
 
-static void conn_params_init(void)
-{
-    ret_code_t             err_code;
-    ble_conn_params_init_t cp_init;
-
-    memset(&cp_init, 0, sizeof(cp_init));
-
-    cp_init.p_conn_params                  = NULL;
-    cp_init.first_conn_params_update_delay = APP_TIMER_TICKS(20000); // 15s
-    cp_init.next_conn_params_update_delay  = APP_TIMER_TICKS(5000); // 5s
-    cp_init.max_conn_params_update_count   = 3;
-    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
-    cp_init.disconnect_on_fail             = true;
-    cp_init.evt_handler                    = on_conn_params_evt;
-    cp_init.error_handler                  = conn_params_error_handler;
-
-    err_code = ble_conn_params_init(&cp_init);
-    APP_ERROR_CHECK(err_code);
-}
-
-ret_code_t ble_init()
+void ble_stack_thread(void * arg)
 {
     ret_code_t err_code;
+    ble_conn_params_init_t cp_init;
 
     err_code = nrf_sdh_enable_request();
     APP_ERROR_CHECK(err_code);
@@ -289,8 +319,26 @@ ret_code_t ble_init()
 
     services_init();
     advertising_init();
-    conn_params_init();
+
+    // Conn params
+    memset(&cp_init, 0, sizeof(cp_init));
+    cp_init.p_conn_params                  = NULL;
+    cp_init.first_conn_params_update_delay = APP_TIMER_TICKS(20000); // 15s
+    cp_init.next_conn_params_update_delay  = APP_TIMER_TICKS(5000); // 5s
+    cp_init.max_conn_params_update_count   = 3;
+    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
+    cp_init.disconnect_on_fail             = true;
+    cp_init.evt_handler                    = on_conn_params_evt;
+    cp_init.error_handler                  = conn_params_error_handler;
+    err_code = ble_conn_params_init(&cp_init);
+    APP_ERROR_CHECK(err_code);
+
     advertising_start();
 
-    return err_code;
+    battery_level_update();
+
+    while (1)
+    {
+    	(void)sd_app_evt_wait();
+    }
 }

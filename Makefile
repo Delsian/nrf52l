@@ -48,9 +48,18 @@ SRC_FILES += \
   $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf52.S \
   $(SDK_ROOT)/components/toolchain/system_nrf52.c \
   $(SDK_ROOT)/components/ble/ble_services/ble_lbs/ble_lbs.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_bas/ble_bas.c \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh.c \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh_ble.c \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
+  $(SDK_ROOT)/external/freertos/source/croutine.c \
+  $(SDK_ROOT)/external/freertos/source/list.c \
+  $(SDK_ROOT)/external/freertos/source/queue.c \
+  $(SDK_ROOT)/external/freertos/source/tasks.c \
+  $(SDK_ROOT)/external/freertos/source/timers.c \
+  $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_4.c \
+  $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c \
+  $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -166,6 +175,9 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/ble/ble_services/ble_lbs \
   $(SDK_ROOT)/components/ble/ble_services/ble_hts \
   $(SDK_ROOT)/components/ble/ble_services/ble_nus \
+  $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52 \
+  $(SDK_ROOT)/external/freertos/portable/GCC/nrf52 \
+  $(SDK_ROOT)/external/freertos/source/include \
 
 # Libraries common to all targets
 LIB_FILES += \

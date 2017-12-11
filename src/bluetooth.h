@@ -25,6 +25,6 @@
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2    /**< Reply when unsupported features are requested. */
 
-ret_code_t ble_init(void);
+void ble_stack_thread(void * arg);
 
 #endif /* BLUETOOTH_H_ */

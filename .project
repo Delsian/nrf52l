@@ -90,6 +90,11 @@
 			<locationURI>$%7BSDK%7D/components/ble/ble_advertising/ble_advertising.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/ble_bas.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_bas/ble_bas.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/ble_conn_params.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/common/ble_conn_params.c</locationURI>
@@ -288,7 +293,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK2%7D</value>
+			<value>$%7BSDK1%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
