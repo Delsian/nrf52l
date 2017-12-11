@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "bluetooth.h"
+#include "control.h"
+#include "leds.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -12,7 +14,6 @@
 #include "nrf_pwr_mgmt.h"
 #include "app_timer.h"
 #include "boards.h"
-#include "bsp.h"
 #include "nrf_soc.h"
 
 void swo_init(void);
@@ -26,12 +27,9 @@ static void hw_init(void)
 
 	swo_init(); // logging
 
-    bsp_board_leds_init();
-    bsp_board_leds_off();
-
     /* initializing the Power manager. */
-    //err_code = nrf_pwr_mgmt_init();
-    //APP_ERROR_CHECK(err_code);
+    err_code = nrf_pwr_mgmt_init();
+    APP_ERROR_CHECK(err_code);
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
@@ -41,6 +39,8 @@ int main(void)
 {
     hw_init();
     printf("Blinky");
+    control_init();
+    leds_init();
 
     m_ble_event_ready = xSemaphoreCreateBinary();
     if(NULL == m_ble_event_ready)

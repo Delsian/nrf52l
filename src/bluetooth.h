@@ -19,10 +19,6 @@
 #include "nrf_ble_gatt.h"
 #include "ble_hci.h"
 
-//-- remove
-#include "bsp.h"
-//--
-
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2    /**< Reply when unsupported features are requested. */
 
 void ble_stack_thread(void * arg);

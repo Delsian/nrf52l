@@ -12,6 +12,8 @@ SRC_FILES += \
   $(PROJ_DIR)/src/main.c \
   $(PROJ_DIR)/src/bluetooth.c \
   $(PROJ_DIR)/src/swo_log.c \
+  $(PROJ_DIR)/src/control.c \
+  $(PROJ_DIR)/src/leds.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_rtt.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_serial.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_uart.c \
@@ -21,7 +23,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
   $(SDK_ROOT)/components/libraries/scheduler/app_scheduler.c \
-  $(SDK_ROOT)/components/libraries/timer/app_timer.c \
+  $(SDK_ROOT)/components/libraries/timer/app_timer_freertos.c \
   $(SDK_ROOT)/components/libraries/util/app_util_platform.c \
   $(SDK_ROOT)/components/libraries/hardfault/hardfault_implementation.c \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
@@ -60,6 +62,7 @@ SRC_FILES += \
   $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_4.c \
   $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c \
+  $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \

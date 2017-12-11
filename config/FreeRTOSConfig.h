@@ -115,7 +115,7 @@
 #define configENABLE_BACKWARD_COMPATIBILITY                                       1
 
 /* Hook function related definitions. */
-#define configUSE_IDLE_HOOK                                                       0
+#define configUSE_IDLE_HOOK 0
 #define configUSE_TICK_HOOK                                                       0
 #define configCHECK_FOR_STACK_OVERFLOW                                            0
 #define configUSE_MALLOC_FAILED_HOOK                                              0
@@ -153,7 +153,7 @@
 #define INCLUDE_vTaskPrioritySet                                                  1
 #define INCLUDE_uxTaskPriorityGet                                                 1
 #define INCLUDE_vTaskDelete                                                       1
-#define INCLUDE_vTaskSuspend                                                      1
+#define INCLUDE_vTaskSuspend 1
 #define INCLUDE_xResumeFromISR                                                    1
 #define INCLUDE_vTaskDelayUntil                                                   1
 #define INCLUDE_vTaskDelay                                                        1
@@ -175,7 +175,7 @@ function. */
 routine that makes calls to interrupt safe FreeRTOS API functions.  DO NOT CALL
 INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
 PRIORITY THAN THIS! (higher priorities are lower numeric values. */
-#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY    _PRIO_APP_HIGH
+#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY 1
 
 
 /* Interrupt priorities used by the kernel port layer itself.  These are generic

@@ -8,6 +8,7 @@
 #include "bluetooth.h"
 #include "ble_bas.h"
 #include "app_timer.h"
+#include "control.h"
 
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
@@ -19,10 +20,6 @@
 #define APP_ADV_INTERVAL                64                                      /**< The advertising interval (in units of 0.625 ms; this value corresponds to 40 ms). */
 
 #define DEVICE_NAME                     "Test_Blinky"                         /**< Name of device. Will be included in the advertising data. */
-
-#define ADVERTISING_LED 0
-#define LEDBUTTON_LED 1
-#define CONNECTED_LED 2
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -104,7 +101,7 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
-    bsp_board_led_on(ADVERTISING_LED);
+    control_post_event(BT_ADV_ON);
 }
 
 static void gap_params_init(void)
@@ -140,15 +137,15 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_CONNECTED:
             printf("Connected");
             // call on connect
-            bsp_board_led_on(CONNECTED_LED);
-            bsp_board_led_off(ADVERTISING_LED);
+            control_post_event(BT_CONNECT);
+            control_post_event(BT_ADV_OFF);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             printf("Disconnected");
             // call on disconnect
-            bsp_board_led_off(CONNECTED_LED);
+            control_post_event(BT_DISCONNECT);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             advertising_start();
             break;
@@ -242,12 +239,12 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
 {
     if (led_state)
     {
-        bsp_board_led_on(LEDBUTTON_LED);
+        //bsp_board_led_on(LEDBUTTON_LED);
         printf("Received LED ON!");
     }
     else
     {
-        bsp_board_led_off(LEDBUTTON_LED);
+        //bsp_board_led_off(LEDBUTTON_LED);
         printf("Received LED OFF!");
     }
 }
