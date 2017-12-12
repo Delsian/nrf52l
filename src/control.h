@@ -13,6 +13,7 @@ typedef enum _controlSignals {
 	BT_ADV_OFF,
 	BT_CONNECT,
 	BT_DISCONNECT,
+	BT_UART_RX
 } ControlSignal;
 
 /**

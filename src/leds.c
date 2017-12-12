@@ -32,6 +32,9 @@ bool leds_control(ControlSignal s)
 	case BT_DISCONNECT:
 		bsp_board_led_off(CONNECTED_LED);
 		break;
+	case BT_UART_RX:
+		bsp_board_led_invert(LEDBUTTON_LED);
+		break;
 	default:
 		break;
 	}

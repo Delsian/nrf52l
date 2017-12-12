@@ -19,14 +19,15 @@
 
 #define APP_ADV_INTERVAL                64                                      /**< The advertising interval (in units of 0.625 ms; this value corresponds to 40 ms). */
 
-#define DEVICE_NAME                     "Test_Blinky"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "PythonBLE"                         /**< Name of device. Will be included in the advertising data. */
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
+static uint8_t uart_buf[32];
 
 // Used UUIDs
-BLE_LBS_DEF(m_lbs);                                                             /**< LED Button Service instance. */
 BLE_BAS_DEF(m_bas);
+BLE_NUS_DEF(m_nus);
 //====
 
 /**@brief Function for performing battery measurement and updating the Battery Level characteristic
@@ -62,8 +63,8 @@ static void advertising_init(void)
     ble_advdata_t srdata;
 
     ble_uuid_t adv_uuids[] = {
-    		{LBS_UUID_SERVICE, m_lbs.uuid_type},
-		    {BLE_UUID_BATTERY_SERVICE,              BLE_UUID_TYPE_BLE},
+		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+			{BLE_UUID_NUS_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
 //		    {BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
     };
 
@@ -81,6 +82,30 @@ static void advertising_init(void)
 
     err_code = ble_advdata_set(&advdata, &srdata);
     APP_ERROR_CHECK(err_code);
+}
+
+/**@brief Function for handling the data from the Nordic UART Service.
+ *
+ * @details This function will process the data received from the Nordic UART BLE Service and send
+ *          it to the UART module.
+ *
+ * @param[in] p_nus    Nordic UART Service structure.
+ * @param[in] p_data   Data to be send to UART module.
+ * @param[in] length   Length of the data.
+ */
+/**@snippet [Handling the data received over BLE] */
+static void nus_data_handler(ble_nus_evt_t * p_evt)
+{
+	uint8_t d[] = "Ok!";
+	uint16_t length = 4;
+
+    if (p_evt->type == BLE_NUS_EVT_RX_DATA)
+    {
+        memcpy(uart_buf,p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
+        control_post_event(BT_UART_RX);
+        ble_nus_string_send(&m_nus, d, &length);
+    }
+
 }
 
 /**@brief Function for starting advertising.
@@ -235,33 +260,11 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     }
 }
 
-static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state)
-{
-    if (led_state)
-    {
-        //bsp_board_led_on(LEDBUTTON_LED);
-        printf("Received LED ON!");
-    }
-    else
-    {
-        //bsp_board_led_off(LEDBUTTON_LED);
-        printf("Received LED OFF!");
-    }
-}
-
 static void services_init(void)
 {
     ret_code_t     err_code;
-    ble_lbs_init_t init;
     ble_bas_init_t bas_init;
-
-    init.led_write_handler = led_write_handler;
-
-    err_code = ble_lbs_init(&m_lbs, &init);
-    APP_ERROR_CHECK(err_code);
-
-    // Initialize Battery Service.
-    memset(&bas_init, 0, sizeof(bas_init));
+    ble_nus_init_t nus_init;
 
     // Here the sec level for the Battery Service can be changed/increased.
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
@@ -276,6 +279,13 @@ static void services_init(void)
     bas_init.initial_batt_level   = 100;
 
     err_code = ble_bas_init(&m_bas, &bas_init);
+    APP_ERROR_CHECK(err_code);
+
+    memset(&nus_init, 0, sizeof(nus_init));
+
+    nus_init.data_handler = nus_data_handler;
+
+    err_code = ble_nus_init(&m_nus, &nus_init);
     APP_ERROR_CHECK(err_code);
 }
 
