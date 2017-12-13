@@ -21,5 +21,6 @@
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2    /**< Reply when unsupported features are requested. */
 
 void ble_stack_thread(void * arg);
+uint32_t bluetooth_send(uint8_t* str, uint16_t len);
 
 #endif /* BLUETOOTH_H_ */

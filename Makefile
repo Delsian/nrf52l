@@ -11,9 +11,9 @@ $(OUTPUT_DIRECTORY)/nrf52832_xxaa.out: \
 SRC_FILES += \
   $(PROJ_DIR)/src/main.c \
   $(PROJ_DIR)/src/bluetooth.c \
-  $(PROJ_DIR)/src/swo_log.c \
   $(PROJ_DIR)/src/control.c \
   $(PROJ_DIR)/src/leds.c \
+  $(PROJ_DIR)/src/rtt_cli.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_rtt.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_serial.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_backend_uart.c \
@@ -29,6 +29,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
   $(SDK_ROOT)/components/libraries/atomic_fifo/nrf_atfifo.c \
   $(SDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
+  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
   $(SDK_ROOT)/components/libraries/experimental_memobj/nrf_memobj.c \
@@ -117,6 +118,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/ppi \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
   $(SDK_ROOT)/external/fprintf \
+  $(SDK_ROOT)/external/segger_rtt \
   $(SDK_ROOT)/components/drivers_nrf/twis_slave \
   $(SDK_ROOT)/components/libraries/atomic \
   $(SDK_ROOT)/components \
@@ -195,11 +197,9 @@ OPT = -O3 -g3
 CFLAGS += $(OPT)
 CFLAGS += -DBOARD_CUSTOM
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
-CFLAGS += -DENABLE_DEBUG_LOG_SUPPORT
-CFLAGS += -DENABLE_SWO
-CFLAGS += -DNRF_LOG_USES_RTT=1
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DNRF52
+CFLAGS += -DCLIRTT_
 CFLAGS += -DNRF52832_XXAA
 CFLAGS += -DNRF52_PAN_74
 CFLAGS += -DNRF_SD_BLE_API_VERSION=5

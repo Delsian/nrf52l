@@ -84,28 +84,25 @@ static void advertising_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
-/**@brief Function for handling the data from the Nordic UART Service.
- *
- * @details This function will process the data received from the Nordic UART BLE Service and send
- *          it to the UART module.
- *
- * @param[in] p_nus    Nordic UART Service structure.
- * @param[in] p_data   Data to be send to UART module.
- * @param[in] length   Length of the data.
- */
-/**@snippet [Handling the data received over BLE] */
 static void nus_data_handler(ble_nus_evt_t * p_evt)
 {
-	uint8_t d[] = "Ok!";
-	uint16_t length = 4;
+	ControlMessage msg;
+    uint16_t* len = (uint16_t*)uart_buf;
 
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
-        memcpy(uart_buf,p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
-        control_post_event(BT_UART_RX);
-        ble_nus_string_send(&m_nus, d, &length);
+        memcpy(uart_buf+2,p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
+        *len = p_evt->params.rx_data.length;
+        msg.type = BT_UART_RX;
+        msg.ptr = uart_buf;
+        control_post_event(msg);
     }
 
+}
+
+uint32_t bluetooth_send(uint8_t* str, uint16_t len)
+{
+	return ble_nus_string_send(&m_nus, str, &len);
 }
 
 /**@brief Function for starting advertising.
@@ -114,6 +111,7 @@ static void advertising_start(void)
 {
     ret_code_t           err_code;
     ble_gap_adv_params_t adv_params;
+    ControlMessage msg;
 
     // Start advertising
     memset(&adv_params, 0, sizeof(adv_params));
@@ -126,7 +124,9 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
-    control_post_event(BT_ADV_ON);
+    msg.type = BT_ADVERT;
+    msg.b = true;
+    control_post_event(msg);
 }
 
 static void gap_params_init(void)
@@ -156,21 +156,27 @@ static void gap_params_init(void)
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
+    ControlMessage msg;
 
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
             printf("Connected");
             // call on connect
-            control_post_event(BT_CONNECT);
-            control_post_event(BT_ADV_OFF);
+            msg.type = BT_CONNECT;
+            msg.b = true;
+            control_post_event(msg);
+            msg.type = BT_ADVERT;
+            msg.b = false;
+            control_post_event(msg);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             printf("Disconnected");
-            // call on disconnect
-            control_post_event(BT_DISCONNECT);
+            msg.type = BT_CONNECT;
+            msg.b = false;
+            control_post_event(msg);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             advertising_start();
             break;

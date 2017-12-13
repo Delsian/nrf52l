@@ -31,7 +31,7 @@
 // <2=> Synth
 
 #ifndef CLOCK_CONFIG_LF_SRC
-#define CLOCK_CONFIG_LF_SRC 0
+#define CLOCK_CONFIG_LF_SRC 1
 #endif
 
 // <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -134,6 +134,52 @@
 
 // </e>
 
+// <e> RTC_ENABLED - nrf_drv_rtc - RTC peripheral driver
+//==========================================================
+#ifndef RTC_ENABLED
+#define RTC_ENABLED 1
+#endif
+// <o> RTC_DEFAULT_CONFIG_FREQUENCY - Frequency  <16-32768>
+
+
+#ifndef RTC_DEFAULT_CONFIG_FREQUENCY
+#define RTC_DEFAULT_CONFIG_FREQUENCY 32768
+#endif
+
+// <q> RTC_DEFAULT_CONFIG_RELIABLE  - Ensures safe compare event triggering
+
+
+#ifndef RTC_DEFAULT_CONFIG_RELIABLE
+#define RTC_DEFAULT_CONFIG_RELIABLE 0
+#endif
+
+// <q> RTC0_ENABLED  - Enable RTC0 instance
+
+
+#ifndef RTC0_ENABLED
+#define RTC0_ENABLED 0
+#endif
+
+// <q> RTC1_ENABLED  - Enable RTC1 instance
+
+
+#ifndef RTC1_ENABLED
+#define RTC1_ENABLED 0
+#endif
+
+// <q> RTC2_ENABLED  - Enable RTC2 instance
+
+
+#ifndef RTC2_ENABLED
+#define RTC2_ENABLED 1
+#endif
+
+// <o> NRF_MAXIMUM_LATENCY_US - Maximum possible time[us] in highest priority interrupt
+#ifndef NRF_MAXIMUM_LATENCY_US
+#define NRF_MAXIMUM_LATENCY_US 2000
+#endif
+
+// </e>
 
 //============= HW
 #ifndef NRF_PWR_MGMT_ENABLED
@@ -1073,4 +1119,51 @@
 #define BLE_NUS_ENABLED 1
 #endif
 
+
+// <h> nRF_Segger_RTT
+
+//==========================================================
+// <h> segger_rtt - SEGGER RTT
+
+//==========================================================
+// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_UP - Size of upstream buffer.
+// <i> Note that either @ref NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE
+// <i> or this value is actually used. It depends on which one is bigger.
+
+#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_UP
+#define SEGGER_RTT_CONFIG_BUFFER_SIZE_UP 512
+#endif
+
+// <o> SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS - Size of upstream buffer.
+#ifndef SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS
+#define SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS 2
+#endif
+
+// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN - Size of upstream buffer.
+#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN
+#define SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN 16
+#endif
+
+// <o> SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS - Size of upstream buffer.
+#ifndef SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS
+#define SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS 2
+#endif
+
+// <o> SEGGER_RTT_CONFIG_DEFAULT_MODE  - RTT behavior if the buffer is full.
+
+
+// <i> The following modes are supported:
+// <i> - SKIP  - Do not block, output nothing.
+// <i> - TRIM  - Do not block, output as much as fits.
+// <i> - BLOCK - Wait until there is space in the buffer.
+// <0=> SKIP
+// <1=> TRIM
+// <2=> BLOCK_IF_FIFO_FULL
+
+#ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
+#define SEGGER_RTT_CONFIG_DEFAULT_MODE 1
+#endif
+
+// </h>
+//==========================================================
 #endif // SDK_CONFIG_H

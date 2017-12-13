@@ -9,12 +9,18 @@
 #define CONTROL_H_
 
 typedef enum _controlSignals {
-	BT_ADV_ON,
-	BT_ADV_OFF,
+	BT_ADVERT,
 	BT_CONNECT,
-	BT_DISCONNECT,
 	BT_UART_RX
 } ControlSignal;
+
+typedef struct _controlMessage {
+	ControlSignal type;
+	union {
+		bool b;
+		uint8_t* ptr;
+	};
+} ControlMessage;
 
 /**
  * Handler to receive task
@@ -24,11 +30,11 @@ typedef enum _controlSignals {
  * @return pdTRUE if the signal was successfully received
  *
  */
-typedef bool (ControlFunction)( ControlSignal );
+typedef bool (ControlFunction)( ControlMessage );
 
 void control_register_receiver(ControlFunction* pf);
 void control_delete_receiver(ControlFunction* f);
-void control_post_event(ControlSignal signal);
+void control_post_event(ControlMessage signal);
 void control_init(void);
 
 #endif /* CONTROL_H_ */

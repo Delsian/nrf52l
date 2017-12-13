@@ -15,8 +15,7 @@
 #include "app_timer.h"
 #include "boards.h"
 #include "nrf_soc.h"
-
-void swo_init(void);
+#include "rtt_cli.h"
 
 static SemaphoreHandle_t m_ble_event_ready;  /**< Semaphore raised if there is a new event to be processed in the BLE thread. */
 static TaskHandle_t  m_ble_stack_thread;     /**< Definition of BLE stack thread. */
@@ -25,7 +24,9 @@ static void hw_init(void)
 {
 	ret_code_t err_code;
 
-	swo_init(); // logging
+#ifdef CLIRTT
+	rtt_cli_init();
+#endif
 
     /* initializing the Power manager. */
     err_code = nrf_pwr_mgmt_init();
@@ -47,6 +48,14 @@ int main(void)
     {
         APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
     }
+
+#ifdef CLIRTT
+    TaskHandle_t  rtt_thread;
+    if(pdPASS != xTaskCreate(rtt_cli_thread, "CLI", 256, NULL, 1, &rtt_thread))
+    {
+        APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
+    }
+#endif
 
     if(pdPASS != xTaskCreate(ble_stack_thread, "BLE", 256, NULL, 1, &m_ble_stack_thread))
     {

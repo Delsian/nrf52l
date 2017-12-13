@@ -16,24 +16,22 @@
 #define LEDBUTTON_LED 1
 #define CONNECTED_LED 2
 
-bool leds_control(ControlSignal s)
+static bool leds_control(ControlMessage msg)
 {
-	switch (s)
+	bsp_board_led_invert(1);
+	switch (msg.type)
 	{
-	case BT_ADV_ON:
-		bsp_board_led_on(ADVERTISING_LED);
-		break;
-	case BT_ADV_OFF:
-		bsp_board_led_off(ADVERTISING_LED);
+	case BT_ADVERT:
+		if (msg.b)
+			bsp_board_led_on(ADVERTISING_LED);
+		else
+			bsp_board_led_off(ADVERTISING_LED);
 		break;
 	case BT_CONNECT:
-		bsp_board_led_on(CONNECTED_LED);
-		break;
-	case BT_DISCONNECT:
-		bsp_board_led_off(CONNECTED_LED);
-		break;
-	case BT_UART_RX:
-		bsp_board_led_invert(LEDBUTTON_LED);
+		if (msg.b)
+			bsp_board_led_on(CONNECTED_LED);
+		else
+			bsp_board_led_off(CONNECTED_LED);
 		break;
 	default:
 		break;

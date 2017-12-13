@@ -20,16 +20,16 @@ static QueueHandle_t ControlQueue;
 
 static void control_thread(void * arg)
 {
-	ControlSignal s;
+	ControlMessage msg;
 	while(1)
 	{
-		if( xQueueReceive(ControlQueue, &s, ( TickType_t ) 100))
+		if( xQueueReceive(ControlQueue, &msg, ( TickType_t ) 100))
 		{
 			for(int i=0; i<MAX_CONTROL_RECEIVERS; i++)
 			{
 				if(control_receivers[i])
 				{
-					if ((*control_receivers[i])(s))
+					if ((*control_receivers[i])(msg))
 						break;
 				}
 			}
@@ -63,9 +63,9 @@ void control_delete_receiver(ControlFunction* f)
 	}
 }
 
-void control_post_event(ControlSignal signal)
+void control_post_event(ControlMessage msg)
 {
-	if (xQueueSend(ControlQueue, &signal, ( TickType_t ) 0) != pdPASS)
+	if (xQueueSend(ControlQueue, &msg, ( TickType_t ) 0) != pdPASS)
 	{
 		APP_ERROR_HANDLER(NRF_ERROR_TIMEOUT);
 	}
@@ -73,7 +73,7 @@ void control_post_event(ControlSignal signal)
 
 void control_init()
 {
-	ControlQueue = xQueueCreate( 10, sizeof( ControlSignal ) );
+	ControlQueue = xQueueCreate( 10, sizeof( ControlMessage ) );
 	if ( ControlQueue == 0 )
 	{
 		APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
