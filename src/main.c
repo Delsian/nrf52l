@@ -39,7 +39,7 @@ static void hw_init(void)
 int main(void)
 {
     hw_init();
-    printf("Blinky");
+    printf("Blinky\n");
     control_init();
     leds_init();
 

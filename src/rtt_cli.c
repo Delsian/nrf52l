@@ -26,9 +26,10 @@ static bool rtt_cli_control(ControlMessage msg)
 {
 	if (msg.type == BT_UART_RX)
 	{
+		bsp_board_led_invert(1);
 		uint8_t* buf = msg.ptr;
 		SEGGER_RTT_Write(0, buf+2, *((uint16_t*)buf));
-		SEGGER_RTT_Write(0, "\r\n", 3);
+		SEGGER_RTT_Write(0, "\n", 2);
 		return true;
 	}
 	return false;
@@ -37,7 +38,7 @@ static bool rtt_cli_control(ControlMessage msg)
 void rtt_cli_init()
 {
 	SEGGER_RTT_Init();
-	SEGGER_RTT_WriteString(0,"CLI>\r\n");
+	SEGGER_RTT_WriteString(0,"CLI>\n");
 	control_register_receiver(&rtt_cli_control);
 }
 
@@ -55,14 +56,14 @@ void rtt_cli_thread(void * arg)
 //			SEGGER_RTT_WriteString(0,"Ok>\r\n");
 //		}
 		vTaskDelay(100);
-		bsp_board_led_invert(1);
+		//bsp_board_led_invert(1);
 	}
 }
 
 
 int _write_r(struct _reent *r, int file, char *ptr, int len) {
-	SEGGER_RTT_Write(0, ptr, len);
-	SEGGER_RTT_Write(0, "\r\n", 3);
+	SEGGER_RTT_Write(0, ptr, (ptr[len-1] == '\n')?len-1:len);
+	SEGGER_RTT_Write(0, "\n", 2);
     return len;
 }
 
