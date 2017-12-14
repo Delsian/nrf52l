@@ -68,6 +68,12 @@ LUA_SRC_FILES += \
   $(PROJ_DIR)/elua/src/lua/lua.c \
   $(PROJ_DIR)/elua/src/lua/lstate.c \
   $(PROJ_DIR)/elua/src/lua/lauxlib.c \
+  $(PROJ_DIR)/elua/src/lua/lmem.c \
+  $(PROJ_DIR)/elua/src/lua/lapi.c \
+  $(PROJ_DIR)/elua/src/lua/lgc.c \
+  $(PROJ_DIR)/elua/src/lua/llex.c \
+  $(PROJ_DIR)/elua/src/lua/lparser.c \
+  $(PROJ_DIR)/elua/src/lua/ltable.c \
   
 SRC_FILES += $(LUA_SRC_FILES)
 
