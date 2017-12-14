@@ -283,7 +283,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK2%7D</value>
+			<value>$%7BSDK1%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>

@@ -18,7 +18,7 @@
 #include "bluetooth.h"
 
 #include "SEGGER_RTT.h"
-#define RX_BUF_LEN 32
+#define RX_BUF_LEN 8
 
 #ifdef CLIRTT
 
@@ -44,18 +44,25 @@ void rtt_cli_init()
 
 void rtt_cli_thread(void * arg)
 {
-	//uint8_t buffer[RX_BUF_LEN];
-	//uint16_t rd_len;
+	uint8_t buffer[RX_BUF_LEN];
+	int key;
+	uint8_t index = 0;
 
 	while(1)
 	{
-//		if(SEGGER_RTT_HasData(0))
-//		{
-//			rd_len = SEGGER_RTT_Read(0, buffer, RX_BUF_LEN);
-//			bluetooth_send(buffer, rd_len);
-//			SEGGER_RTT_WriteString(0,"Ok>\r\n");
-//		}
-		vTaskDelay(100);
+		if((key = SEGGER_RTT_GetKey()) > 0)
+		{
+			buffer[index++] = (uint8_t)key;
+			if (key == '\r' || key == '\n' || index == RX_BUF_LEN)
+			{
+				bluetooth_send(buffer, index);
+				index = 0;
+			}
+		}
+		else
+		{
+			vTaskDelay(100);
+		}
 		//bsp_board_led_invert(1);
 	}
 }

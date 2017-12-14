@@ -33,7 +33,6 @@ static void control_thread(void * arg)
 						break;
 				}
 			}
-
 		}
 	}
 }
