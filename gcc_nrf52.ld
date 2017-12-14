@@ -46,6 +46,12 @@ SECTIONS
   .mem_section_dummy_rom :
   {
   }
+  .stext :
+  {
+    . = ALIGN(4);
+    _stext = .;
+    PROVIDE(stext = .);
+  }
   .sdh_soc_observers :
   {
     PROVIDE(__start_sdh_soc_observers = .);
@@ -94,8 +100,12 @@ SECTIONS
     KEEP(*(.cli_command))
     PROVIDE(__stop_cli_command = .);
   } > FLASH
-  
-
+  .etext :
+  {
+    . = ALIGN(4);
+    _etext = .;
+    PROVIDE(etext = .);
+  }
 } INSERT AFTER .text
 
 INCLUDE "nrf5x_common.ld"

@@ -70,10 +70,21 @@ LUA_SRC_FILES += \
   $(PROJ_DIR)/elua/src/lua/lauxlib.c \
   $(PROJ_DIR)/elua/src/lua/lmem.c \
   $(PROJ_DIR)/elua/src/lua/lapi.c \
+  $(PROJ_DIR)/elua/src/lua/lzio.c \
   $(PROJ_DIR)/elua/src/lua/lgc.c \
+  $(PROJ_DIR)/elua/src/lua/lvm.c \
+  $(PROJ_DIR)/elua/src/lua/ltm.c \
+  $(PROJ_DIR)/elua/src/lua/ldo.c \
   $(PROJ_DIR)/elua/src/lua/llex.c \
   $(PROJ_DIR)/elua/src/lua/lparser.c \
   $(PROJ_DIR)/elua/src/lua/ltable.c \
+  $(PROJ_DIR)/elua/src/lua/lrotable.c \
+  $(PROJ_DIR)/elua/src/lua/lstring.c \
+  $(PROJ_DIR)/elua/src/lua/lobject.c \
+  $(PROJ_DIR)/elua/src/lua/lfunc.c \
+  $(PROJ_DIR)/elua/src/lua/ldebug.c \
+  $(PROJ_DIR)/elua/src/lua/lundump.c \
+  $(PROJ_DIR)/elua/src/lua/lopcodes.c \
   
 SRC_FILES += $(LUA_SRC_FILES)
 
@@ -90,9 +101,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/usbd/class/msc \
   $(SDK_ROOT)/components/libraries/usbd/class/hid \
   $(SDK_ROOT)/components/libraries/experimental_log \
-  $(SDK_ROOT)/components/ble/ble_services/ble_gls \
   $(SDK_ROOT)/components/libraries/fstorage \
-  $(SDK_ROOT)/components/drivers_nrf/i2s \
   $(SDK_ROOT)/components/libraries/mutex \
   $(SDK_ROOT)/components/libraries\bsp \
   $(SDK_ROOT)/components/libraries/gpiote \
@@ -118,13 +127,11 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/ble/ble_services/ble_ans_c \
   $(SDK_ROOT)/components/libraries/slip \
   $(SDK_ROOT)/components/libraries/mem_manager \
-  $(SDK_ROOT)/components/libraries/usbd/class/cdc \
   $(SDK_ROOT)/components/drivers_nrf/hal \
   $(SDK_ROOT)/components/ble/ble_services/ble_nus_c \
   $(SDK_ROOT)/components/drivers_nrf/rtc \
   $(SDK_ROOT)/components/softdevice/common \
   $(SDK_ROOT)/components/ble/ble_services/ble_ias \
-  $(SDK_ROOT)/components/libraries/usbd/class/hid/mouse \
   $(SDK_ROOT)/components/libraries/ecc \
   $(SDK_ROOT)/components/drivers_nrf/ppi \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
@@ -158,7 +165,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/drivers_nrf/rng \
   $(SDK_ROOT)/components/drivers_nrf/power \
-  $(SDK_ROOT)/components/libraries/usbd/config \
   $(SDK_ROOT)/components/toolchain \
   $(SDK_ROOT)/components/libraries/led_softblink \
   $(SDK_ROOT)/components/drivers_nrf/qdec \
@@ -183,7 +189,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/ble/nrf_ble_gatt \
   $(SDK_ROOT)/components/ble/nrf_ble_qwr \
   $(SDK_ROOT)/components/libraries/button \
-  $(SDK_ROOT)/components/libraries/usbd \
   $(SDK_ROOT)/components/drivers_nrf/saadc \
   $(SDK_ROOT)/components/libraries/atomic_fifo \
   $(SDK_ROOT)/components/ble/ble_racp \
