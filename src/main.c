@@ -17,6 +17,10 @@
 #include "nrf_soc.h"
 #include "rtt_cli.h"
 
+#ifdef USE_LUA
+#include "nlua.h"
+#endif
+
 static SemaphoreHandle_t m_ble_event_ready;  /**< Semaphore raised if there is a new event to be processed in the BLE thread. */
 static TaskHandle_t  m_ble_stack_thread;     /**< Definition of BLE stack thread. */
 
@@ -49,12 +53,8 @@ int main(void)
         APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
     }
 
-#ifdef CLIRTT
-    TaskHandle_t  rtt_thread;
-    if(pdPASS != xTaskCreate(rtt_cli_thread, "CLI", 256, NULL, 1, &rtt_thread))
-    {
-        APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
-    }
+#ifdef USE_LUA
+    nlua_init();
 #endif
 
     if(pdPASS != xTaskCreate(ble_stack_thread, "BLE", 256, NULL, 1, &m_ble_stack_thread))

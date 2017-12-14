@@ -62,6 +62,14 @@ SRC_FILES += \
   $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c \
+  
+LUA_SRC_FILES += \
+  $(PROJ_DIR)/src/Lua/nlua.c \
+  $(PROJ_DIR)/elua/src/lua/lua.c \
+  $(PROJ_DIR)/elua/src/lua/lstate.c \
+  $(PROJ_DIR)/elua/src/lua/lauxlib.c \
+  
+SRC_FILES += $(LUA_SRC_FILES)
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -126,7 +134,13 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/timer \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/drivers_nrf/pwm \
-  ./config \
+  $(PROJ_DIR)/config \
+  $(PROJ_DIR)/src \
+  $(PROJ_DIR)/src/Lua \
+  $(PROJ_DIR)/elua/src/lua \
+  $(PROJ_DIR)/elua/src/modules \
+  $(PROJ_DIR)/elua/inc \
+  $(PROJ_DIR)/elua/inc/newlib \
   $(SDK_ROOT)/components/libraries/csense_drv \
   $(SDK_ROOT)/components/libraries/csense \
   $(SDK_ROOT)/components/libraries/balloc \
@@ -197,6 +211,7 @@ CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DNRF52
 CFLAGS += -DCLIRTT
+CFLAGS += -DUSE_LUA
 CFLAGS += -DNRF52832_XXAA
 CFLAGS += -DNRF52_PAN_74
 CFLAGS += -DNRF_SD_BLE_API_VERSION=5
