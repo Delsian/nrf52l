@@ -11,6 +11,7 @@
 #include "task.h"
 #include "queue.h"
 #include "control.h"
+#include "bsp.h"
 
 #include "lua.h"
 #include "lauxlib.h"
@@ -26,7 +27,8 @@ static void lua_thread(void * arg)
 
 	while(1)
 	{
-
+		vTaskDelay(100);
+		bsp_board_led_invert(1);
 	}
 }
 

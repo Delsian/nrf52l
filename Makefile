@@ -14,6 +14,7 @@ SRC_FILES += \
   $(PROJ_DIR)/src/control.c \
   $(PROJ_DIR)/src/leds.c \
   $(PROJ_DIR)/src/rtt_cli.c \
+  $(PROJ_DIR)/src/fs.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_default_backends.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_frontend.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_str_formatter.c \
@@ -26,6 +27,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
   $(SDK_ROOT)/components/libraries/atomic_fifo/nrf_atfifo.c \
   $(SDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
+  $(SDK_ROOT)/components/libraries/fstorage/nrf_fstorage.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
@@ -146,6 +148,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/crc16 \
   $(SDK_ROOT)/components/drivers_nrf/timer \
   $(SDK_ROOT)/components/libraries/util \
+  $(SDK_ROOT)/components/libraries/fstorage \
   $(SDK_ROOT)/components/drivers_nrf/pwm \
   $(PROJ_DIR)/config \
   $(PROJ_DIR)/src \
