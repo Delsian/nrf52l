@@ -70,6 +70,26 @@
 			<locationURI>$%7BSDK%7D/components/toolchain/system_nrf52.c</locationURI>
 		</link>
 		<link>
+			<name>FreeRTOS/portable/port.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/GCC/nrf52/port.c</locationURI>
+		</link>
+		<link>
+			<name>FreeRTOS/portable/port_cmsis.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis.c</locationURI>
+		</link>
+		<link>
+			<name>FreeRTOS/portable/port_cmsis_systick.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_advdata.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/common/ble_advdata.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/ble_advertising.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/ble_advertising/ble_advertising.c</locationURI>
@@ -103,6 +123,11 @@
 			<name>SDK/BLE/ble_nus.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_nus/ble_nus.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_srv_common.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/common/ble_srv_common.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/BLE/nrf_ble_gatt.c</name>
@@ -155,6 +180,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/app_button.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/button/app_button.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_error.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error.c</locationURI>
@@ -170,6 +200,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/timer/app_timer.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/app_timer_freertos.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/timer/app_timer_freertos.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_uart.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/uart/app_uart.c</locationURI>
@@ -183,6 +218,11 @@
 			<name>SDK/Libraries/bsp_btn_ble.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp_btn_ble.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_atfifo.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/NRF/components/libraries/atomic_fifo/nrf_atfifo.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/nrf_balloc.c</name>

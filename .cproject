@@ -12,8 +12,6 @@
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -45,7 +43,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.830048038" name="Float ABI" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi" useByScannerDiscovery="true" value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.hard" valueType="enumerated"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.109428630" name="FPU Type" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit" useByScannerDiscovery="true" value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.fpv4spd16" valueType="enumerated"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.810943965" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/nrf52l}" id="ilg.gnuarmeclipse.managedbuild.cross.builder.983118119" incrementalBuildTarget="flash" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
+							<builder autoBuildTarget="all" buildPath="${workspace_loc:/nrf52l}/Debug" cleanBuildTarget="clean" command="${cross_make}" id="org.eclipse.cdt.build.core.internal.builder.985288618" incrementalBuildTarget="flash" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} -c ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.243902329" name="Cross ARM GNU Assembler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor.1343566037" name="Use preprocessor" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs.649698599" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
@@ -62,6 +60,10 @@
 									<listOptionValue builtIn="false" value="CONFIG_GPIO_AS_PINRESET"/>
 									<listOptionValue builtIn="false" value="CLIRTT"/>
 									<listOptionValue builtIn="false" value="USE_LUA"/>
+									<listOptionValue builtIn="false" value="FLOAT_ABI_HARD"/>
+									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
+									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.1465730393" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
@@ -106,6 +108,13 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -118,12 +127,16 @@
 									<listOptionValue builtIn="false" value="SOFTDEVICE_PRESENT"/>
 									<listOptionValue builtIn="false" value="S132"/>
 									<listOptionValue builtIn="false" value="BLE_STACK_SUPPORT_REQD"/>
-									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=4"/>
+									<listOptionValue builtIn="false" value="NRF_SD_BLE_API_VERSION=5"/>
 									<listOptionValue builtIn="false" value="NRF_LOG_USES_RTT=1"/>
 									<listOptionValue builtIn="false" value="ENABLE_SWO"/>
 									<listOptionValue builtIn="false" value="CONFIG_GPIO_AS_PINRESET"/>
 									<listOptionValue builtIn="false" value="CLIRTT"/>
 									<listOptionValue builtIn="false" value="USE_LUA"/>
+									<listOptionValue builtIn="false" value="FLOAT_ABI_HARD"/>
+									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
+									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.653441933" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -155,6 +168,8 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
@@ -168,16 +183,21 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.1252137993" name="Cross ARM GNU C++ Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker.1345546899" name="Cross ARM GNU C Linker" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker">
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections.1096850746" name="Remove unused sections (-Xlinker --gc-sections)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other.766619778" name="Other linker flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other" useByScannerDiscovery="false" value="--specs=rdimon.specs -Wl,--start-group -lgcc -lm -lrdimon -Wl,--end-group" valueType="string"/>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections.1096850746" name="Remove unused sections (-Xlinker --gc-sections)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.gcsections" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other.766619778" name="Other linker flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.other" useByScannerDiscovery="false" value="--specs=rdimon.specs -Wl,--start-group -lgcc -lm -lrdimon -Wl,--end-group --specs=nano.specs" valueType="string"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.scriptfile.954998544" name="Script files (-T)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.linker.scriptfile" useByScannerDiscovery="false" valueType="stringList">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/FreeRTOS_gcc_nrf52.ld}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nrf53l.ld}&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker.input.1628584670" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -202,16 +222,12 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.269690278" name="nrf_fstorage_sd.c" rcbsApplicability="disable" resourcePath="SDK/Libraries/nrf_fstorage_sd.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1398566970">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1398566970" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1801989100" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="portable/MemMang/heap_5.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c|portable/MemMang/heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
-						<entry excluding="Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
+						<entry excluding="Libraries/app_button.c|Libraries/app_timer.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="modules/pwm.c|modules/term.c|modules/uart.c|modules/i2c.c|lua/luac.c|lua/lmathlib.c|modules/luarpc.c|modules/can.c|modules/spi.c|modules/adc.c|modules/tmr.c|xmodem.c|term.c|semifs.c|salloc.c|romfs.c|mmcfs.c|main.c|luarpc_elua_uart.c|luarpc_desktop_serial.c|linenoise.c|linenoise_posix.c|eluarpc.c|elua_uip.c|elua_mmc.c|elua_mmc_sim.c|elua_int.c|elua_adc.c|dlmalloc.c|common.c|common_uart.c|common_tmr.c|common_fs.c|buf.c|uip|shell|serial|remotefs|platform|newlib|fatfs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="elua/src"/>
+						<entry excluding="swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -303,6 +319,11 @@
 									<listOptionValue builtIn="false" value="CONFIG_GPIO_AS_PINRESET"/>
 									<listOptionValue builtIn="false" value="CLIRTT"/>
 									<listOptionValue builtIn="false" value="USE_LUA"/>
+									<listOptionValue builtIn="false" value="FLOAT_ABI_HARD"/>
+									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
+									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.328872940" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -347,6 +368,13 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.417154629" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -366,6 +394,11 @@
 									<listOptionValue builtIn="false" value="CONFIG_GPIO_AS_PINRESET"/>
 									<listOptionValue builtIn="false" value="CLIRTT"/>
 									<listOptionValue builtIn="false" value="USE_LUA"/>
+									<listOptionValue builtIn="false" value="FLOAT_ABI_HARD"/>
+									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
+									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE"/>
+									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.1173983047" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -410,6 +443,13 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/lua}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2031137071" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
@@ -442,7 +482,8 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="portable/MemMang/heap_5.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c|portable/MemMang/heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
-						<entry excluding="RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="modules/pwm.c|modules/term.c|modules/uart.c|modules/i2c.c|lua/luac.c|lua/lmathlib.c|modules/luarpc.c|modules/can.c|modules/spi.c|modules/adc.c|modules/tmr.c|xmodem.c|term.c|semifs.c|salloc.c|romfs.c|mmcfs.c|main.c|luarpc_elua_uart.c|luarpc_desktop_serial.c|linenoise.c|linenoise_posix.c|eluarpc.c|elua_uip.c|elua_mmc.c|elua_mmc_sim.c|elua_int.c|elua_adc.c|dlmalloc.c|common.c|common_uart.c|common_tmr.c|common_fs.c|buf.c|uip|shell|serial|remotefs|platform|newlib|fatfs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="elua/src"/>
+						<entry excluding="swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

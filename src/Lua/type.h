@@ -5,6 +5,8 @@
 #define NULL    ((void *)0)
 #endif
 
+#include <stdio.h>
+
 typedef unsigned char  BYTE;
 typedef unsigned short WORD;
 typedef unsigned long  DWORD;
@@ -20,5 +22,5 @@ typedef unsigned long long u64;
 typedef signed long long s64;
 
 
-int fileno(void *stream);
+int fileno(FILE* stream);
 #endif

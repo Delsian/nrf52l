@@ -20,10 +20,10 @@
 static void lua_thread(void * arg)
 {
 
-	lua_State *L = lua_open();
-	if (L == NULL) {
-		APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
-	}
+//	lua_State *L = lua_open();
+//	if (L == NULL) {
+//		APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
+//	}
 
 	while(1)
 	{
@@ -43,7 +43,7 @@ void nlua_init()
     }
 }
 
-int fileno(void *stream)
+int fileno(FILE *stream)
 {
 	return 0;
 }
