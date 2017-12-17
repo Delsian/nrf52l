@@ -15,6 +15,7 @@ SRC_FILES += \
   $(PROJ_DIR)/src/leds.c \
   $(PROJ_DIR)/src/rtt_cli.c \
   $(PROJ_DIR)/src/fs.c \
+  $(PROJ_DIR)/src/Lua/nlua.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_default_backends.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_frontend.c \
   $(SDK_ROOT)/components/libraries/experimental_log/src/nrf_log_str_formatter.c \
@@ -66,7 +67,6 @@ SRC_FILES += \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c \
   
 LUA_SRC_FILES += \
-  $(PROJ_DIR)/src/Lua/nlua.c \
   $(PROJ_DIR)/elua/src/lua/lua.c \
   $(PROJ_DIR)/elua/src/lua/lstate.c \
   $(PROJ_DIR)/elua/src/lua/lauxlib.c \
@@ -88,7 +88,7 @@ LUA_SRC_FILES += \
   $(PROJ_DIR)/elua/src/lua/lundump.c \
   $(PROJ_DIR)/elua/src/lua/lopcodes.c \
   
-SRC_FILES += $(LUA_SRC_FILES)
+#SRC_FILES += $(LUA_SRC_FILES)
 
 # Include folders common to all targets
 INC_FOLDERS += \

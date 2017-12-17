@@ -27,7 +27,7 @@
 		<link>
 			<name>FreeRTOS</name>
 			<type>2</type>
-			<locationURI>$%7BSDK%7D/external/freertos/source</locationURI>
+			<locationURI>$%7BSDK%7D/external/freertos</locationURI>
 		</link>
 		<link>
 			<name>SDK</name>
@@ -68,21 +68,6 @@
 			<name>Toolchain/system_nrf52.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/toolchain/system_nrf52.c</locationURI>
-		</link>
-		<link>
-			<name>FreeRTOS/portable/port.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/external/freertos/portable/GCC/nrf52/port.c</locationURI>
-		</link>
-		<link>
-			<name>FreeRTOS/portable/port_cmsis.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis.c</locationURI>
-		</link>
-		<link>
-			<name>FreeRTOS/portable/port_cmsis_systick.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/external/freertos/portable/CMSIS/nrf52/port_cmsis_systick.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/BLE/ble_advdata.c</name>
@@ -222,7 +207,7 @@
 		<link>
 			<name>SDK/Libraries/nrf_atfifo.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/NRF/components/libraries/atomic_fifo/nrf_atfifo.c</locationURI>
+			<locationURI>$%7BSDK%7D/components/libraries/atomic_fifo/nrf_atfifo.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/nrf_balloc.c</name>
@@ -333,7 +318,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK1%7D</value>
+			<value>$%7BSDK2%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
