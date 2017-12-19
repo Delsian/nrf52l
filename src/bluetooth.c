@@ -5,6 +5,7 @@
  *      Author: Eug
  */
 
+#include <ble_lserv.h>
 #include "bluetooth.h"
 #include "ble_bas.h"
 #include "app_timer.h"
@@ -13,6 +14,7 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
+
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -28,6 +30,7 @@ static uint8_t uart_buf[32];
 // Used UUIDs
 BLE_BAS_DEF(m_bas);
 BLE_NUS_DEF(m_nus);
+BLE_LSERV_DEF(m_lserv);
 //====
 
 /**@brief Function for performing battery measurement and updating the Battery Level characteristic
@@ -64,8 +67,8 @@ static void advertising_init(void)
 
     ble_uuid_t adv_uuids[] = {
 		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
-			{BLE_UUID_NUS_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
-//		    {BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
+			{BLE_UUID_NUS_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN},
+		    {BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_BLE}
     };
 
     // Build and set advertising data
@@ -74,7 +77,6 @@ static void advertising_init(void)
     advdata.name_type          = BLE_ADVDATA_FULL_NAME;
     advdata.include_appearance = true;
     advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
-
 
     memset(&srdata, 0, sizeof(srdata));
     srdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
@@ -292,6 +294,9 @@ static void services_init(void)
     nus_init.data_handler = nus_data_handler;
 
     err_code = ble_nus_init(&m_nus, &nus_init);
+    APP_ERROR_CHECK(err_code);
+
+    err_code = ble_lserv_init();
     APP_ERROR_CHECK(err_code);
 }
 
