@@ -25,17 +25,13 @@
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
-static uint8_t uart_buf[32];
 
 // Used UUIDs
 BLE_BAS_DEF(m_bas);
-BLE_NUS_DEF(m_nus);
-BLE_LSERV_DEF(m_lserv);
+static ble_lserv_t m_lserv;
 //====
 
-/**@brief Function for performing battery measurement and updating the Battery Level characteristic
- *        in Battery Service.
- */
+
 static void battery_level_update(void)
 {
     ret_code_t err_code;
@@ -54,11 +50,6 @@ static void battery_level_update(void)
     }
 }
 
-/**@brief Function for initializing the Advertising functionality.
- *
- * @details Encodes the required advertising data and passes it to the stack.
- *          Also builds a structure to be passed to the stack when starting advertising.
- */
 static void advertising_init(void)
 {
     ret_code_t    err_code;
@@ -67,8 +58,7 @@ static void advertising_init(void)
 
     ble_uuid_t adv_uuids[] = {
 		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
-			{BLE_UUID_NUS_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN},
-		    {BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_BLE}
+		    {BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
     };
 
     // Build and set advertising data
@@ -84,27 +74,6 @@ static void advertising_init(void)
 
     err_code = ble_advdata_set(&advdata, &srdata);
     APP_ERROR_CHECK(err_code);
-}
-
-static void nus_data_handler(ble_nus_evt_t * p_evt)
-{
-	ControlMessage msg;
-    uint16_t* len = (uint16_t*)uart_buf;
-
-    if (p_evt->type == BLE_NUS_EVT_RX_DATA)
-    {
-        memcpy(uart_buf+2,p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
-        *len = p_evt->params.rx_data.length;
-        msg.type = BT_UART_RX;
-        msg.ptr = uart_buf;
-        control_post_event(msg);
-    }
-
-}
-
-uint32_t bluetooth_send(uint8_t* str, uint16_t len)
-{
-	return ble_nus_string_send(&m_nus, str, &len);
 }
 
 /**@brief Function for starting advertising.
@@ -272,7 +241,7 @@ static void services_init(void)
 {
     ret_code_t     err_code;
     ble_bas_init_t bas_init;
-    ble_nus_init_t nus_init;
+    ble_lserv_init_t lserv_init;
 
     // Here the sec level for the Battery Service can be changed/increased.
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
@@ -289,14 +258,7 @@ static void services_init(void)
     err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
 
-    memset(&nus_init, 0, sizeof(nus_init));
-
-    nus_init.data_handler = nus_data_handler;
-
-    err_code = ble_nus_init(&m_nus, &nus_init);
-    APP_ERROR_CHECK(err_code);
-
-    err_code = ble_lserv_init();
+    err_code = ble_lserv_init(&m_lserv);
     APP_ERROR_CHECK(err_code);
 }
 

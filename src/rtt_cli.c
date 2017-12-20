@@ -55,7 +55,7 @@ void rtt_cli_thread(void * arg)
 			buffer[index++] = (uint8_t)key;
 			if (key == '\r' || key == '\n' || index == RX_BUF_LEN)
 			{
-				bluetooth_send(buffer, index);
+				//bluetooth_send(buffer, index);
 				index = 0;
 			}
 		}
