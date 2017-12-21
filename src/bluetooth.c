@@ -28,7 +28,7 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
 // Used UUIDs
 BLE_BAS_DEF(m_bas);
-static ble_lserv_t m_lserv;
+extern ble_lserv_t m_lserv;
 //====
 
 

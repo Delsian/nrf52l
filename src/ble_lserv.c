@@ -8,6 +8,7 @@
 #include "ble_lserv.h"
 
 const uint8_t char1_str[] = "MyChar1";
+ble_lserv_t m_lserv;
 
 void ble_lserv_evt(ble_lserv_evt_t * p_evt)
 {
@@ -58,7 +59,7 @@ static uint32_t Ist_char_add(ble_lserv_t * p_lserv)
 	                                           &p_lserv->rx_handles);
 }
 
-static void __attribute__ ((section(".sdh_ble_observers"))) __attribute__((used)) ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
+static void ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
     if ((p_context == NULL) || (p_ble_evt == NULL))
     {
@@ -66,6 +67,8 @@ static void __attribute__ ((section(".sdh_ble_observers"))) __attribute__((used)
     }
 
 }
+
+NRF_SDH_BLE_OBSERVER(m_lserv_obs, 2, ble_lserv_on_ble_evt, &m_lserv);
 
 ret_code_t ble_lserv_init(ble_lserv_t * p_lserv)
 {
