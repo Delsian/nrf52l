@@ -6,16 +6,18 @@
 #include "bluetooth.h"
 #include "sdk_macros.h"
 #include "ble_lserv.h"
+#include <locale.h>
 
-const uint8_t char1_str[] = "MyChar1";
+const uint8_t char1_str[] = "MyØÔÖ1";
 ble_lserv_t m_lserv;
 
-void ble_lserv_evt(ble_lserv_evt_t * p_evt)
+void ble_lserv_rx_evt(ble_lserv_evt_t * p_evt)
 {
 
 }
 
-static uint32_t Ist_char_add(ble_lserv_t * p_lserv)
+// For incoming events
+static uint32_t rx_char_add(ble_lserv_t * p_lserv)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_t    attr_char_value;
@@ -26,7 +28,7 @@ static uint32_t Ist_char_add(ble_lserv_t * p_lserv)
 
     char_md.char_props.write         = 1;
     char_md.char_props.write_wo_resp = 1;
-    char_md.p_char_user_desc         = NULL;
+    char_md.p_char_user_desc         = char1_str;
     char_md.p_char_pf                = NULL;
     char_md.p_user_desc_md           = NULL;
     char_md.p_cccd_md                = NULL;
@@ -66,6 +68,31 @@ static void ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         return;
     }
 
+    printf("evt %d\n", p_ble_evt->header.evt_id);
+    ble_lserv_t * p_serv = (ble_lserv_t *)p_context;
+
+    switch (p_ble_evt->header.evt_id)
+    {
+        case BLE_GAP_EVT_CONNECTED:
+            break;
+
+        case BLE_GAP_EVT_DISCONNECTED:
+            break;
+
+        case BLE_GATTS_EVT_WRITE:
+        	//ble_lserv_rx_evt(p_nus, p_ble_evt);
+            break;
+
+        case BLE_GATTS_EVT_HVN_TX_COMPLETE:
+        {
+            //notify with empty data that some tx was completed.
+            break;
+        }
+        default:
+            // No implementation needed.
+            break;
+    }
+
 }
 
 NRF_SDH_BLE_OBSERVER(m_lserv_obs, 2, ble_lserv_on_ble_evt, &m_lserv);
@@ -84,7 +111,6 @@ ret_code_t ble_lserv_init(ble_lserv_t * p_lserv)
     VERIFY_PARAM_NOT_NULL(p_lserv);
 
     p_lserv->conn_handle             = BLE_CONN_HANDLE_INVALID;
-    p_lserv->data_handler            = ble_lserv_evt;
     p_lserv->is_notification_enabled = false;
 
 	err_code = sd_ble_uuid_vs_add(&u128, &p_lserv->uuid_type);
@@ -99,7 +125,7 @@ ret_code_t ble_lserv_init(ble_lserv_t * p_lserv)
 	                                    &p_lserv->service_handle);
 	VERIFY_SUCCESS(err_code);
 
-    err_code = Ist_char_add(p_lserv);
+    err_code = rx_char_add(p_lserv);
     VERIFY_SUCCESS(err_code);
 
     return NRF_SUCCESS;

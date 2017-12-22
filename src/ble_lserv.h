@@ -17,6 +17,7 @@
 #define SERVICE_UUID { 0x24, 0x38, 0xEE, 0x58,    0x22, 0x06c,    0x46, 0x46,    0xad, 0xc7,    0x98, 0x94, 0xd2, 0x46, 0xe3, 0x86 }
 #define BLE_UUID_LSERV_SERVICE 0xEE58
 #define BLE_UUID_LSERV_1ST_CHARACTERISTIC 0xEE59
+#define BLE_UUID_LSERV_2ND_CHARACTERISTIC 0xEE5A
 
 #define OPCODE_LENGTH 1
 #define HANDLE_LENGTH 2
@@ -49,11 +50,6 @@ typedef struct
 
 typedef void (*ble_lserv_data_handler_t) (ble_lserv_evt_t * p_evt);
 
-typedef struct
-{
-    ble_lserv_data_handler_t data_handler;
-} ble_lserv_init_t;
-
 struct ble_lserv_s
 {
     uint8_t                  uuid_type;               /**< UUID type for Service Base UUID. */
@@ -62,7 +58,6 @@ struct ble_lserv_s
     ble_gatts_char_handles_t rx_handles;              /**< Handles related to the RX characteristic (as provided by the SoftDevice). */
     uint16_t                 conn_handle;             /**< Handle of the current connection (as provided by the SoftDevice). BLE_CONN_HANDLE_INVALID if not in a connection. */
     bool                     is_notification_enabled; /**< Variable to indicate if the peer has enabled notification of the RX characteristic.*/
-    ble_lserv_data_handler_t data_handler;            /**< Event handler to be called for handling received data. */
 };
 
 // Set uuid in advdata

@@ -241,7 +241,6 @@ static void services_init(void)
 {
     ret_code_t     err_code;
     ble_bas_init_t bas_init;
-    ble_lserv_init_t lserv_init;
 
     // Here the sec level for the Battery Service can be changed/increased.
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
