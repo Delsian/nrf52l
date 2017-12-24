@@ -16,8 +16,8 @@
 
 #define SERVICE_UUID { 0x24, 0x38, 0xEE, 0x58,    0x22, 0x06c,    0x46, 0x46,    0xad, 0xc7,    0x98, 0x94, 0xd2, 0x46, 0xe3, 0x86 }
 #define BLE_UUID_LSERV_SERVICE 0xEE58
-#define BLE_UUID_LSERV_1ST_CHARACTERISTIC 0xEE59
-#define BLE_UUID_LSERV_2ND_CHARACTERISTIC 0xEE5A
+#define BLE_UUID_LSERV_RX_CHARACTERISTIC 0xEE59
+#define BLE_UUID_LSERV_TX_CHARACTERISTIC 0xEE5A
 
 #define OPCODE_LENGTH 1
 #define HANDLE_LENGTH 2
@@ -61,7 +61,6 @@ struct ble_lserv_s
 };
 
 // Set uuid in advdata
-void ble_lserv_adv_init(ble_uuid_t* uuid);
-ret_code_t ble_lserv_init(ble_lserv_t * p_lserv);
+ret_code_t ble_lserv_init();
 
 #endif /* BLE_LSERV_H_ */
