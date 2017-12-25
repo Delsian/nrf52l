@@ -120,6 +120,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -195,6 +198,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -239,6 +245,11 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.428543628" name="ble_dis.c" rcbsApplicability="disable" resourcePath="SDK/BLE/ble_dis.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.345953042">
+						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.345953042" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
+							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1517676332" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/app_button.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
@@ -393,6 +404,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${SDK}\components\libraries\experimental_ringbuf}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.417154629" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -470,6 +484,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${SDK}\components\libraries\experimental_ringbuf}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2031137071" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>

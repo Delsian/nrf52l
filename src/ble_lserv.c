@@ -40,6 +40,7 @@ static void tx_put_scheduler(void * p_event_data, uint16_t event_size)
 			}
 			err_code = nrf_ringbuf_free(m_lserv.p_tx_ringbuf, out_data_len);
 			ASSERT(err_code == NRF_SUCCESS);
+			printf("tx %d bytes\n", out_data_len);
 		}
 	}
 }

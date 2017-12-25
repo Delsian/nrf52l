@@ -90,9 +90,19 @@
 			<locationURI>$%7BSDK%7D/components/ble/common/ble_conn_params.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/ble_conn_state.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/common/ble_conn_state.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/ble_db_discovery.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/ble_db_discovery/ble_db_discovery.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/ble_dis.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_dis/ble_dis.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/BLE/ble_lbs.c</name>
@@ -115,6 +125,21 @@
 			<locationURI>$%7BSDK%7D/components/ble/common/ble_srv_common.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/gatt_cache_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/gatt_cache_manager.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/gatts_cache_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/gatts_cache_manager.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/id_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/id_manager.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/nrf_ble_gatt.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/nrf_ble_gatt/nrf_ble_gatt.c</locationURI>
@@ -133,6 +158,46 @@
 			<name>SDK/BLE/nrf_sdh_freertos.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/softdevice/common/nrf_sdh_freertos.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/peer_data_storage.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/peer_data_storage.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/peer_database.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/peer_database.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/peer_id.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/peer_id.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/peer_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/peer_manager.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/pm_buffer.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/pm_buffer.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/pm_mutex.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/pm_mutex.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/security_dispatcher.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/security_dispatcher.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/BLE/security_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/ble/peer_manager/security_manager.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/BSP/boards.c</name>
@@ -210,6 +275,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp_btn_ble.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/fds.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/NRF52/SDK/components/libraries/fds/fds.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_atfifo.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/atomic_fifo/nrf_atfifo.c</locationURI>
@@ -283,6 +353,11 @@
 			<name>SDK/Libraries/nrf_strerror.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/strerror/nrf_strerror.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/sdk_mapped_flags.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/util/sdk_mapped_flags.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/task_manager.c</name>
