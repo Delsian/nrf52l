@@ -180,6 +180,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error_weak.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/app_scheduler.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/scheduler/app_scheduler.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_timer.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/timer/app_timer.c</locationURI>
@@ -218,6 +223,11 @@
 			<name>SDK/Libraries/nrf_cli.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/cli/nrf_cli.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/nrf_cli_ble_uart.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/cli/ble_uart/nrf_cli_ble_uart.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/nrf_cli_rtt.c</name>
@@ -260,6 +270,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/queue/nrf_queue.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/nrf_ringbuf.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_ringbuf/nrf_ringbuf.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_section_iter.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/experimental_section_vars/nrf_section_iter.c</locationURI>
@@ -268,6 +283,16 @@
 			<name>SDK/Libraries/nrf_strerror.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/strerror/nrf_strerror.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/task_manager.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_task_manager/task_manager.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/task_manager_core_armgcc.S</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_task_manager/task_manager_core_armgcc.S</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/Log/SEGGER_RTT.c</name>

@@ -9,11 +9,12 @@
 #include "bluetooth.h"
 #include "ble_bas.h"
 #include "app_timer.h"
-#include "control.h"
+#include "app_scheduler.h"
 
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
+#include "leds.h"
 
 
 #define APP_BLE_OBSERVER_PRIO           2
@@ -82,7 +83,6 @@ static void advertising_start(void)
 {
     ret_code_t           err_code;
     ble_gap_adv_params_t adv_params;
-    ControlMessage msg;
 
     // Start advertising
     memset(&adv_params, 0, sizeof(adv_params));
@@ -95,9 +95,8 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
-    msg.type = BT_ADVERT;
-    msg.b = true;
-    control_post_event(msg);
+    LedsControlSignal signal = LED1_ON;
+    app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
 }
 
 static void gap_params_init(void)
@@ -127,27 +126,24 @@ static void gap_params_init(void)
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
-    ControlMessage msg;
+    LedsControlSignal signal;
 
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
-            printf("Connected");
+            printf("Connected\n");
             // call on connect
-            msg.type = BT_CONNECT;
-            msg.b = true;
-            control_post_event(msg);
-            msg.type = BT_ADVERT;
-            msg.b = false;
-            control_post_event(msg);
+            signal = LED3_ON;
+            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+            signal = LED1_OFF;
+            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
-            printf("Disconnected");
-            msg.type = BT_CONNECT;
-            msg.b = false;
-            control_post_event(msg);
+            printf("Disconnected\n");
+            signal = LED3_OFF;
+            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             advertising_start();
             break;
@@ -164,7 +160,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 #ifndef S140
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
         {
-            printf("PHY update request.");
+            printf("PHY update request\n");
             ble_gap_phys_t const phys =
             {
                 .rx_phys = BLE_GAP_PHY_AUTO,
@@ -183,7 +179,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
-            printf("GATT Client Timeout.");
+            printf("GATT Client Timeout\n");
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
                                              BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);
@@ -191,7 +187,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
         case BLE_GATTS_EVT_TIMEOUT:
             // Disconnect on GATT Server timeout event.
-            printf("GATT Server Timeout.");
+            printf("GATT Server Timeout\n");
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
                                              BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);
@@ -270,7 +266,7 @@ static void conn_params_error_handler(uint32_t nrf_error)
     APP_ERROR_HANDLER(nrf_error);
 }
 
-void ble_stack_thread(void * arg)
+void ble_stack_init()
 {
     ret_code_t err_code;
     ble_conn_params_init_t cp_init;
@@ -315,9 +311,4 @@ void ble_stack_thread(void * arg)
     advertising_start();
 
     battery_level_update();
-
-    while (1)
-    {
-    	(void)sd_app_evt_wait();
-    }
 }

@@ -6,24 +6,59 @@
 #include "bluetooth.h"
 #include "sdk_macros.h"
 #include "ble_lserv.h"
-#include "FreeRTOS.h"
-#include "semphr.h"
+#include "app_scheduler.h"
 
 const uint8_t char1_str[] = "MyØÔÖ1";
 ble_lserv_t m_lserv;
-static SemaphoreHandle_t xSemTx = NULL;
+NRF_RINGBUF_DEF(tx_ringbuf, 64);
 
-void ble_lserv_rx_evt(ble_evt_t const * p_evt)
+static void tx_put_scheduler(void * p_event_data, uint16_t event_size)
+{
+    UNUSED_PARAMETER(p_event_data);
+    UNUSED_PARAMETER(event_size);
+
+    uint8_t * p_out_data;
+    size_t    out_data_len = 20; // ToDo: nrf_ble_gatt_eff_mtu_get(p_instance->p_gatt, p_instance->p_cb->conn_handle) - OVERHEAD_LENGTH;
+
+    ret_code_t err_code = nrf_ringbuf_get(m_lserv.p_tx_ringbuf,
+										 &p_out_data,
+										 &out_data_len,
+										 true);
+	if (err_code == NRF_SUCCESS) {
+		if (out_data_len > 0) {
+			ble_gatts_hvx_params_t hvx_params;
+			uint16_t len = out_data_len;
+			hvx_params.handle = m_lserv.tx_handles.value_handle;
+			hvx_params.p_data = p_out_data;
+			hvx_params.p_len  = &len;
+			hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+
+			sd_ble_gatts_hvx(m_lserv.conn_handle, &hvx_params);
+			if ((err_code == NRF_ERROR_BUSY) || (err_code == NRF_ERROR_RESOURCES))
+			{
+			   out_data_len = 0;
+			}
+			err_code = nrf_ringbuf_free(m_lserv.p_tx_ringbuf, out_data_len);
+			ASSERT(err_code == NRF_SUCCESS);
+		}
+	}
+}
+
+static void ble_lserv_rx_evt(ble_evt_t const * p_evt)
 {
 	ble_gatts_evt_write_t const * p_evt_write = &p_evt->evt.gatts_evt.params.write;
 
 	if (p_evt_write->handle == m_lserv.tx_handles.cccd_handle)
 	{
-		printf("txh\n");
+		m_lserv.is_notification_enabled = ble_srv_is_notification_enabled(p_evt_write->data);
+		printf("Notification %s\n", m_lserv.is_notification_enabled?"On":"Off");
 	}
 	else if (p_evt_write->handle == m_lserv.rx_handles.value_handle)
 	{
 		printf("rx %s\n", p_evt_write->data);
+		uint8_t test[] = "34635635635663563tatatatatattataahdhsrhstrhsrthsdhsftjhfjtrjrtjrtjrjrtjrjtjrtjjrtjrjrjrjtjrtjrttjtjrtjtjrtjrtjr";
+		size_t ll = strlen(test);
+		ble_lserv_send(test, &ll);
 	}
 }
 
@@ -142,7 +177,7 @@ static void ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         return;
     }
 
-    printf("evt %d\n", p_ble_evt->header.evt_id);
+    //printf("evt %d\n", p_ble_evt->header.evt_id);
     ble_lserv_t * p_serv = (ble_lserv_t *)p_context;
 
     switch (p_ble_evt->header.evt_id)
@@ -162,7 +197,7 @@ static void ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GATTS_EVT_HVN_TX_COMPLETE:
         {
             //notify with empty data that some tx was completed.
-        	xSemaphoreGive(xSemTx);
+        	app_sched_event_put(NULL, 0, tx_put_scheduler);
             break;
         }
         default:
@@ -173,6 +208,18 @@ static void ble_lserv_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 }
 
 NRF_SDH_BLE_OBSERVER(m_lserv_obs, 2, ble_lserv_on_ble_evt, &m_lserv);
+
+size_t ble_lserv_send(uint8_t* p_data, size_t* p_len)
+{
+	if(m_lserv.is_notification_enabled) {
+		ret_code_t err_code = nrf_ringbuf_cpy_put(m_lserv.p_tx_ringbuf, p_data, p_len);
+		if (err_code == NRF_SUCCESS) {
+			app_sched_event_put(NULL, 0, tx_put_scheduler);
+			return *p_len;
+		}
+	}
+	return 0;
+}
 
 ret_code_t ble_lserv_init()
 {
@@ -185,7 +232,6 @@ ret_code_t ble_lserv_init()
     ble_gatts_attr_md_t attr_md;
     ble_gatts_char_handles_t char_handles;
 
-    xSemTx = xSemaphoreCreateBinary();
     m_lserv.conn_handle             = BLE_CONN_HANDLE_INVALID;
     m_lserv.is_notification_enabled = false;
 
@@ -200,6 +246,9 @@ ret_code_t ble_lserv_init()
 	                                    &ble_uuid,
 	                                    &m_lserv.service_handle);
 	VERIFY_SUCCESS(err_code);
+
+	m_lserv.p_tx_ringbuf = &tx_ringbuf;
+	nrf_ringbuf_init(m_lserv.p_tx_ringbuf);
 
     err_code = rx_char_add();
     VERIFY_SUCCESS(err_code);

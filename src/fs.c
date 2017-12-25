@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "FreeRTOS.h"
-#include "task.h"
 #include "nrf.h"
 #include "nrf_soc.h"
 #include "nordic_common.h"
@@ -63,7 +61,7 @@ static void wait_for_flash_ready(nrf_fstorage_t const * p_fstorage)
 {
     while (nrf_fstorage_is_busy(p_fstorage))
     {
-		vTaskDelay(1);
+		//vTaskDelay(1);
     }
 }
 

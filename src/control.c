@@ -7,14 +7,11 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
 #include "control.h"
+#include "nrf_queue.h"
 
 #define MAX_CONTROL_RECEIVERS 8
 
-static TaskHandle_t  h_control_thread;     /**< Definition of BLE stack thread. */
 static ControlFunction* control_receivers[MAX_CONTROL_RECEIVERS];
 static QueueHandle_t ControlQueue;
 

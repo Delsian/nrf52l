@@ -9,11 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "timers.h"
-#include "semphr.h"
-#include "control.h"
 #include "bsp.h"
 #include "bluetooth.h"
 
@@ -22,24 +17,10 @@
 
 #ifdef CLIRTT
 
-static bool rtt_cli_control(ControlMessage msg)
-{
-	if (msg.type == BT_UART_RX)
-	{
-		bsp_board_led_invert(1);
-		uint8_t* buf = msg.ptr;
-		SEGGER_RTT_Write(0, buf+2, *((uint16_t*)buf));
-		SEGGER_RTT_Write(0, "\n", 2);
-		return true;
-	}
-	return false;
-}
-
 void rtt_cli_init()
 {
 	SEGGER_RTT_Init();
 	SEGGER_RTT_WriteString(0,"CLI>\n");
-	control_register_receiver(&rtt_cli_control);
 }
 
 void rtt_cli_thread(void * arg)
@@ -61,7 +42,7 @@ void rtt_cli_thread(void * arg)
 		}
 		else
 		{
-			vTaskDelay(100);
+			//vTaskDelay(100);
 		}
 		//bsp_board_led_invert(1);
 	}

@@ -16,7 +16,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug" postannouncebuildStep="" postbuildStep="${cross_prefix}${cross_objcopy}${cross_suffix}  -O ihex nrf52l.elf nrf52l.hex" preannouncebuildStep="" prebuildStep="">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug" postannouncebuildStep="" postbuildStep="${cross_prefix}${cross_objcopy}${cross_suffix}  -O ihex nrf52l.elf nrf52l.hex" preannouncebuildStep="" prebuildStep="rm -f nrf52l.*">
 					<folderInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537." name="/" resourcePath="">
 						<toolChain errorParsers="" id="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug.1964553099" name="Cross ARM GCC" nonInternalBuilderId="ilg.gnuarmeclipse.managedbuild.cross.builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.69960409" name="Optimization Level" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" useByScannerDiscovery="true" value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.none" valueType="enumerated"/>
@@ -118,6 +118,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -191,6 +193,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc/newlib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -236,10 +240,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="source/portable/MemMang/heap_3.c|source/portable/MemMang/heap_2.c|source/portable/MemMang/heap_5.c|source/portable/MemMang/heap_1.c|portable/GCC/nrf51|portable/CMSIS/nrf51|portable/IAR|portable/ARM|portable/MemMang/heap_5.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c|portable/MemMang/heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
-						<entry excluding="Libraries/app_button.c|Libraries/app_timer.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
+						<entry excluding="Libraries/app_timer_freertos.c|Libraries/app_button.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="Lua/nlua.c|control.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -388,6 +391,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${SDK}\components\libraries\experimental_ringbuf}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.417154629" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -463,6 +468,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/elua/src/modules}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${SDK}\components\libraries\experimental_ringbuf}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2031137071" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
@@ -494,8 +501,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="source/portable/MemMang/heap_3.c|source/portable/MemMang/heap_2.c|source/portable/MemMang/heap_5.c|source/portable/MemMang/heap_1.c|portable/GCC/nrf51|portable/CMSIS/nrf51|portable/IAR|portable/ARM|portable/MemMang/heap_5.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c|portable/MemMang/heap_1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
-						<entry excluding="swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="Lua/nlua.c|control.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

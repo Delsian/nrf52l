@@ -13,6 +13,7 @@
 #include "ble.h"
 #include "ble_srv_common.h"
 #include "nrf_sdh_ble.h"
+#include "nrf_ringbuf.h"
 
 #define SERVICE_UUID { 0x24, 0x38, 0xEE, 0x58,    0x22, 0x06c,    0x46, 0x46,    0xad, 0xc7,    0x98, 0x94, 0xd2, 0x46, 0xe3, 0x86 }
 #define BLE_UUID_LSERV_SERVICE 0xEE58
@@ -58,9 +59,11 @@ struct ble_lserv_s
     ble_gatts_char_handles_t rx_handles;              /**< Handles related to the RX characteristic (as provided by the SoftDevice). */
     uint16_t                 conn_handle;             /**< Handle of the current connection (as provided by the SoftDevice). BLE_CONN_HANDLE_INVALID if not in a connection. */
     bool                     is_notification_enabled; /**< Variable to indicate if the peer has enabled notification of the RX characteristic.*/
+    nrf_ringbuf_t const * 	 p_tx_ringbuf;
 };
 
 // Set uuid in advdata
 ret_code_t ble_lserv_init();
+size_t ble_lserv_send(uint8_t* p_data, size_t* p_len);
 
 #endif /* BLE_LSERV_H_ */

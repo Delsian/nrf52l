@@ -8,42 +8,43 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "bsp.h"
-#include "control.h"
-#include "FreeRTOS.h"
-#include "timers.h"
+#include "leds.h"
 
 #define ADVERTISING_LED 0
 #define LEDBUTTON_LED 1
 #define CONNECTED_LED 2
 
-static bool leds_control(ControlMessage msg)
+void leds_scheduler(void * p_event_data, uint16_t event_size)
 {
-	bsp_board_led_invert(1);
-	switch (msg.type)
+    UNUSED_PARAMETER(event_size);
+	LedsControlSignal signal = *((LedsControlSignal*)p_event_data);
+	switch (signal)
 	{
-	case BT_ADVERT:
-		if (msg.b)
-			bsp_board_led_on(ADVERTISING_LED);
-		else
-			bsp_board_led_off(ADVERTISING_LED);
+	case LED1_ON:
+		bsp_board_led_on(ADVERTISING_LED);
 		break;
-	case BT_CONNECT:
-		if (msg.b)
-			bsp_board_led_on(CONNECTED_LED);
-		else
-			bsp_board_led_off(CONNECTED_LED);
+	case LED1_OFF:
+		bsp_board_led_off(ADVERTISING_LED);
+		break;
+	case LED2_ON:
+		bsp_board_led_on(CONNECTED_LED);
+		break;
+	case LED2_OFF:
+		bsp_board_led_off(CONNECTED_LED);
+		break;
+	case LED3_ON:
+		bsp_board_led_on(LEDBUTTON_LED);
+		break;
+	case LED3_OFF:
+		bsp_board_led_off(LEDBUTTON_LED);
 		break;
 	default:
 		break;
 	}
-
-	return false;
 }
 
 void leds_init()
 {
     bsp_board_leds_init();
     bsp_board_leds_off();
-
-    control_register_receiver(&leds_control);
 }
