@@ -8,16 +8,12 @@
 #include <ble_lserv.h>
 #include "bluetooth.h"
 #include "ble_bas.h"
-#include "ble_dis.h"
 #include "app_timer.h"
 #include "app_scheduler.h"
 
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
-#include "fds.h"
-#include "peer_manager.h"
-#include "ble_conn_state.h"
 #include "leds.h"
 
 
@@ -28,25 +24,14 @@
 
 #define DEVICE_NAME                     "PythonBLE"                         /**< Name of device. Will be included in the advertising data. */
 
-NRF_BLE_GATT_DEF(m_gatt);
+NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
+static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
+
+// Used UUIDs
 BLE_BAS_DEF(m_bas);
 extern ble_lserv_t m_lserv;
-BLE_ADVERTISING_DEF(m_advertising);
+//====
 
-static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
-static pm_peer_id_t      m_peer_id;
-static pm_peer_id_t      m_whitelist_peers[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
-static uint32_t          m_whitelist_peer_cnt;
-static ble_uuid_t        m_adv_uuids[] =
-{
-	    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE}
-	    //,{BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
-};
-
-static void ble_error_handler(uint32_t nrf_error)
-{
-    APP_ERROR_HANDLER(nrf_error);
-}
 
 static void battery_level_update(void)
 {
@@ -66,172 +51,52 @@ static void battery_level_update(void)
     }
 }
 
-static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
-{
-    ret_code_t err_code;
-
-    switch (ble_adv_evt)
-    {
-        case BLE_ADV_EVT_DIRECTED:
-            printf("Directed advertising\n");
-            break;
-
-        case BLE_ADV_EVT_FAST:
-            printf("Fast advertising\n");
-            break;
-
-        case BLE_ADV_EVT_SLOW:
-            printf("Slow advertising\n");
-            break;
-
-        case BLE_ADV_EVT_FAST_WHITELIST:
-            printf("Fast advertising with whitelist\n");
-            break;
-
-        case BLE_ADV_EVT_SLOW_WHITELIST:
-            printf("Slow advertising with whitelist\n");
-            err_code = ble_advertising_restart_without_whitelist(&m_advertising);
-            APP_ERROR_CHECK(err_code);
-            break;
-
-        case BLE_ADV_EVT_IDLE:
-            //sleep_mode_enter();
-            break;
-
-        case BLE_ADV_EVT_WHITELIST_REQUEST:
-        {
-            ble_gap_addr_t whitelist_addrs[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
-            ble_gap_irk_t  whitelist_irks[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
-            uint32_t       addr_cnt = BLE_GAP_WHITELIST_ADDR_MAX_COUNT;
-            uint32_t       irk_cnt  = BLE_GAP_WHITELIST_ADDR_MAX_COUNT;
-
-            err_code = pm_whitelist_get(whitelist_addrs, &addr_cnt,
-                                        whitelist_irks,  &irk_cnt);
-            APP_ERROR_CHECK(err_code);
-            printf("pm_whitelist_get returns %d addr in whitelist and %d irk whitelist\n",
-                           addr_cnt,
-                           irk_cnt);
-
-            // Apply the whitelist.
-            err_code = ble_advertising_whitelist_reply(&m_advertising,
-                                                       whitelist_addrs,
-                                                       addr_cnt,
-                                                       whitelist_irks,
-                                                       irk_cnt);
-            APP_ERROR_CHECK(err_code);
-        }
-        break;
-
-        case BLE_ADV_EVT_PEER_ADDR_REQUEST:
-        {
-            pm_peer_data_bonding_t peer_bonding_data;
-
-            // Only Give peer address if we have a handle to the bonded peer.
-            if (m_peer_id != PM_PEER_ID_INVALID)
-            {
-
-                err_code = pm_peer_data_bonding_load(m_peer_id, &peer_bonding_data);
-                if (err_code != NRF_ERROR_NOT_FOUND)
-                {
-                    APP_ERROR_CHECK(err_code);
-
-                    ble_gap_addr_t * p_peer_addr = &(peer_bonding_data.peer_ble_id.id_addr_info);
-                    err_code = ble_advertising_peer_addr_reply(&m_advertising, p_peer_addr);
-                    APP_ERROR_CHECK(err_code);
-                }
-
-            }
-            break;
-        }
-
-        default:
-            break;
-    }
-}
-
 static void advertising_init(void)
 {
     ret_code_t    err_code;
-    uint8_t                adv_flags;
-    ble_advertising_init_t init;
+    ble_advdata_t advdata;
+    ble_advdata_t srdata;
 
-    memset(&init, 0, sizeof(init));
+    ble_uuid_t adv_uuids[] = {
+		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+		    {BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
+    };
 
-    adv_flags                            = BLE_GAP_ADV_FLAGS_LE_ONLY_LIMITED_DISC_MODE;
-    init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
-    init.advdata.include_appearance      = true;
-    init.advdata.flags                   = adv_flags;
-    init.advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
-    init.advdata.uuids_complete.p_uuids  = m_adv_uuids;
+    // Build and set advertising data
+    memset(&advdata, 0, sizeof(advdata));
 
-    init.config.ble_adv_whitelist_enabled      = true;
-    init.config.ble_adv_directed_enabled       = true;
-    init.config.ble_adv_directed_slow_enabled  = false;
-    init.config.ble_adv_directed_slow_interval = 0;
-    init.config.ble_adv_directed_slow_timeout  = 0;
-    init.config.ble_adv_fast_enabled           = true;
-    init.config.ble_adv_fast_interval          = 0x28;
-    init.config.ble_adv_fast_timeout           = 30;
-    init.config.ble_adv_slow_enabled           = true;
-    init.config.ble_adv_slow_interval          = 0xc80;
-    init.config.ble_adv_slow_timeout           = 180;
+    advdata.name_type          = BLE_ADVDATA_FULL_NAME;
+    advdata.include_appearance = true;
+    advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 
-    init.evt_handler   = on_adv_evt;
-    init.error_handler = ble_error_handler;
+    memset(&srdata, 0, sizeof(srdata));
+    srdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
+    srdata.uuids_complete.p_uuids  = adv_uuids;
 
-    err_code = ble_advertising_init(&m_advertising, &init);
+    err_code = ble_advdata_set(&advdata, &srdata);
     APP_ERROR_CHECK(err_code);
-
-    ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
 }
 
-
-static void peer_list_get(pm_peer_id_t * p_peers, uint32_t * p_size)
+/**@brief Function for starting advertising.
+ */
+static void advertising_start(void)
 {
-    pm_peer_id_t peer_id;
-    uint32_t     peers_to_copy;
+    ret_code_t           err_code;
+    ble_gap_adv_params_t adv_params;
 
-    peers_to_copy = (*p_size < BLE_GAP_WHITELIST_ADDR_MAX_COUNT) ?
-                     *p_size : BLE_GAP_WHITELIST_ADDR_MAX_COUNT;
+    // Start advertising
+    memset(&adv_params, 0, sizeof(adv_params));
 
-    peer_id = pm_next_peer_id_get(PM_PEER_ID_INVALID);
-    *p_size = 0;
+    adv_params.type        = BLE_GAP_ADV_TYPE_ADV_IND;
+    adv_params.p_peer_addr = NULL;
+    adv_params.fp          = BLE_GAP_ADV_FP_ANY;
+    adv_params.interval    = APP_ADV_INTERVAL;
+    adv_params.timeout     = BLE_GAP_ADV_TIMEOUT_GENERAL_UNLIMITED;
 
-    while ((peer_id != PM_PEER_ID_INVALID) && (peers_to_copy--))
-    {
-        p_peers[(*p_size)++] = peer_id;
-        peer_id = pm_next_peer_id_get(peer_id);
-    }
-}
-
-static void advertising_start(bool erase_bonds)
-{
-	ret_code_t           ret;
-
-    if (erase_bonds == true)
-    {
-    	ret = pm_peers_delete();
-    	APP_ERROR_CHECK(ret);
-        // Advertising is started by PM_EVT_PEERS_DELETE_SUCCEEDED event.
-    }
-    else
-    {
-        memset(m_whitelist_peers, PM_PEER_ID_INVALID, sizeof(m_whitelist_peers));
-        m_whitelist_peer_cnt = (sizeof(m_whitelist_peers) / sizeof(pm_peer_id_t));
-        peer_list_get(m_whitelist_peers, &m_whitelist_peer_cnt);
-        ret = pm_whitelist_set(m_whitelist_peers, m_whitelist_peer_cnt);
-        APP_ERROR_CHECK(ret);
-//        ret = pm_device_identities_list_set(m_whitelist_peers, m_whitelist_peer_cnt);
-//        if (ret != NRF_ERROR_NOT_SUPPORTED)
-//        {
-//            APP_ERROR_CHECK(ret);
-//        }
-
-        ret = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
-        APP_ERROR_CHECK(ret);
-		LedsControlSignal signal = LED1_ON;
-		app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
-    }
+    err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
+    APP_ERROR_CHECK(err_code);
+    LedsControlSignal signal = LED1_ON;
+    app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
 }
 
 static void gap_params_init(void)
@@ -280,7 +145,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             signal = LED3_OFF;
             app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
-            advertising_start(false);
+            advertising_start();
             break;
 
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
@@ -372,32 +237,13 @@ static void services_init(void)
 {
     ret_code_t     err_code;
     ble_bas_init_t bas_init;
-    ble_dis_init_t   dis_init_obj;
-    ble_dis_pnp_id_t pnp_id;
-
-    // Device Information Service.
-    pnp_id.vendor_id_source = 2;
-    pnp_id.vendor_id        = 0x9876;
-    pnp_id.product_id       = 0x5678;
-    pnp_id.product_version  = 1;
-
-    memset(&dis_init_obj, 0, sizeof(dis_init_obj));
-
-    ble_srv_ascii_to_utf8(&dis_init_obj.manufact_name_str, "EugK");
-    dis_init_obj.p_pnp_id = &pnp_id;
-
-    BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&dis_init_obj.dis_attr_md.read_perm);
-    BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&dis_init_obj.dis_attr_md.write_perm);
-
-    err_code = ble_dis_init(&dis_init_obj);
-    APP_ERROR_CHECK(err_code);
 
     // Here the sec level for the Battery Service can be changed/increased.
-    BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&bas_init.battery_level_char_attr_md.cccd_write_perm);
-    BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&bas_init.battery_level_char_attr_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.read_perm);
     BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&bas_init.battery_level_char_attr_md.write_perm);
 
-    BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&bas_init.battery_level_report_read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_report_read_perm);
 
     bas_init.evt_handler          = NULL;
     bas_init.support_notification = true;
@@ -407,162 +253,17 @@ static void services_init(void)
     err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
 
-    err_code = ble_lserv_init(&m_lserv);
+    err_code = ble_lserv_init(&m_gatt);
     APP_ERROR_CHECK(err_code);
 }
 
-static void pm_evt_handler(pm_evt_t const * p_evt)
+static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
 {
-    ret_code_t err_code;
-
-    switch (p_evt->evt_id)
-    {
-        case PM_EVT_BONDED_PEER_CONNECTED:
-        {
-            printf("Connected to a previously bonded device\n");
-        } break;
-
-        case PM_EVT_CONN_SEC_SUCCEEDED:
-        {
-            printf("Connection secured: role: %d, conn_handle: 0x%x, procedure: %d\n",
-                         ble_conn_state_role(p_evt->conn_handle),
-                         p_evt->conn_handle,
-                         p_evt->params.conn_sec_succeeded.procedure);
-
-            m_peer_id = p_evt->peer_id;
-        } break;
-
-        case PM_EVT_CONN_SEC_FAILED:
-        {
-            /* Often, when securing fails, it shouldn't be restarted, for security reasons.
-             * Other times, it can be restarted directly.
-             * Sometimes it can be restarted, but only after changing some Security Parameters.
-             * Sometimes, it cannot be restarted until the link is disconnected and reconnected.
-             * Sometimes it is impossible, to secure the link, or the peer device does not support it.
-             * How to handle this error is highly application dependent. */
-        } break;
-
-        case PM_EVT_CONN_SEC_CONFIG_REQ:
-        {
-            // Reject pairing request from an already bonded peer.
-            pm_conn_sec_config_t conn_sec_config = {.allow_repairing = false};
-            pm_conn_sec_config_reply(p_evt->conn_handle, &conn_sec_config);
-        } break;
-
-        case PM_EVT_STORAGE_FULL:
-        {
-            // Run garbage collection on the flash.
-            err_code = fds_gc();
-            if (err_code == FDS_ERR_BUSY || err_code == FDS_ERR_NO_SPACE_IN_QUEUES)
-            {
-                // Retry.
-            }
-            else
-            {
-                APP_ERROR_CHECK(err_code);
-            }
-        } break;
-
-        case PM_EVT_PEERS_DELETE_SUCCEEDED:
-        {
-            advertising_start(false);
-        } break;
-
-        case PM_EVT_LOCAL_DB_CACHE_APPLY_FAILED:
-        {
-            // The local database has likely changed, send service changed indications.
-            pm_local_database_has_changed();
-        } break;
-
-        case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
-        {
-            if (     p_evt->params.peer_data_update_succeeded.flash_changed
-                 && (p_evt->params.peer_data_update_succeeded.data_id == PM_PEER_DATA_ID_BONDING))
-            {
-                printf("New Bond, add the peer to the whitelist if possible");
-                printf("\tm_whitelist_peer_cnt %d, MAX_PEERS_WLIST %d\n",
-                               m_whitelist_peer_cnt + 1,
-                               BLE_GAP_WHITELIST_ADDR_MAX_COUNT);
-                // Note: You should check on what kind of white list policy your application should use.
-
-                if (m_whitelist_peer_cnt < BLE_GAP_WHITELIST_ADDR_MAX_COUNT)
-                {
-                    // Bonded to a new peer, add it to the whitelist.
-                    m_whitelist_peers[m_whitelist_peer_cnt++] = m_peer_id;
-
-                    // The whitelist has been modified, update it in the Peer Manager.
-                    err_code = pm_whitelist_set(m_whitelist_peers, m_whitelist_peer_cnt);
-                    APP_ERROR_CHECK(err_code);
-
-                    err_code = pm_device_identities_list_set(m_whitelist_peers, m_whitelist_peer_cnt);
-                    if (err_code != NRF_ERROR_NOT_SUPPORTED)
-                    {
-                        APP_ERROR_CHECK(err_code);
-                    }
-                }
-            }
-        } break;
-
-        case PM_EVT_PEER_DATA_UPDATE_FAILED:
-        {
-            // Assert.
-            APP_ERROR_CHECK(p_evt->params.peer_data_update_failed.error);
-        } break;
-
-        case PM_EVT_PEER_DELETE_FAILED:
-        {
-            // Assert.
-            APP_ERROR_CHECK(p_evt->params.peer_delete_failed.error);
-        } break;
-
-        case PM_EVT_PEERS_DELETE_FAILED:
-        {
-            // Assert.
-            APP_ERROR_CHECK(p_evt->params.peers_delete_failed_evt.error);
-        } break;
-
-        case PM_EVT_ERROR_UNEXPECTED:
-        {
-            // Assert.
-            APP_ERROR_CHECK(p_evt->params.error_unexpected.error);
-        } break;
-
-        case PM_EVT_CONN_SEC_START:
-        case PM_EVT_PEER_DELETE_SUCCEEDED:
-        case PM_EVT_LOCAL_DB_CACHE_APPLIED:
-        case PM_EVT_SERVICE_CHANGED_IND_SENT:
-        case PM_EVT_SERVICE_CHANGED_IND_CONFIRMED:
-        default:
-            break;
-    }
 }
 
-static void peer_manager_init(void)
+static void conn_params_error_handler(uint32_t nrf_error)
 {
-    ble_gap_sec_params_t sec_param;
-    ret_code_t err_code = pm_init();
-    APP_ERROR_CHECK(err_code);
-    memset(&sec_param, 0, sizeof(ble_gap_sec_params_t));
-
-	// Security parameters to be used for all security procedures.
-	sec_param.bond           = 1;
-	sec_param.mitm           = 0;
-	sec_param.lesc           = 0;
-	sec_param.keypress       = 0;
-	sec_param.io_caps        = BLE_GAP_IO_CAPS_NONE;
-	sec_param.oob            = 0;
-	sec_param.min_key_size   = 7;
-	sec_param.max_key_size   = 16;
-	sec_param.kdist_own.enc  = 1;
-	sec_param.kdist_own.id   = 1;
-	sec_param.kdist_peer.enc = 1;
-	sec_param.kdist_peer.id  = 1;
-
-	err_code = pm_sec_params_set(&sec_param);
-	APP_ERROR_CHECK(err_code);
-
-	err_code = pm_register(pm_evt_handler);
-	APP_ERROR_CHECK(err_code);
+    APP_ERROR_HANDLER(nrf_error);
 }
 
 void ble_stack_init()
@@ -590,6 +291,9 @@ void ble_stack_init()
 
     err_code = nrf_ble_gatt_init(&m_gatt, NULL);
     APP_ERROR_CHECK(err_code);
+    // ????
+    //err_code = nrf_ble_gatt_att_mtu_periph_set(&m_gatt, 64);
+    //APP_ERROR_CHECK(err_code);
 
     services_init();
     advertising_init();
@@ -597,18 +301,17 @@ void ble_stack_init()
     // Conn params
     memset(&cp_init, 0, sizeof(cp_init));
     cp_init.p_conn_params                  = NULL;
-    cp_init.first_conn_params_update_delay = APP_TIMER_TICKS(5000); // 15s
-    cp_init.next_conn_params_update_delay  = APP_TIMER_TICKS(30000); // 5s
+    cp_init.first_conn_params_update_delay = APP_TIMER_TICKS(20000); // 15s
+    cp_init.next_conn_params_update_delay  = APP_TIMER_TICKS(5000); // 5s
     cp_init.max_conn_params_update_count   = 3;
     cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
     cp_init.disconnect_on_fail             = true;
-    cp_init.evt_handler                    = NULL;
-    cp_init.error_handler                  = ble_error_handler;
+    cp_init.evt_handler                    = on_conn_params_evt;
+    cp_init.error_handler                  = conn_params_error_handler;
     err_code = ble_conn_params_init(&cp_init);
     APP_ERROR_CHECK(err_code);
 
-    peer_manager_init();
-    advertising_start(false);  // ToDo: Bonds erase
+    advertising_start();
 
     battery_level_update();
 }

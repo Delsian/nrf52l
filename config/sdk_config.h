@@ -186,100 +186,11 @@
 
 // </e>
 
-// <e> PEER_MANAGER_ENABLED - peer_manager - Peer Manager
-//==========================================================
-#ifndef PEER_MANAGER_ENABLED
-#define PEER_MANAGER_ENABLED 1
-#endif
-// <o> PM_MAX_REGISTRANTS
-// <i> Number of event handlers that can be registered.
-
-#ifndef PM_MAX_REGISTRANTS
-#define PM_MAX_REGISTRANTS 3
-#endif
-
-// <o> PM_FLASH_BUFFERS
-// <i> Number of internal buffers for flash operations.
-// <i> Decrease this value to lower RAM usage.
-
-#ifndef PM_FLASH_BUFFERS
-#define PM_FLASH_BUFFERS 8
-#endif
-
-// </e>
-
-//=============
+//============= HW
 #ifndef NRF_PWR_MGMT_ENABLED
 #define NRF_PWR_MGMT_ENABLED 1
 #endif
 
-// <e> FDS_ENABLED - fds - Flash data storage module
-//==========================================================
-#ifndef FDS_ENABLED
-#define FDS_ENABLED 1
-#endif
-// <h> Pages - Virtual page settings
-
-// <i> Configure the number of virtual pages to use and their size.
-//==========================================================
-// <o> FDS_VIRTUAL_PAGES - Number of virtual flash pages to use.
-// <i> One of the virtual pages is reserved by the system for garbage collection.
-// <i> Therefore, the minimum is two virtual pages: one page to store data and one page to be used by the system for garbage collection.
-// <i> The total amount of flash memory that is used by FDS amounts to @ref FDS_VIRTUAL_PAGES * @ref FDS_VIRTUAL_PAGE_SIZE * 4 bytes.
-
-#ifndef FDS_VIRTUAL_PAGES
-#define FDS_VIRTUAL_PAGES 3
-#endif
-
-// <o> FDS_VIRTUAL_PAGE_SIZE  - The size of a virtual flash page.
-
-
-// <i> Expressed in number of 4-byte words.
-// <i> By default, a virtual page is the same size as a physical page.
-// <i> The size of a virtual page must be a multiple of the size of a physical page.
-// <1024=> 1024
-// <2048=> 2048
-
-#ifndef FDS_VIRTUAL_PAGE_SIZE
-#define FDS_VIRTUAL_PAGE_SIZE 1024
-#endif
-
-// </h>
-//==========================================================
-
-// <h> Backend - Backend configuration
-
-// <i> Configure which nrf_fstorage backend is used by FDS to write to flash.
-//==========================================================
-// <o> FDS_BACKEND  - FDS flash backend.
-
-
-// <i> NRF_FSTORAGE_SD uses the nrf_fstorage_sd backend implementation using the SoftDevice API. Use this if you have a SoftDevice present.
-// <i> NRF_FSTORAGE_NVMC uses the nrf_fstorage_nvmc implementation. Use this setting if you don't use the SoftDevice.
-// <1=> NRF_FSTORAGE_NVMC
-// <2=> NRF_FSTORAGE_SD
-
-#ifndef FDS_BACKEND
-#define FDS_BACKEND 2
-#endif
-
-
-//==========================================================
-// <o> FDS_MAX_USERS - Maximum number of callbacks that can be registered.
-#ifndef FDS_MAX_USERS
-#define FDS_MAX_USERS 4
-#endif
-
-//==========================================================
-// <o> FDS_OP_QUEUE_SIZE - Size of the internal queue.
-// <i> Increase this value if you frequently get synchronous FDS_ERR_NO_SPACE_IN_QUEUES errors.
-
-#ifndef FDS_OP_QUEUE_SIZE
-#define FDS_OP_QUEUE_SIZE 4
-#endif
-
-
-// </h>
 
 //========== BT
 // <q> NRF_BLE_GATT_ENABLED  - nrf_ble_gatt - GATT module
@@ -390,11 +301,6 @@
 #define NRF_SDH_BLE_GAP_EVENT_LENGTH 3
 #endif
 
-// <o> NRF_SDH_BLE_GATT_MAX_MTU_SIZE - Static maximum MTU size.
-#ifndef NRF_SDH_BLE_GATT_MAX_MTU_SIZE
-#define NRF_SDH_BLE_GATT_MAX_MTU_SIZE 23
-#endif
-
 // <o> NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE - Attribute Table size in bytes. The size must be a multiple of 4.
 #ifndef NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE
 #define NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE 1408
@@ -411,15 +317,6 @@
 #ifndef NRF_SDH_BLE_SERVICE_CHANGED
 #define NRF_SDH_BLE_SERVICE_CHANGED 0
 #endif
-
-
-// <q> BLE_ADVERTISING_ENABLED  - ble_advertising - Advertising module
-
-
-#ifndef BLE_ADVERTISING_ENABLED
-#define BLE_ADVERTISING_ENABLED 1
-#endif
-
 
 // </h>
 //==========================================================
@@ -1197,11 +1094,6 @@
 
 // </h>
 //==========================================================
-// <q> BLE_DIS_ENABLED  - ble_dis - Device Information Service
-
-#ifndef BLE_DIS_ENABLED
-#define BLE_DIS_ENABLED 1
-#endif
 
 // <q> BLE_LBS_C_ENABLED  - ble_lbs_c - Nordic LED Button Service Client
 

@@ -18,7 +18,7 @@ static void tx_put_scheduler(void * p_event_data, uint16_t event_size)
     UNUSED_PARAMETER(event_size);
 
     uint8_t * p_out_data;
-    size_t    out_data_len = 20; // ToDo: nrf_ble_gatt_eff_mtu_get(p_instance->p_gatt, p_instance->p_cb->conn_handle) - OVERHEAD_LENGTH;
+    size_t    out_data_len = nrf_ble_gatt_eff_mtu_get(m_lserv.p_gatt, m_lserv.conn_handle) - 3;
 
     ret_code_t err_code = nrf_ringbuf_get(m_lserv.p_tx_ringbuf,
 										 &p_out_data,
@@ -31,6 +31,7 @@ static void tx_put_scheduler(void * p_event_data, uint16_t event_size)
 			hvx_params.handle = m_lserv.tx_handles.value_handle;
 			hvx_params.p_data = p_out_data;
 			hvx_params.p_len  = &len;
+			hvx_params.offset = 0;
 			hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
 
 			sd_ble_gatts_hvx(m_lserv.conn_handle, &hvx_params);
@@ -57,9 +58,9 @@ static void ble_lserv_rx_evt(ble_evt_t const * p_evt)
 	else if (p_evt_write->handle == m_lserv.rx_handles.value_handle)
 	{
 		printf("rx %s\n", p_evt_write->data);
-		uint8_t test[] = "34635635635663563tatatatatattataahdhsrhstrhsrthsdhsftjhfjtrjrtjrtjrjrtjrjtjrtjjrtjrjrjrjtjrtjrttjtjrtjtjrtjrtjr";
-		size_t ll = strlen(test);
-		ble_lserv_send(test, &ll);
+		//uint8_t test[] = "34635635635663563tatatatatattataahdhsrhstrhsrthsdhsftjhfjtrjrtjrtjrjrtjrjtjrtjjrtjrjrjrjtjrtjrttjtjrtjtjrtjrtjr";
+		//size_t ll = strlen(test);
+		//ble_lserv_send(test, &ll);
 	}
 }
 
@@ -222,7 +223,7 @@ size_t ble_lserv_send(uint8_t* p_data, size_t* p_len)
 	return 0;
 }
 
-ret_code_t ble_lserv_init()
+ret_code_t ble_lserv_init(nrf_ble_gatt_t *p_gatt)
 {
 	ret_code_t err_code;
 	ble_uuid128_t u128 = SERVICE_UUID;
@@ -235,6 +236,7 @@ ret_code_t ble_lserv_init()
 
     m_lserv.conn_handle             = BLE_CONN_HANDLE_INVALID;
     m_lserv.is_notification_enabled = false;
+    m_lserv.p_gatt = p_gatt;
 
 	err_code = sd_ble_uuid_vs_add(&u128, &m_lserv.uuid_type);
 	VERIFY_SUCCESS(err_code);

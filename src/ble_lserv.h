@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "ble.h"
+#include "bluetooth.h"
 #include "ble_srv_common.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_ringbuf.h"
@@ -53,6 +54,7 @@ typedef void (*ble_lserv_data_handler_t) (ble_lserv_evt_t * p_evt);
 
 struct ble_lserv_s
 {
+	nrf_ble_gatt_t *		 p_gatt;
     uint8_t                  uuid_type;               /**< UUID type for Service Base UUID. */
     uint16_t                 service_handle;          /**< Handle of Service (as provided by the SoftDevice). */
     ble_gatts_char_handles_t tx_handles;              /**< Handles related to the TX characteristic (as provided by the SoftDevice). */
