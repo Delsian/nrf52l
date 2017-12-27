@@ -22,7 +22,7 @@
 
 #define APP_ADV_INTERVAL                64                                      /**< The advertising interval (in units of 0.625 ms; this value corresponds to 40 ms). */
 
-#define DEVICE_NAME                     "PythonBLE"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "R0b0"                         /**< Name of device. Will be included in the advertising data. */
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;

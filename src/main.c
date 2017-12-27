@@ -5,6 +5,7 @@
 #include "bluetooth.h"
 #include "control.h"
 #include "leds.h"
+#include "esp_impl.h"
 
 #include "nrf_pwr_mgmt.h"
 #include "app_timer.h"
@@ -36,6 +37,8 @@ int main(void)
     leds_init();
 
     ble_stack_init();
+
+    esp_init();
 
 	while (1)
 	{
