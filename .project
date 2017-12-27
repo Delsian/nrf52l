@@ -277,7 +277,7 @@
 		<link>
 			<name>SDK/Libraries/fds.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/NRF52/SDK/components/libraries/fds/fds.c</locationURI>
+			<locationURI>$%7BSDK%7D/components/libraries/fds/fds.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/nrf_atfifo.c</name>
@@ -418,7 +418,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK2%7D</value>
+			<value>$%7BSDK1%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
