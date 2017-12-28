@@ -1,6 +1,3 @@
-[submodule "micropython"]
-	path = micropython
-	url = git@github.com:micropython/micropython.git
-[submodule "elua"]
-	path = elua
-	url = git@github.com:elua/elua.git
+[submodule "Espruino"]
+	path = Espruino
+	url = git@github.com:espruino/Espruino.git
