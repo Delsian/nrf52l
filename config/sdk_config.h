@@ -1583,5 +1583,49 @@
 
 // </e>
 
+// <e> TASK_MANAGER_ENABLED - task_manager - Task manager.
+//==========================================================
+#ifndef TASK_MANAGER_ENABLED
+#define TASK_MANAGER_ENABLED 1
+#endif
+// <q> TASK_MANAGER_CLI_CMDS  - Enable CLI commands specific to the module
+
+
+#ifndef TASK_MANAGER_CLI_CMDS
+#define TASK_MANAGER_CLI_CMDS 0
+#endif
+
+// <o> TASK_MANAGER_CONFIG_MAX_TASKS - Maximum number of tasks which can be created
+#ifndef TASK_MANAGER_CONFIG_MAX_TASKS
+#define TASK_MANAGER_CONFIG_MAX_TASKS 2
+#endif
+
+// <o> TASK_MANAGER_CONFIG_STACK_SIZE - Stack size for every task (power of 2)
+#ifndef TASK_MANAGER_CONFIG_STACK_SIZE
+#define TASK_MANAGER_CONFIG_STACK_SIZE 1024
+#endif
+
+// <q> TASK_MANAGER_CONFIG_STACK_PROFILER_ENABLED  - Enable stack profiling.
+
+
+#ifndef TASK_MANAGER_CONFIG_STACK_PROFILER_ENABLED
+#define TASK_MANAGER_CONFIG_STACK_PROFILER_ENABLED 1
+#endif
+
+// <o> TASK_MANAGER_CONFIG_STACK_GUARD  - Configures stack guard.
+
+// <0=> Disabled
+// <4=> 32 bytes
+// <5=> 64 bytes
+// <6=> 128 bytes
+// <7=> 256 bytes
+// <8=> 512 bytes
+
+#ifndef TASK_MANAGER_CONFIG_STACK_GUARD
+#define TASK_MANAGER_CONFIG_STACK_GUARD 5
+#endif
+
+// </e>
+
 //==========================================================
 #endif // SDK_CONFIG_H

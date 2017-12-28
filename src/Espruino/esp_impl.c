@@ -51,6 +51,7 @@ bool twi1Initialised = false;
 void esp_init()
 {
 	jsiConsolePrintf("Hello\n");
+	jsiLoop();
 }
 
 void jshInit() {

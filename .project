@@ -360,6 +360,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/experimental_memobj/nrf_memobj.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/nrf_mpu.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/experimental_mpu/nrf_mpu.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/nrf_pwr_mgmt.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c</locationURI>

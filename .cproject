@@ -127,6 +127,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -209,6 +210,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -253,9 +255,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.1485189388" name="nrf_drv_gpiote.c" rcbsApplicability="disable" resourcePath="SDK/Drivers/nrf_drv_gpiote.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.684524319">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.684524319" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1858717882" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
+					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.955424561" name="nrf_mpu.c" rcbsApplicability="disable" resourcePath="SDK/Libraries/nrf_mpu.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1121116234">
+						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1121116234" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
+							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2010027395" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 						</tool>
 					</fileInfo>
 					<sourceEntries>
