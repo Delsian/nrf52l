@@ -386,62 +386,6 @@ static JsVarFloat gen_jswrap_Math_max(JsVar* args) {
   return jswrap_math_minmax(args, true);
 }
 
-static JsVarInt gen_jswrap_Graphics_getWidth(JsVar *parent) {
-  return jswrap_graphics_getWidthOrHeight(parent, false);
-}
-
-static JsVarInt gen_jswrap_Graphics_getHeight(JsVar *parent) {
-  return jswrap_graphics_getWidthOrHeight(parent, true);
-}
-
-static void gen_jswrap_Graphics_setColor(JsVar *parent, JsVar* r, JsVar* g, JsVar* b) {
-  jswrap_graphics_setColorX(parent, r,g,b, true);
-}
-
-static void gen_jswrap_Graphics_setBgColor(JsVar *parent, JsVar* r, JsVar* g, JsVar* b) {
-  jswrap_graphics_setColorX(parent, r,g,b, false);
-}
-
-static JsVarInt gen_jswrap_Graphics_getColor(JsVar *parent) {
-  return jswrap_graphics_getColorX(parent, true);
-}
-
-static JsVarInt gen_jswrap_Graphics_getBgColor(JsVar *parent) {
-  return jswrap_graphics_getColorX(parent, false);
-}
-
-static void gen_jswrap_Graphics_setFontBitmap(JsVar *parent) {
-  jswrap_graphics_setFontSizeX(parent, JSGRAPHICS_FONTSIZE_4X6, false);
-}
-
-static void gen_jswrap_Graphics_setFontVector(JsVar *parent, int size) {
-  jswrap_graphics_setFontSizeX(parent, size, true);
-}
-
-static JsVar* gen_jswrap_net_connect(JsVar* options, JsVar* callback) {
-  return jswrap_net_connect(options, callback, ST_NORMAL);
-}
-
-static JsVar* gen_jswrap_dgram_createSocket(JsVar* type, JsVar* callback) {
-  return jswrap_dgram_createSocket(type, callback);
-}
-
-static JsVar* gen_jswrap_Server_listen(JsVar *parent, int port) {
-  return jswrap_net_server_listen(parent, port, ST_NORMAL);
-}
-
-static JsVar* gen_jswrap_http_request(JsVar* options, JsVar* callback) {
-  return jswrap_net_connect(options, callback, ST_HTTP);
-}
-
-static JsVar* gen_jswrap_httpSrv_listen(JsVar *parent, int port) {
-  return jswrap_net_server_listen(parent, port, ST_HTTP);
-}
-
-static JsVar* gen_jswrap_Bluetooth() {
-  return jspNewObject("Bluetooth", "Serial") /* needs JSWAT_EXECUTE_IMMEDIATELY */;
-}
-
 static Pin gen_jswrap_LED1() {
   return LED1_PININDEX;
 }
@@ -628,7 +572,6 @@ static const JswSymPtr jswSymbols_global[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_array_constructor},
   {6, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_arraybuffer_constructor},
   {18, JSWAT_JSVAR, (void (*)(void))gen_jswrap_ArrayBufferView_ArrayBufferView},
-  {58, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Bluetooth},
   {68, JSWAT_JSVAR, (void (*)(void))gen_jswrap_BluetoothDevice_BluetoothDevice},
   {84, JSWAT_JSVAR, (void (*)(void))gen_jswrap_BluetoothRemoteGATTCharacteristic_BluetoothRemoteGATTCharacteristic},
   {118, JSWAT_JSVAR, (void (*)(void))gen_jswrap_BluetoothRemoteGATTServer_BluetoothRemoteGATTServer},
@@ -894,11 +837,6 @@ static const JswSymPtr jswSymbols_E[] FLASH_SECT = {
 };
 static const unsigned char jswSymbolIndex_E = 12;
 static const JswSymPtr jswSymbols_Flash[] FLASH_SECT = {
-  {0, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_flash_erasePage},
-  {10, JSWAT_JSVAR, (void (*)(void))jswrap_flash_getFree},
-  {18, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_flash_getPage},
-  {26, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_flash_read},
-  {31, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_flash_write}
 };
 static const unsigned char jswSymbolIndex_Flash = 13;
 static const JswSymPtr jswSymbols_console[] FLASH_SECT = {
@@ -1103,201 +1041,6 @@ static const JswSymPtr jswSymbols_Math[] FLASH_SECT = {
   {132, JSWAT_JSVARFLOAT | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)), (void (*)(void))wrapAround}
 };
 static const unsigned char jswSymbolIndex_Math = 38;
-static const JswSymPtr jswSymbols_Graphics[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)) | (JSWAT_JSVAR << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_createArrayBuffer},
-  {18, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)) | (JSWAT_JSVAR << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_createCallback}
-};
-static const unsigned char jswSymbolIndex_Graphics = 39;
-static const JswSymPtr jswSymbols_Graphics_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))jswrap_graphics_clear},
-  {6, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))jswrap_graphics_drawCircle},
-  {17, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))jswrap_graphics_drawImage},
-  {27, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)) | (JSWAT_INT32 << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_drawLine},
-  {36, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)) | (JSWAT_INT32 << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_drawRect},
-  {45, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))jswrap_graphics_drawString},
-  {56, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))jswrap_graphics_fillCircle},
-  {67, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_graphics_fillPoly},
-  {76, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)) | (JSWAT_INT32 << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_fillRect},
-  {85, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_Graphics_getBgColor},
-  {96, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_Graphics_getColor},
-  {105, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_Graphics_getHeight},
-  {115, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_BOOL << (JSWAT_BITS*1)), (void (*)(void))jswrap_graphics_getModified},
-  {127, JSWAT_INT32 | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_graphics_getPixel},
-  {136, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_Graphics_getWidth},
-  {145, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_graphics_lineTo},
-  {152, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_graphics_moveTo},
-  {159, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Graphics_setBgColor},
-  {170, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Graphics_setColor},
-  {179, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_Graphics_setFontBitmap},
-  {193, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)) | (JSWAT_INT32 << (JSWAT_BITS*4)), (void (*)(void))jswrap_graphics_setFontCustom},
-  {207, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_Graphics_setFontVector},
-  {221, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_graphics_setPixel},
-  {230, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_BOOL << (JSWAT_BITS*2)), (void (*)(void))jswrap_graphics_setRotation},
-  {242, JSWAT_INT32 | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_graphics_stringWidth}
-};
-static const unsigned char jswSymbolIndex_Graphics_proto = 40;
-static const JswSymPtr jswSymbols_url[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_BOOL << (JSWAT_BITS*2)), (void (*)(void))jswrap_url_parse}
-};
-static const unsigned char jswSymbolIndex_url = 41;
-static const JswSymPtr jswSymbols_Socket[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_Socket = 42;
-static const JswSymPtr jswSymbols_Socket_proto[] FLASH_SECT = {
-  {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_stream_available},
-  {10, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_net_socket_end},
-  {14, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_pipe},
-  {19, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_stream_read},
-  {24, JSWAT_BOOL | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_net_socket_write}
-};
-static const unsigned char jswSymbolIndex_Socket_proto = 43;
-static const JswSymPtr jswSymbols_net[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))gen_jswrap_net_connect},
-  {8, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_net_createServer}
-};
-static const unsigned char jswSymbolIndex_net = 44;
-static const JswSymPtr jswSymbols_dgram[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))gen_jswrap_dgram_createSocket}
-};
-static const unsigned char jswSymbolIndex_dgram = 45;
-static const JswSymPtr jswSymbols_dgramSocket_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_dgram_addMembership},
-  {14, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_dgramSocket_bind},
-  {19, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))jswrap_dgram_close},
-  {25, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*4)), (void (*)(void))jswrap_dgram_socket_send}
-};
-static const unsigned char jswSymbolIndex_dgramSocket_proto = 46;
-static const JswSymPtr jswSymbols_dgramSocket[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_dgramSocket = 47;
-static const JswSymPtr jswSymbols_Server_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))jswrap_net_server_close},
-  {6, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_Server_listen}
-};
-static const unsigned char jswSymbolIndex_Server_proto = 48;
-static const JswSymPtr jswSymbols_httpSRq[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_httpSRq = 49;
-static const JswSymPtr jswSymbols_httpSRq_proto[] FLASH_SECT = {
-  {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_stream_available},
-  {10, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_pipe},
-  {15, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_stream_read}
-};
-static const unsigned char jswSymbolIndex_httpSRq_proto = 50;
-static const JswSymPtr jswSymbols_httpSRs[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_httpSRs = 51;
-static const JswSymPtr jswSymbols_httpCRq[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_httpCRq = 52;
-static const JswSymPtr jswSymbols_httpCRs[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_httpCRs = 53;
-static const JswSymPtr jswSymbols_httpCRs_proto[] FLASH_SECT = {
-  {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_stream_available},
-  {10, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_pipe},
-  {15, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_stream_read}
-};
-static const unsigned char jswSymbolIndex_httpCRs_proto = 54;
-static const JswSymPtr jswSymbols_http[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_http_createServer},
-  {13, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_http_get},
-  {17, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))gen_jswrap_http_request}
-};
-static const unsigned char jswSymbolIndex_http = 55;
-static const JswSymPtr jswSymbols_httpSrv_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))jswrap_net_server_close},
-  {6, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_httpSrv_listen}
-};
-static const unsigned char jswSymbolIndex_httpSrv_proto = 56;
-static const JswSymPtr jswSymbols_httpSRs_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_httpSRs_end},
-  {4, JSWAT_BOOL | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_httpSRs_write},
-  {10, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_httpSRs_writeHead}
-};
-static const unsigned char jswSymbolIndex_httpSRs_proto = 57;
-static const JswSymPtr jswSymbols_httpCRq_proto[] FLASH_SECT = {
-  {0, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_net_socket_end},
-  {4, JSWAT_BOOL | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_net_socket_write}
-};
-static const unsigned char jswSymbolIndex_httpCRq_proto = 58;
-static const JswSymPtr jswSymbols_NetworkJS[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_networkjs_create}
-};
-static const unsigned char jswSymbolIndex_NetworkJS = 59;
-static const JswSymPtr jswSymbols_NRF[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_connect},
-  {8, JSWAT_VOID, (void (*)(void))jswrap_nrf_bluetooth_disconnect},
-  {19, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_nrf_bluetooth_findDevices},
-  {31, JSWAT_JSVAR, (void (*)(void))jswrap_nrf_bluetooth_getAddress},
-  {42, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_nrf_bluetooth_getAdvertisingData},
-  {61, JSWAT_JSVARFLOAT, (void (*)(void))jswrap_nrf_bluetooth_getBattery},
-  {72, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_nfcRaw},
-  {79, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_nfcSend},
-  {87, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_nfcStart},
-  {96, JSWAT_VOID, (void (*)(void))jswrap_nrf_nfcStop},
-  {104, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_nfcURL},
-  {111, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_requestDevice},
-  {125, JSWAT_VOID, (void (*)(void))jswrap_nrf_bluetooth_restart},
-  {133, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_nrf_sendHIDReport},
-  {147, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_nrf_bluetooth_setAdvertising},
-  {162, JSWAT_VOID | (JSWAT_BOOL << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_setLowPowerConnection},
-  {184, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_setRSSIHandler},
-  {199, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_setScan},
-  {207, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_setScanResponse},
-  {223, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_nrf_bluetooth_setServices},
-  {235, JSWAT_VOID | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_setTxPower},
-  {246, JSWAT_VOID | (JSWAT_BOOL << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_setWhitelist},
-  {259, JSWAT_VOID, (void (*)(void))jswrap_nrf_bluetooth_sleep},
-  {265, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_bluetooth_updateServices},
-  {280, JSWAT_VOID, (void (*)(void))jswrap_nrf_bluetooth_wake}
-};
-static const unsigned char jswSymbolIndex_NRF = 60;
-static const JswSymPtr jswSymbols_BluetoothDevice[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_BluetoothDevice = 61;
-static const JswSymPtr jswSymbols_BluetoothRemoteGATTCharacteristic[] FLASH_SECT = {
-  
-};
-static const unsigned char jswSymbolIndex_BluetoothRemoteGATTCharacteristic = 62;
-static const JswSymPtr jswSymbols_BluetoothDevice_proto[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | JSWAT_THIS_ARG | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))jswrap_BluetoothDevice_gatt}
-};
-static const unsigned char jswSymbolIndex_BluetoothDevice_proto = 63;
-static const JswSymPtr jswSymbols_BluetoothRemoteGATTServer_proto[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_nrf_BluetoothRemoteGATTServer_connect},
-  {8, JSWAT_VOID | JSWAT_THIS_ARG, (void (*)(void))jswrap_BluetoothRemoteGATTServer_disconnect},
-  {19, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_BluetoothRemoteGATTServer_getPrimaryService},
-  {37, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_BluetoothRemoteGATTServer_getPrimaryServices},
-  {56, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_nrf_BluetoothRemoteGATTServer_getSecurityStatus},
-  {74, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_BluetoothRemoteGATTServer_setRSSIHandler},
-  {89, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_BOOL << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_BluetoothRemoteGATTServer_startBonding}
-};
-static const unsigned char jswSymbolIndex_BluetoothRemoteGATTServer_proto = 64;
-static const JswSymPtr jswSymbols_BluetoothRemoteGATTService_proto[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_BluetoothRemoteGATTService_getCharacteristic},
-  {18, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_BluetoothRemoteGATTService_getCharacteristics}
-};
-static const unsigned char jswSymbolIndex_BluetoothRemoteGATTService_proto = 65;
-static const JswSymPtr jswSymbols_BluetoothRemoteGATTCharacteristic_proto[] FLASH_SECT = {
-  {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_nrf_BluetoothRemoteGATTCharacteristic_readValue},
-  {10, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_nrf_BluetoothRemoteGATTCharacteristic_startNotifications},
-  {29, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_nrf_BluetoothRemoteGATTCharacteristic_stopNotifications},
-  {47, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_nrf_BluetoothRemoteGATTCharacteristic_writeValue}
-};
-static const unsigned char jswSymbolIndex_BluetoothRemoteGATTCharacteristic_proto = 66;
-static const JswSymPtr jswSymbols_neopixel[] FLASH_SECT = {
-  {0, JSWAT_VOID | (JSWAT_PIN << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_neopixel_write}
-};
-static const unsigned char jswSymbolIndex_neopixel = 67;
-
 
 FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0BTN\0BTN1\0BTN2\0BTN3\0BTN4\0Bluetooth\0BluetoothDevice\0BluetoothRemoteGATTCharacteristic\0BluetoothRemoteGATTServer\0BluetoothRemoteGATTService\0Boolean\0DataView\0Date\0E\0Error\0Float32Array\0Float64Array\0Function\0Graphics\0HIGH\0I2C\0I2C1\0I2C2\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LED\0LED1\0LED2\0LED3\0LED4\0LOW\0LoopbackA\0LoopbackB\0Math\0Modules\0NRF\0NaN\0Number\0Object\0OneWire\0Pin\0Promise\0ReferenceError\0RegExp\0SPI\0SPI1\0SPI2\0SPI3\0Serial\0Serial1\0Server\0Socket\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0Waveform\0analogRead\0analogWrite\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0clearWatch\0console\0decodeURIComponent\0dgramSocket\0digitalPulse\0digitalRead\0digitalWrite\0dump\0echo\0edit\0encodeURIComponent\0eval\0fs\0getPinMode\0getSerial\0getTime\0global\0httpCRq\0httpCRs\0httpSRq\0httpSRs\0httpSrv\0isNaN\0load\0parseFloat\0parseInt\0peek16\0peek32\0peek8\0pinMode\0poke16\0poke32\0poke8\0print\0process\0require\0reset\0save\0setBusyIndicator\0setDeepSleep\0setInterval\0setSleepIndicator\0setTime\0setTimeout\0setWatch\0shiftOut\0trace\0url\0");
 FLASH_STR(jswSymbols_Array_proto_str, "concat\0every\0fill\0filter\0forEach\0indexOf\0join\0length\0map\0pop\0push\0reduce\0reverse\0shift\0slice\0some\0sort\0splice\0toString\0unshift\0");
@@ -1312,7 +1055,7 @@ FLASH_STR(jswSymbols_TypeError_proto_str, "toString\0");
 FLASH_STR(jswSymbols_InternalError_proto_str, "toString\0");
 FLASH_STR(jswSymbols_ReferenceError_proto_str, "toString\0");
 FLASH_STR(jswSymbols_E_str, "FFT\0HSBtoRGB\0clip\0convolve\0dumpLockedVars\0dumpStr\0dumpTimers\0enableWatchdog\0getAddressOf\0getAnalogVRef\0getErrorFlags\0getFlags\0getSizeOf\0getTemperature\0hwRand\0interpolate\0interpolate2d\0kickWatchdog\0lockConsole\0mapInPlace\0memoryArea\0nativeCall\0reverseByte\0setBootCode\0setClock\0setFlags\0setPassword\0setTimeZone\0srand\0sum\0toArrayBuffer\0toString\0toUint8Array\0variance\0");
-FLASH_STR(jswSymbols_Flash_str, "erasePage\0getFree\0getPage\0read\0write\0");
+FLASH_STR(jswSymbols_Flash_str, "\0");
 FLASH_STR(jswSymbols_console_str, "log\0");
 FLASH_STR(jswSymbols_JSON_str, "parse\0stringify\0");
 FLASH_STR(jswSymbols_Modules_str, "addCached\0getCached\0removeAllCached\0removeCached\0");
@@ -1338,35 +1081,6 @@ FLASH_STR(jswSymbols_String_proto_str, "charAt\0charCodeAt\0indexOf\0lastIndexOf
 FLASH_STR(jswSymbols_String_str, "fromCharCode\0");
 FLASH_STR(jswSymbols_Waveform_proto_str, "startInput\0startOutput\0stop\0");
 FLASH_STR(jswSymbols_Math_str, "E\0LN10\0LN2\0LOG10E\0LOG2E\0PI\0SQRT1_2\0SQRT2\0abs\0acos\0asin\0atan\0atan2\0ceil\0clip\0cos\0exp\0floor\0log\0max\0min\0pow\0random\0round\0sin\0sqrt\0tan\0wrap\0");
-FLASH_STR(jswSymbols_Graphics_str, "createArrayBuffer\0createCallback\0");
-FLASH_STR(jswSymbols_Graphics_proto_str, "clear\0drawCircle\0drawImage\0drawLine\0drawRect\0drawString\0fillCircle\0fillPoly\0fillRect\0getBgColor\0getColor\0getHeight\0getModified\0getPixel\0getWidth\0lineTo\0moveTo\0setBgColor\0setColor\0setFontBitmap\0setFontCustom\0setFontVector\0setPixel\0setRotation\0stringWidth\0");
-FLASH_STR(jswSymbols_url_str, "parse\0");
-FLASH_STR(jswSymbols_Socket_str, "");
-FLASH_STR(jswSymbols_Socket_proto_str, "available\0end\0pipe\0read\0write\0");
-FLASH_STR(jswSymbols_net_str, "connect\0createServer\0");
-FLASH_STR(jswSymbols_dgram_str, "createSocket\0");
-FLASH_STR(jswSymbols_dgramSocket_proto_str, "addMembership\0bind\0close\0send\0");
-FLASH_STR(jswSymbols_dgramSocket_str, "");
-FLASH_STR(jswSymbols_Server_proto_str, "close\0listen\0");
-FLASH_STR(jswSymbols_httpSRq_str, "");
-FLASH_STR(jswSymbols_httpSRq_proto_str, "available\0pipe\0read\0");
-FLASH_STR(jswSymbols_httpSRs_str, "");
-FLASH_STR(jswSymbols_httpCRq_str, "");
-FLASH_STR(jswSymbols_httpCRs_str, "");
-FLASH_STR(jswSymbols_httpCRs_proto_str, "available\0pipe\0read\0");
-FLASH_STR(jswSymbols_http_str, "createServer\0get\0request\0");
-FLASH_STR(jswSymbols_httpSrv_proto_str, "close\0listen\0");
-FLASH_STR(jswSymbols_httpSRs_proto_str, "end\0write\0writeHead\0");
-FLASH_STR(jswSymbols_httpCRq_proto_str, "end\0write\0");
-FLASH_STR(jswSymbols_NetworkJS_str, "create\0");
-FLASH_STR(jswSymbols_NRF_str, "connect\0disconnect\0findDevices\0getAddress\0getAdvertisingData\0getBattery\0nfcRaw\0nfcSend\0nfcStart\0nfcStop\0nfcURL\0requestDevice\0restart\0sendHIDReport\0setAdvertising\0setLowPowerConnection\0setRSSIHandler\0setScan\0setScanResponse\0setServices\0setTxPower\0setWhitelist\0sleep\0updateServices\0wake\0");
-FLASH_STR(jswSymbols_BluetoothDevice_str, "");
-FLASH_STR(jswSymbols_BluetoothRemoteGATTCharacteristic_str, "");
-FLASH_STR(jswSymbols_BluetoothDevice_proto_str, "gatt\0");
-FLASH_STR(jswSymbols_BluetoothRemoteGATTServer_proto_str, "connect\0disconnect\0getPrimaryService\0getPrimaryServices\0getSecurityStatus\0setRSSIHandler\0startBonding\0");
-FLASH_STR(jswSymbols_BluetoothRemoteGATTService_proto_str, "getCharacteristic\0getCharacteristics\0");
-FLASH_STR(jswSymbols_BluetoothRemoteGATTCharacteristic_proto_str, "readValue\0startNotifications\0stopNotifications\0writeValue\0");
-FLASH_STR(jswSymbols_neopixel_str, "write\0");
 
 const JswSymList jswSymbolTables[] FLASH_SECT = {
   {jswSymbols_global, jswSymbols_global_str, 123},
@@ -1408,35 +1122,6 @@ const JswSymList jswSymbolTables[] FLASH_SECT = {
   {jswSymbols_String, jswSymbols_String_str, 1},
   {jswSymbols_Waveform_proto, jswSymbols_Waveform_proto_str, 3},
   {jswSymbols_Math, jswSymbols_Math_str, 28},
-  {jswSymbols_Graphics, jswSymbols_Graphics_str, 2},
-  {jswSymbols_Graphics_proto, jswSymbols_Graphics_proto_str, 25},
-  {jswSymbols_url, jswSymbols_url_str, 1},
-  {jswSymbols_Socket, jswSymbols_Socket_str, 0},
-  {jswSymbols_Socket_proto, jswSymbols_Socket_proto_str, 5},
-  {jswSymbols_net, jswSymbols_net_str, 2},
-  {jswSymbols_dgram, jswSymbols_dgram_str, 1},
-  {jswSymbols_dgramSocket_proto, jswSymbols_dgramSocket_proto_str, 4},
-  {jswSymbols_dgramSocket, jswSymbols_dgramSocket_str, 0},
-  {jswSymbols_Server_proto, jswSymbols_Server_proto_str, 2},
-  {jswSymbols_httpSRq, jswSymbols_httpSRq_str, 0},
-  {jswSymbols_httpSRq_proto, jswSymbols_httpSRq_proto_str, 3},
-  {jswSymbols_httpSRs, jswSymbols_httpSRs_str, 0},
-  {jswSymbols_httpCRq, jswSymbols_httpCRq_str, 0},
-  {jswSymbols_httpCRs, jswSymbols_httpCRs_str, 0},
-  {jswSymbols_httpCRs_proto, jswSymbols_httpCRs_proto_str, 3},
-  {jswSymbols_http, jswSymbols_http_str, 3},
-  {jswSymbols_httpSrv_proto, jswSymbols_httpSrv_proto_str, 2},
-  {jswSymbols_httpSRs_proto, jswSymbols_httpSRs_proto_str, 3},
-  {jswSymbols_httpCRq_proto, jswSymbols_httpCRq_proto_str, 2},
-  {jswSymbols_NetworkJS, jswSymbols_NetworkJS_str, 1},
-  {jswSymbols_NRF, jswSymbols_NRF_str, 25},
-  {jswSymbols_BluetoothDevice, jswSymbols_BluetoothDevice_str, 0},
-  {jswSymbols_BluetoothRemoteGATTCharacteristic, jswSymbols_BluetoothRemoteGATTCharacteristic_str, 0},
-  {jswSymbols_BluetoothDevice_proto, jswSymbols_BluetoothDevice_proto_str, 1},
-  {jswSymbols_BluetoothRemoteGATTServer_proto, jswSymbols_BluetoothRemoteGATTServer_proto_str, 7},
-  {jswSymbols_BluetoothRemoteGATTService_proto, jswSymbols_BluetoothRemoteGATTService_proto_str, 2},
-  {jswSymbols_BluetoothRemoteGATTCharacteristic_proto, jswSymbols_BluetoothRemoteGATTCharacteristic_proto_str, 4},
-  {jswSymbols_neopixel, jswSymbols_neopixel_str, 1},
 };
 
 
@@ -1456,19 +1141,6 @@ const JswSymList *jswGetSymbolListForConstructorProto(JsVar *constructor) {
   if (constructorPtr==(void*)jswrap_spi_constructor) return &jswSymbolTables[jswSymbolIndex_SPI_proto];
   if (constructorPtr==(void*)jswrap_i2c_constructor) return &jswSymbolTables[jswSymbolIndex_I2C_proto];
   if (constructorPtr==(void*)jswrap_waveform_constructor) return &jswSymbolTables[jswSymbolIndex_Waveform_proto];
-  if (constructorPtr==(void*)gen_jswrap_Graphics_Graphics) return &jswSymbolTables[jswSymbolIndex_Graphics_proto];
-  if (constructorPtr==(void*)gen_jswrap_Socket_Socket) return &jswSymbolTables[jswSymbolIndex_Socket_proto];
-  if (constructorPtr==(void*)gen_jswrap_dgramSocket_dgramSocket) return &jswSymbolTables[jswSymbolIndex_dgramSocket_proto];
-  if (constructorPtr==(void*)gen_jswrap_Server_Server) return &jswSymbolTables[jswSymbolIndex_Server_proto];
-  if (constructorPtr==(void*)gen_jswrap_httpSRq_httpSRq) return &jswSymbolTables[jswSymbolIndex_httpSRq_proto];
-  if (constructorPtr==(void*)gen_jswrap_httpCRs_httpCRs) return &jswSymbolTables[jswSymbolIndex_httpCRs_proto];
-  if (constructorPtr==(void*)gen_jswrap_httpSrv_httpSrv) return &jswSymbolTables[jswSymbolIndex_httpSrv_proto];
-  if (constructorPtr==(void*)gen_jswrap_httpSRs_httpSRs) return &jswSymbolTables[jswSymbolIndex_httpSRs_proto];
-  if (constructorPtr==(void*)gen_jswrap_httpCRq_httpCRq) return &jswSymbolTables[jswSymbolIndex_httpCRq_proto];
-  if (constructorPtr==(void*)gen_jswrap_BluetoothDevice_BluetoothDevice) return &jswSymbolTables[jswSymbolIndex_BluetoothDevice_proto];
-  if (constructorPtr==(void*)gen_jswrap_BluetoothRemoteGATTServer_BluetoothRemoteGATTServer) return &jswSymbolTables[jswSymbolIndex_BluetoothRemoteGATTServer_proto];
-  if (constructorPtr==(void*)gen_jswrap_BluetoothRemoteGATTService_BluetoothRemoteGATTService) return &jswSymbolTables[jswSymbolIndex_BluetoothRemoteGATTService_proto];
-  if (constructorPtr==(void*)gen_jswrap_BluetoothRemoteGATTCharacteristic_BluetoothRemoteGATTCharacteristic) return &jswSymbolTables[jswSymbolIndex_BluetoothRemoteGATTCharacteristic_proto];
   return 0;
 }
 
@@ -1557,22 +1229,6 @@ const JswSymList *jswGetSymbolListForObject(JsVar *parent) {
     if ((void*)parent->varData.native.ptr==(void*)jswrap_i2c_constructor) return &jswSymbolTables[jswSymbolIndex_I2C];
     if ((void*)parent->varData.native.ptr==(void*)jswrap_string_constructor) return &jswSymbolTables[jswSymbolIndex_String];
     if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_Math_Math) return &jswSymbolTables[jswSymbolIndex_Math];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_Graphics_Graphics) return &jswSymbolTables[jswSymbolIndex_Graphics];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_url_url) return &jswSymbolTables[jswSymbolIndex_url];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_Socket_Socket) return &jswSymbolTables[jswSymbolIndex_Socket];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_net_net) return &jswSymbolTables[jswSymbolIndex_net];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_dgram_dgram) return &jswSymbolTables[jswSymbolIndex_dgram];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_dgramSocket_dgramSocket) return &jswSymbolTables[jswSymbolIndex_dgramSocket];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_httpSRq_httpSRq) return &jswSymbolTables[jswSymbolIndex_httpSRq];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_httpSRs_httpSRs) return &jswSymbolTables[jswSymbolIndex_httpSRs];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_httpCRq_httpCRq) return &jswSymbolTables[jswSymbolIndex_httpCRq];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_httpCRs_httpCRs) return &jswSymbolTables[jswSymbolIndex_httpCRs];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_http_http) return &jswSymbolTables[jswSymbolIndex_http];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_NetworkJS_NetworkJS) return &jswSymbolTables[jswSymbolIndex_NetworkJS];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_NRF_NRF) return &jswSymbolTables[jswSymbolIndex_NRF];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_BluetoothDevice_BluetoothDevice) return &jswSymbolTables[jswSymbolIndex_BluetoothDevice];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_BluetoothRemoteGATTCharacteristic_BluetoothRemoteGATTCharacteristic) return &jswSymbolTables[jswSymbolIndex_BluetoothRemoteGATTCharacteristic];
-    if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_neopixel_neopixel) return &jswSymbolTables[jswSymbolIndex_neopixel];
   }
   if (parent==execInfo.root) return &jswSymbolTables[jswSymbolIndex_global];
   return 0;
@@ -1716,27 +1372,17 @@ bool jswIdle() {
   bool wasBusy = false;
   if (jswrap_pipe_idle()) wasBusy = true;
   if (jswrap_waveform_idle()) wasBusy = true;
-  if (jswrap_graphics_idle()) wasBusy = true;
-  if (jswrap_net_idle()) wasBusy = true;
-  if (jswrap_nrf_idle()) wasBusy = true;
   return wasBusy;
 }
 
 
 /** Tasks to run on Initialisation */
 void jswInit() {
-  jswrap_graphics_init();
-  jswrap_net_init();
-  jswrap_nrf_init();
 }
 
 
 /** Tasks to run on Deinitialisation */
 void jswKill() {
-  jswrap_pipe_kill();
-  jswrap_waveform_kill();
-  jswrap_net_kill();
-  jswrap_nrf_kill();
 }
 
 

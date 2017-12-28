@@ -1206,5 +1206,382 @@
 #endif
 
 // </h>
+
+// <e> TWIS_ENABLED - nrf_drv_twis - TWIS peripheral driver
+//==========================================================
+#ifndef TWIS_ENABLED
+#define TWIS_ENABLED 0
+#endif
+// <o> TWIS_DEFAULT_CONFIG_ADDR0 - Address0
+#ifndef TWIS_DEFAULT_CONFIG_ADDR0
+#define TWIS_DEFAULT_CONFIG_ADDR0 0
+#endif
+
+// <o> TWIS_DEFAULT_CONFIG_ADDR1 - Address1
+#ifndef TWIS_DEFAULT_CONFIG_ADDR1
+#define TWIS_DEFAULT_CONFIG_ADDR1 0
+#endif
+
+// <o> TWIS_DEFAULT_CONFIG_SCL_PULL  - SCL pin pull configuration
+
+// <0=> Disabled
+// <1=> Pull down
+// <3=> Pull up
+
+#ifndef TWIS_DEFAULT_CONFIG_SCL_PULL
+#define TWIS_DEFAULT_CONFIG_SCL_PULL 0
+#endif
+
+// <o> TWIS_DEFAULT_CONFIG_SDA_PULL  - SDA pin pull configuration
+
+// <0=> Disabled
+// <1=> Pull down
+// <3=> Pull up
+
+#ifndef TWIS_DEFAULT_CONFIG_SDA_PULL
+#define TWIS_DEFAULT_CONFIG_SDA_PULL 0
+#endif
+
+// <o> TWIS_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef TWIS_DEFAULT_CONFIG_IRQ_PRIORITY
+#define TWIS_DEFAULT_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <q> TWIS0_ENABLED  - Enable TWIS0 instance
+
+
+#ifndef TWIS0_ENABLED
+#define TWIS0_ENABLED 0
+#endif
+
+// <q> TWIS1_ENABLED  - Enable TWIS1 instance
+
+
+#ifndef TWIS1_ENABLED
+#define TWIS1_ENABLED 0
+#endif
+
+// <q> TWIS_ASSUME_INIT_AFTER_RESET_ONLY  - Assume that any instance would be initialized only once
+
+
+// <i> Optimization flag. Registers used by TWIS are shared by other peripherals. Normally, during initialization driver tries to clear all registers to known state before doing the initialization itself. This gives initialization safe procedure, no matter when it would be called. If you activate TWIS only once and do never uninitialize it - set this flag to 1 what gives more optimal code.
+
+#ifndef TWIS_ASSUME_INIT_AFTER_RESET_ONLY
+#define TWIS_ASSUME_INIT_AFTER_RESET_ONLY 0
+#endif
+
+// <q> TWIS_NO_SYNC_MODE  - Remove support for synchronous mode
+
+
+// <i> Synchronous mode would be used in specific situations. And it uses some additional code and data memory to safely process state machine by polling it in status functions. If this functionality is not required it may be disabled to free some resources.
+
+#ifndef TWIS_NO_SYNC_MODE
+#define TWIS_NO_SYNC_MODE 0
+#endif
+
+// </e>
+
+// <e> TWI_ENABLED - nrf_drv_twi - TWI/TWIM peripheral driver
+//==========================================================
+#ifndef TWI_ENABLED
+#define TWI_ENABLED 1
+#endif
+// <o> TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
+
+// <26738688=> 100k
+// <67108864=> 250k
+// <104857600=> 400k
+
+#ifndef TWI_DEFAULT_CONFIG_FREQUENCY
+#define TWI_DEFAULT_CONFIG_FREQUENCY 26738688
+#endif
+
+// <q> TWI_DEFAULT_CONFIG_CLR_BUS_INIT  - Enables bus clearing procedure during init
+
+
+#ifndef TWI_DEFAULT_CONFIG_CLR_BUS_INIT
+#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 0
+#endif
+
+// <q> TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
+
+
+#ifndef TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
+#define TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
+#endif
+
+// <o> TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef TWI_DEFAULT_CONFIG_IRQ_PRIORITY
+#define TWI_DEFAULT_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <e> TWI0_ENABLED - Enable TWI0 instance
+//==========================================================
+#ifndef TWI0_ENABLED
+#define TWI0_ENABLED 1
+#endif
+// <q> TWI0_USE_EASY_DMA  - Use EasyDMA (if present)
+
+
+#ifndef TWI0_USE_EASY_DMA
+#define TWI0_USE_EASY_DMA 0
+#endif
+
+// </e>
+
+// <e> TWI1_ENABLED - Enable TWI1 instance
+//==========================================================
+#ifndef TWI1_ENABLED
+#define TWI1_ENABLED 1
+#endif
+// <q> TWI1_USE_EASY_DMA  - Use EasyDMA (if present)
+
+
+#ifndef TWI1_USE_EASY_DMA
+#define TWI1_USE_EASY_DMA 0
+#endif
+
+// </e>
+
+// <e> SAADC_ENABLED - nrf_drv_saadc - SAADC peripheral driver
+//==========================================================
+#ifndef SAADC_ENABLED
+#define SAADC_ENABLED 1
+#endif
+// <o> SAADC_CONFIG_RESOLUTION  - Resolution
+
+// <0=> 8 bit
+// <1=> 10 bit
+// <2=> 12 bit
+// <3=> 14 bit
+
+#ifndef SAADC_CONFIG_RESOLUTION
+#define SAADC_CONFIG_RESOLUTION 1
+#endif
+
+// <o> SAADC_CONFIG_OVERSAMPLE  - Sample period
+
+// <0=> Disabled
+// <1=> 2x
+// <2=> 4x
+// <3=> 8x
+// <4=> 16x
+// <5=> 32x
+// <6=> 64x
+// <7=> 128x
+// <8=> 256x
+
+#ifndef SAADC_CONFIG_OVERSAMPLE
+#define SAADC_CONFIG_OVERSAMPLE 0
+#endif
+
+// <q> SAADC_CONFIG_LP_MODE  - Enabling low power mode
+
+
+#ifndef SAADC_CONFIG_LP_MODE
+#define SAADC_CONFIG_LP_MODE 0
+#endif
+
+// <o> SAADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef SAADC_CONFIG_IRQ_PRIORITY
+#define SAADC_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// </e>
+
+// <e> GPIOTE_ENABLED - nrf_drv_gpiote - GPIOTE peripheral driver
+//==========================================================
+#ifndef GPIOTE_ENABLED
+#define GPIOTE_ENABLED 1
+#endif
+// <o> GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins
+#ifndef GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
+#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 4
+#endif
+
+// <o> GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef GPIOTE_CONFIG_IRQ_PRIORITY
+#define GPIOTE_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// </e>
+
+// <e> PWM_ENABLED - nrf_drv_pwm - PWM peripheral driver
+//==========================================================
+#ifndef PWM_ENABLED
+#define PWM_ENABLED 1
+#endif
+// <o> PWM_DEFAULT_CONFIG_OUT0_PIN - Out0 pin  <0-31>
+
+
+#ifndef PWM_DEFAULT_CONFIG_OUT0_PIN
+#define PWM_DEFAULT_CONFIG_OUT0_PIN 31
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_OUT1_PIN - Out1 pin  <0-31>
+
+
+#ifndef PWM_DEFAULT_CONFIG_OUT1_PIN
+#define PWM_DEFAULT_CONFIG_OUT1_PIN 31
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_OUT2_PIN - Out2 pin  <0-31>
+
+
+#ifndef PWM_DEFAULT_CONFIG_OUT2_PIN
+#define PWM_DEFAULT_CONFIG_OUT2_PIN 31
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_OUT3_PIN - Out3 pin  <0-31>
+
+
+#ifndef PWM_DEFAULT_CONFIG_OUT3_PIN
+#define PWM_DEFAULT_CONFIG_OUT3_PIN 31
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_BASE_CLOCK  - Base clock
+
+// <0=> 16 MHz
+// <1=> 8 MHz
+// <2=> 4 MHz
+// <3=> 2 MHz
+// <4=> 1 MHz
+// <5=> 500 kHz
+// <6=> 250 kHz
+// <7=> 125 kHz
+
+#ifndef PWM_DEFAULT_CONFIG_BASE_CLOCK
+#define PWM_DEFAULT_CONFIG_BASE_CLOCK 4
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_COUNT_MODE  - Count mode
+
+// <0=> Up
+// <1=> Up and Down
+
+#ifndef PWM_DEFAULT_CONFIG_COUNT_MODE
+#define PWM_DEFAULT_CONFIG_COUNT_MODE 0
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_TOP_VALUE - Top value
+#ifndef PWM_DEFAULT_CONFIG_TOP_VALUE
+#define PWM_DEFAULT_CONFIG_TOP_VALUE 1000
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_LOAD_MODE  - Load mode
+
+// <0=> Common
+// <1=> Grouped
+// <2=> Individual
+// <3=> Waveform
+
+#ifndef PWM_DEFAULT_CONFIG_LOAD_MODE
+#define PWM_DEFAULT_CONFIG_LOAD_MODE 0
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_STEP_MODE  - Step mode
+
+// <0=> Auto
+// <1=> Triggered
+
+#ifndef PWM_DEFAULT_CONFIG_STEP_MODE
+#define PWM_DEFAULT_CONFIG_STEP_MODE 0
+#endif
+
+// <o> PWM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef PWM_DEFAULT_CONFIG_IRQ_PRIORITY
+#define PWM_DEFAULT_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <q> PWM0_ENABLED  - Enable PWM0 instance
+
+
+#ifndef PWM0_ENABLED
+#define PWM0_ENABLED 1
+#endif
+
+// <q> PWM1_ENABLED  - Enable PWM1 instance
+
+
+#ifndef PWM1_ENABLED
+#define PWM1_ENABLED 0
+#endif
+
+// <q> PWM2_ENABLED  - Enable PWM2 instance
+
+
+#ifndef PWM2_ENABLED
+#define PWM2_ENABLED 0
+#endif
+
+// <q> PWM3_ENABLED  - Enable PWM3 instance
+
+
+#ifndef PWM3_ENABLED
+#define PWM3_ENABLED 0
+#endif
+
+// </e>
+
 //==========================================================
 #endif // SDK_CONFIG_H

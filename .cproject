@@ -65,7 +65,6 @@
 									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
 									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
 									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
-									<listOptionValue builtIn="false" value="BLUETOOTH"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.1465730393" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
@@ -124,12 +123,10 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/compression}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/crypto}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/crypto/mbedtls/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/bluetooth}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -150,7 +147,6 @@
 									<listOptionValue builtIn="false" value="NRF52832_XXAA"/>
 									<listOptionValue builtIn="false" value="NRF52_PAN_74"/>
 									<listOptionValue builtIn="false" value="SWI_DISABLE0"/>
-									<listOptionValue builtIn="false" value="BLUETOOTH"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.653441933" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
@@ -209,12 +205,10 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/compression}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/crypto}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/crypto/mbedtls/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/bluetooth}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -259,13 +253,18 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.1485189388" name="nrf_drv_gpiote.c" rcbsApplicability="disable" resourcePath="SDK/Drivers/nrf_drv_gpiote.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.684524319">
+						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.684524319" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
+							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1858717882" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
-						<entry excluding="neopixel|wio_lte|puckjs|microbit|compression|hexbadge|bluetooth|crypto|graphics|tv|network|filesystem|filesystem/fat_sd" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/libs"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/src"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/libs/math"/>
+						<entry excluding="jswrap_flash.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/src"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/app_button.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
 						<entry excluding="Espruino|Lua/nlua.c|control.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry excluding="jswrapper.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Espruino"/>
+						<entry excluding="jshardware.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Espruino"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
