@@ -13,6 +13,7 @@
 #include "boards.h"
 #include "nrf_soc.h"
 #include "rtt_cli.h"
+#include "custom_service.h"
 
 static void hw_init(void)
 {
@@ -37,8 +38,6 @@ int main(void)
     leds_init();
 
     ble_stack_init();
-
-    esp_init();
 
 	while (1)
 	{

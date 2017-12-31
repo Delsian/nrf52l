@@ -255,18 +255,10 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537.955424561" name="nrf_mpu.c" rcbsApplicability="disable" resourcePath="SDK/Libraries/nrf_mpu.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1121116234">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150.1121116234" name="Cross ARM GNU C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.155875150">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.2010027395" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/libs/math"/>
-						<entry excluding="jswrap_flash.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Espruino/src"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/app_button.c|Libraries/bsp_btn_ble.c|Libraries/Log/SEGGER_RTT_Syscalls_GCC.c|Libraries/Log/SEGGER_RTT_printf.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="Espruino|Lua/nlua.c|control.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry excluding="jshardware.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/Espruino"/>
+						<entry excluding="ble_lserv.c|Espruino|Lua/nlua.c|control.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

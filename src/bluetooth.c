@@ -5,7 +5,6 @@
  *      Author: Eug
  */
 
-#include <ble_lserv.h>
 #include "bluetooth.h"
 #include "ble_bas.h"
 #include "app_timer.h"
@@ -15,7 +14,7 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
 #include "leds.h"
-
+#include "custom_service.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -29,7 +28,6 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
 // Used UUIDs
 BLE_BAS_DEF(m_bas);
-extern ble_lserv_t m_lserv;
 //====
 
 
@@ -58,8 +56,7 @@ static void advertising_init(void)
     ble_advdata_t srdata;
 
     ble_uuid_t adv_uuids[] = {
-		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
-		    {BLE_UUID_LSERV_SERVICE, BLE_UUID_TYPE_VENDOR_BEGIN}
+		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE}
     };
 
     // Build and set advertising data
@@ -253,7 +250,7 @@ static void services_init(void)
     err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
 
-    err_code = ble_lserv_init(&m_gatt);
+    err_code = CustomServiceInit(&tServ);
     APP_ERROR_CHECK(err_code);
 }
 

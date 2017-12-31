@@ -247,7 +247,7 @@
 		<link>
 			<name>SDK/Drivers/nrf_drv_twi.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/NRF/components/drivers_nrf/twi_master/nrf_drv_twi.c</locationURI>
+			<locationURI>$%7BSDK%7D/components/drivers_nrf/twi_master/nrf_drv_twi.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Drivers/nrf_saadc.c</name>
@@ -453,7 +453,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BSDK1%7D</value>
+			<value>$%7BSDK2%7D</value>
 		</variable>
 		<variable>
 			<name>SDK1</name>
