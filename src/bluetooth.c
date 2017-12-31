@@ -21,8 +21,6 @@
 
 #define APP_ADV_INTERVAL                64                                      /**< The advertising interval (in units of 0.625 ms; this value corresponds to 40 ms). */
 
-#define DEVICE_NAME                     "R0b0"                         /**< Name of device. Will be included in the advertising data. */
-
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
@@ -56,7 +54,8 @@ static void advertising_init(void)
     ble_advdata_t srdata;
 
     ble_uuid_t adv_uuids[] = {
-		    {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE}
+		    {tServ.ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
+			{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
     };
 
     // Build and set advertising data
@@ -101,12 +100,11 @@ static void gap_params_init(void)
     ret_code_t              err_code;
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
+    const uint8_t *devname = tServ.pubDeviceName;
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
-    err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
+    err_code = sd_ble_gap_device_name_set(&sec_mode, devname, strlen(devname));
     APP_ERROR_CHECK(err_code);
 
     memset(&gap_conn_params, 0, sizeof(gap_conn_params));

@@ -17,6 +17,9 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         return;
     }
 
+    printf("evt %d\n", p_ble_evt->header.evt_id);
+    //printf("evt %d\n", p_ble_evt->header.evt_id);
+
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
@@ -57,7 +60,9 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 	err_code = sd_ble_uuid_vs_add(&(itServ->tUuid), &(ptCustVar->tUuid.type));
 	VERIFY_SUCCESS(err_code);
 
-	ptCustVar->tUuid.uuid = itServ->tUuid.uuid128[13]<<8 + itServ->tUuid.uuid128[12];
+	ptCustVar->tUuid.uuid = itServ->tUuid.uuid128[13];
+	ptCustVar->tUuid.uuid <<= 8;
+	ptCustVar->tUuid.uuid += itServ->tUuid.uuid128[12];
 	// Add the service.
 	err_code = sd_ble_gatts_service_add(itServ->ubServiceType,
 										&(ptCustVar->tUuid),
