@@ -29,21 +29,27 @@ typedef enum {
 	CCM_NOTIFY
 } CustomCharMode;
 
+typedef struct _CharVars {
+	uint16_t 	hval;
+	uint16_t 	hcccd;
+	uint8_t		notif;
+} tCharVars;
+
+typedef void (CustEventReceiver)(ble_evt_t const *);
+
 typedef struct _CustomChar {
 	uint16_t			usUuid;
 	uint8_t*			ubName;
 	CustomCharMode		tMode;
-	ble_gatts_char_handles_t* ptHandle;
+	tCharVars* 			ptHandle;
+	CustEventReceiver*  wrEvt;
+	CustEventReceiver*	rdEvt;
 } tCustomChar;
-
-typedef void (CustEventReceiver)(ble_evt_t const *);
 
 typedef struct _CustomService {
 	ble_uuid128_t 			tUuid;
 	uint8_t 				ubServiceType;
 	tCustomServiceVars* 	ptVars;
-	CustEventReceiver*		wrEvt;
-	CustEventReceiver*		rdEvt;
 	tCustomChar 			ptChars[];
 } tCustomService;
 

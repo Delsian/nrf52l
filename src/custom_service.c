@@ -9,8 +9,22 @@
 #include "sdk_macros.h"
 
 static tCustomServiceVars* ptCustVar;
-static CustEventReceiver* RdHndlr;
-static CustEventReceiver* WrHndlr;
+
+static tCustomChar const * GetByCccd(uint16_t iusCccd)
+{
+    uint8_t i = 0;
+    while (gtServices.tServices[i]) {
+    	tCustomService const * tServ = gtServices.tServices[i++];
+		uint8_t j = 0;
+    	while (tServ->ptChars[j].usUuid)
+    	{
+    		if (tServ->ptChars[j].ptHandle && tServ->ptChars[j].ptHandle->hcccd == iusCccd )
+    			return &(tServ->ptChars[j]);
+    		j++;
+    	}
+    }
+    return NULL;
+}
 
 static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
@@ -32,22 +46,39 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GATTS_EVT_WRITE:
-        	if(WrHndlr) {
-        		(*WrHndlr)(p_ble_evt);
+        {
+        	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+        	tCustomChar const * tCh = GetByCccd(p_evt_write->handle);
+        	if (tCh) {
+        		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);
+        		printf("Notification %s\n", tCh->ptHandle->notif?"On":"Off");
         	}
-            break;
+        }
+        break;
 
         case BLE_GATTS_EVT_HVN_TX_COMPLETE:
             //notify with empty data that some tx was completed.
-        	if(RdHndlr) {
-				(*RdHndlr)(p_ble_evt);
-			}
+//        	if(RdHndlr) {
+//				(*RdHndlr)(p_ble_evt);
+//			}
             break;
         default:
             // No implementation needed.
             break;
     }
+}
 
+void CustomServiceSend(uint16_t iusConn, uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
+{
+	ble_gatts_hvx_params_t hvx_params;
+	uint16_t len = iusLen;
+	hvx_params.handle = iusChar;
+	hvx_params.p_data = pubData;
+	hvx_params.p_len  = &len;
+	hvx_params.offset = 0;
+	hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+
+	sd_ble_gatts_hvx(iusConn, &hvx_params);
 }
 
 NRF_SDH_BLE_OBSERVER(cust_obs, 2, ble_custom_on_ble_evt, NULL);
@@ -121,25 +152,18 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 		attr_char_value.init_len  = sizeof(uint8_t);
 		attr_char_value.max_len   = 20;
 
-		printf("Char %x\n", itServ->ptChars[ubChIndex].usUuid);
 		err_code = sd_ble_gatts_characteristic_add(ptCustVar->usServiceHandle,
 		                                           &char_md,
 		                                           &attr_char_value,
 		                                           &tNewHandle);
 		VERIFY_SUCCESS(err_code);
-		printf("Hnd %x %x %x\n", tNewHandle.value_handle, tNewHandle.user_desc_handle, tNewHandle.cccd_handle);
+		printf("Ch %x '%s' Hnd %x %x\n", itServ->ptChars[ubChIndex].usUuid, itServ->ptChars[ubChIndex].ubName, tNewHandle.value_handle, tNewHandle.cccd_handle);
 		if (itServ->ptChars[ubChIndex].ptHandle) {
-			memcpy(itServ->ptChars[ubChIndex].ptHandle, &tNewHandle, sizeof(ble_gatts_char_handles_t));
+			itServ->ptChars[ubChIndex].ptHandle->hval = tNewHandle.value_handle;
+			itServ->ptChars[ubChIndex].ptHandle->hcccd = tNewHandle.cccd_handle;
+			itServ->ptChars[ubChIndex].ptHandle->notif = 0;
 		}
 		ubChIndex++;
 	}
-
-	if (itServ->rdEvt) {
-		RdHndlr = itServ->rdEvt;
-	}
-	if (itServ->wrEvt) {
-		WrHndlr = itServ->wrEvt;
-	}
-
     return NRF_SUCCESS;
 }
