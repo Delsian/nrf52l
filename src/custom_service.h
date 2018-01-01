@@ -22,23 +22,38 @@ typedef struct _CustomServiceVars {
 	uint16_t                 usConnHandle;             /**< Handle of the current connection (as provided by the SoftDevice). BLE_CONN_HANDLE_INVALID if not in a connection. */
 } tCustomServiceVars;
 
+typedef enum {
+	CCM_WRITE,
+	CCM_READNOTIFY,
+	CCM_READWRITE,
+	CCM_NOTIFY
+} CustomCharMode;
+
 typedef struct _CustomChar {
-	uint16_t usUuid;
+	uint16_t			usUuid;
+	uint8_t*			ubName;
+	CustomCharMode		tMode;
 	ble_gatts_char_handles_t* ptHandle;
-	ble_gatt_char_props_t tProps;
-	const ble_gatts_attr_md_t* pCccd;
 } tCustomChar;
 
+typedef void (CustEventReceiver)(ble_evt_t const *);
+
 typedef struct _CustomService {
-	uint8_t*				pubDeviceName;
 	ble_uuid128_t 			tUuid;
 	uint8_t 				ubServiceType;
 	tCustomServiceVars* 	ptVars;
-	tCustomChar** 			ptChars;
+	CustEventReceiver*		wrEvt;
+	CustEventReceiver*		rdEvt;
+	tCustomChar 			ptChars[];
 } tCustomService;
 
+typedef struct _DeviceDescription {
+	uint8_t*				pubDeviceName;
+	const tCustomService*			tServices[];
+} tDevDescription;
+
 // Define this structure in external module
-extern const tCustomService tServ;
+extern const tDevDescription gtServices;
 
 #endif /* CUSTOM_SERVICE_H_ */
 

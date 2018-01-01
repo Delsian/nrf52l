@@ -54,7 +54,9 @@ static void advertising_init(void)
     ble_advdata_t srdata;
 
     ble_uuid_t adv_uuids[] = {
-		    {tServ.ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
+    		// ToDo: причесать этот кусок циклом
+		    {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
+		    //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
 			{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
     };
 
@@ -100,7 +102,7 @@ static void gap_params_init(void)
     ret_code_t              err_code;
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
-    const uint8_t *devname = tServ.pubDeviceName;
+    const uint8_t *devname = gtServices.pubDeviceName;
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
@@ -248,8 +250,11 @@ static void services_init(void)
     err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
 
-    err_code = CustomServiceInit(&tServ);
-    APP_ERROR_CHECK(err_code);
+    uint8_t i = 0;
+    while (gtServices.tServices[i]) {
+    	err_code = CustomServiceInit(gtServices.tServices[i++]);
+    	APP_ERROR_CHECK(err_code);
+    }
 }
 
 static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
