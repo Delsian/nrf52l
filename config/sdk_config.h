@@ -1583,6 +1583,13 @@
 
 // </e>
 
+// <q> BUTTON_ENABLED  - app_button - buttons handling module
+
+
+#ifndef BUTTON_ENABLED
+#define BUTTON_ENABLED 1
+#endif
+
 // <e> TASK_MANAGER_ENABLED - task_manager - Task manager.
 //==========================================================
 #ifndef TASK_MANAGER_ENABLED

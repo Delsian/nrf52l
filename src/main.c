@@ -29,6 +29,8 @@ static void hw_init(void)
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
+
+    InitTftBtn();
 }
 
 int main(void)

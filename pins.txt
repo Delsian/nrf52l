@@ -1,0 +1,55 @@
+          +------------+
+          |  Antenna   |
+1  P24    |            |  P25
+2  P23    |            |  P26                     
+3  P22    |            |  P27
+4  P21    |            |  P
+5  P20    |            |  P29
+6  P19    |            |  P30
+7  P17    |            |  P31
+8  P16    |            |  P02
+9  P15    |            |
+10
+11
+12
+13 P08
+14 VCC    +-----------+  GND
+
+
+
+   TFT    Joy
+1  x      Up
+2  LED-   GND btn
+3  LED+   Left
+4  Reset  Center 
+5  A0     VCC LED
+6  SDA    --
+7  SCK    Blue
+8  VCC    Red
+9  CS     Green
+10 --     Down
+11 GND    Right
+
+
+P24 - B LED
+P23 - R LED
+P22 - G LED
+P21 - Down
+P20 - Right
+P17 - Left
+P16 - Center
+P15 - Up
+
+P25 - CS
+P26 - Reset
+P27 - LED TFT
+P29 - A0
+P30 - SDA
+P31 - SCK
+
+
+
+
+
+
+

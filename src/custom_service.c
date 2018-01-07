@@ -26,6 +26,22 @@ static tCustomChar const * GetByCccd(uint16_t iusCccd)
     return NULL;
 }
 
+static tCustomChar const * GetByVal(uint16_t iusVal)
+{
+    uint8_t i = 0;
+    while (gtServices.tServices[i]) {
+    	tCustomService const * tServ = gtServices.tServices[i++];
+		uint8_t j = 0;
+    	while (tServ->ptChars[j].usUuid)
+    	{
+    		if (tServ->ptChars[j].ptHandle && tServ->ptChars[j].ptHandle->hval == iusVal )
+    			return &(tServ->ptChars[j]);
+    		j++;
+    	}
+    }
+    return NULL;
+}
+
 static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
     if (p_ble_evt == NULL)
@@ -52,6 +68,11 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         	if (tCh) {
         		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);
         		printf("Notification %s\n", tCh->ptHandle->notif?"On":"Off");
+        		break;
+        	}
+        	tCh = GetByVal(p_evt_write->handle);
+        	if (tCh && tCh->wrEvt) {
+        		(*tCh->wrEvt)(p_ble_evt);
         	}
         }
         break;

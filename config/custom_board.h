@@ -66,6 +66,12 @@ extern "C" {
 
 #define BUTTONS_NUMBER 0
 
+#define JOYSTICK_UP			20
+#define JOYSTICK_DOWN		21
+#define JOYSTICK_LEFT		22
+#define JOYSTICK_RIGHT		23
+#define JOYSTICK_CENTER		24
+
 #define RX_PIN_NUMBER  11
 #define TX_PIN_NUMBER  9
 #define CTS_PIN_NUMBER 10
