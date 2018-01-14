@@ -93,8 +93,8 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
-    LedsControlSignal signal = LED1_ON;
-    app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+//    LedsControlSignal signal = LED1_ON;
+//    app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
 }
 
 static void gap_params_init(void)
@@ -130,17 +130,17 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_CONNECTED:
             printf("Connected\n");
             // call on connect
-            signal = LED3_ON;
-            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
-            signal = LED1_OFF;
-            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+//            signal = LED3_ON;
+//            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+//            signal = LED1_OFF;
+//            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
             printf("Disconnected\n");
-            signal = LED3_OFF;
-            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+//            signal = LED3_OFF;
+//            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             advertising_start();
             break;

@@ -31,22 +31,24 @@
 11 GND    Right
 
 
-P24 - B LED
-P23 - R LED
-P22 - G LED
-P21 - Down
-P20 - Right
-P17 - Left
-P16 - Center
-P15 - Up
 
-P25 - CS
-P26 - Reset
-P27 - LED TFT
-P29 - A0
-P30 - SDA
-P31 - SCK
-
+PCA9685
+1 BTN
+2 VCC 
+3
+4 GND
+5
+6
+7
+8
+9
+10
+11
+12 A_BATT
+13
+14
+15 SCL
+16 SDA
 
 
 

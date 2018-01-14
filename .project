@@ -255,6 +255,11 @@
 			<locationURI>$%7BSDK%7D/components/drivers_nrf/hal/nrf_saadc.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Drivers/nrf_twi_mngr.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/twi_mngr/nrf_twi_mngr.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/Log</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

@@ -3,14 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 #include "bluetooth.h"
-#include "control.h"
-#include "leds.h"
-#include "esp_impl.h"
+#include "pca9685.h"
 
 #include "nrf_pwr_mgmt.h"
 #include "app_timer.h"
 #include "app_scheduler.h"
-#include "boards.h"
 #include "nrf_soc.h"
 #include "rtt_cli.h"
 #include "custom_service.h"
@@ -30,16 +27,16 @@ static void hw_init(void)
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
 
-    InitTftBtn();
 }
 
 int main(void)
 {
     hw_init();
-    APP_SCHED_INIT(sizeof(void*), 6);
-    leds_init();
+    APP_SCHED_INIT(sizeof(void*), 16);
 
-    ble_stack_init();
+    PcaInit();
+
+    //ble_stack_init();
 
 	while (1)
 	{

@@ -1454,10 +1454,17 @@
 
 // </e>
 
+// <q> NRF_TWI_MNGR_ENABLED  - nrf_twi_mngr - TWI transaction manager
+
+
+#ifndef NRF_TWI_MNGR_ENABLED
+#define NRF_TWI_MNGR_ENABLED 1
+#endif
+
 // <e> PWM_ENABLED - nrf_drv_pwm - PWM peripheral driver
 //==========================================================
 #ifndef PWM_ENABLED
-#define PWM_ENABLED 1
+#define PWM_ENABLED 0
 #endif
 // <o> PWM_DEFAULT_CONFIG_OUT0_PIN - Out0 pin  <0-31>
 
@@ -1588,6 +1595,13 @@
 
 #ifndef BUTTON_ENABLED
 #define BUTTON_ENABLED 1
+#endif
+
+// <q> NRF_QUEUE_ENABLED  - nrf_queue - Queue module
+
+
+#ifndef NRF_QUEUE_ENABLED
+#define NRF_QUEUE_ENABLED 1
 #endif
 
 // <e> TASK_MANAGER_ENABLED - task_manager - Task manager.
