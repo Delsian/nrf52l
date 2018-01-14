@@ -16,6 +16,10 @@
 #define PCA9685_ADDR 0x60
 #define PCA9685_MAX_CHANNEL         15
 
+#define PCA9685_LEDR				0
+#define PCA9685_LEDG				1
+#define PCA9685_LEDB				15
+
 // Register addresses from data sheet
 #define PCA9685_MODE1_REG           0x00
 #define PCA9685_MODE2_REG           0x01
@@ -40,6 +44,14 @@
 #define PCA9685_SW_RESET            0x06 // Sent to address 0x00 to reset all devices on Wire line
 #define PCA9685_PWM_FULL            0x01000 // Special value for full on/full off LEDx modes
 
+const nrf_drv_twi_config_t config = {
+	.scl                = TWI0_SCL,
+	.sda                = TWI0_SDA,
+	.frequency          = NRF_TWI_FREQ_400K,
+	.interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
+	.clear_bus_init     = false
+};
+
 NRF_TWI_MNGR_DEF(m_nrf_twi_mngr, 1, 0);
 static uint8_t ubData[5];
 static nrf_twi_mngr_transfer_t ptTransfers[1] =
@@ -51,7 +63,8 @@ const static nrf_twi_mngr_transaction_t tTransaction =
     .callback            = NULL,
     .p_user_data         = NULL,
     .p_transfers         = ptTransfers,
-    .number_of_transfers = 1
+    .number_of_transfers = 1,
+	.p_required_twi_cfg  = &config
 };
 
 static bool PcaQueueFull()
@@ -75,25 +88,43 @@ void PcaWriteChannel(uint8_t ch, uint16_t val_on, uint16_t val_off)
 	}
 }
 
+void PcaLed(uint8_t uR,uint8_t uG,uint8_t uB)
+{
+	static uint8_t ledR[5];
+	static uint8_t ledG[5];
+	static uint8_t ledB[5];
+	const nrf_twi_mngr_transfer_t ptTrC[] =
+	{
+		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ledR, 5, 0),
+		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ledG, 5, 0),
+		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ledB, 5, 0)
+	};
+	const nrf_twi_mngr_transaction_t tC =
+	{
+	    .callback            = NULL,
+	    .p_user_data         = NULL,
+	    .p_transfers         = ptTrC,
+	    .number_of_transfers = 3,
+		.p_required_twi_cfg = &config
+	};
+	APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &tC));
+}
+
 void PcaInit(void)
 {
 	uint32_t err_code;
 
-	nrf_drv_twi_config_t const config = {
-	  .scl                = TWI0_SCL,
-	  .sda                = TWI0_SDA,
-	  .frequency          = NRF_TWI_FREQ_100K,
-	  .interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
-	  .clear_bus_init     = false
-	};
-
 	err_code = nrf_twi_mngr_init(&m_nrf_twi_mngr, &config);
 	APP_ERROR_CHECK(err_code);
 
-	const uint8_t ubDataReset1[2] = {PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC};
+	const uint8_t ubDataReset0[2] = {PCA9685_MODE1_REG, PCA9685_MODE_SLEEP};
+	const uint8_t ubDataPre[2] = {PCA9685_PRESCALE_REG, 3}; // max pwm freq
+	const uint8_t ubDataReset1[2] = {PCA9685_MODE1_REG, PCA9685_MODE_RESTART};
 	const uint8_t ubDataReset2[2] = {PCA9685_MODE2_REG, 0x4};
 	const nrf_twi_mngr_transfer_t ptTrRes[] =
 	{
+		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ubDataReset0, 2, 0),
+		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ubDataPre, 2, 0),
 		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ubDataReset1, 2, 0),
 		NRF_TWI_MNGR_WRITE(PCA9685_ADDR, ubDataReset2, 2, 0)
 	};
@@ -102,12 +133,14 @@ void PcaInit(void)
 	    .callback            = NULL,
 	    .p_user_data         = NULL,
 	    .p_transfers         = ptTrRes,
-	    .number_of_transfers = 2
+	    .number_of_transfers = 4,
+		.p_required_twi_cfg = &config
 	};
 	APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &tT));
 
-	for (int i=0; i<2; i++)
-	{
-		PcaWriteChannel(i,0x1ff-i*4, 0x80);
-	}
+//	for (int i=0; i<4; i++)
+//	{
+//		PcaWriteChannel(i,0x1ff-i*32, 0x80);
+//	}
+
 }

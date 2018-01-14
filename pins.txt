@@ -37,7 +37,7 @@ PCA9685
 2 VCC 
 3
 4 GND
-5
+5 buzzer
 6
 7
 8

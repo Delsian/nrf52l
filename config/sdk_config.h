@@ -329,7 +329,7 @@
 // <i> The priority level of a handler determines the order in which it receives events, with respect to other handlers.
 
 #ifndef NRF_SDH_BLE_OBSERVER_PRIO_LEVELS
-#define NRF_SDH_BLE_OBSERVER_PRIO_LEVELS 3
+#define NRF_SDH_BLE_OBSERVER_PRIO_LEVELS 4
 #endif
 
 // <h> BLE Observers priorities - Invididual priorities
