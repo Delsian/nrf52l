@@ -25,11 +25,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>FreeRTOS</name>
-			<type>2</type>
-			<locationURI>$%7BSDK%7D/external/freertos</locationURI>
-		</link>
-		<link>
 			<name>SDK</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -313,6 +308,11 @@
 			<name>SDK/Libraries/fds.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/fds/fds.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Libraries/low_power_pwm.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7D/components/libraries/low_power_pwm/low_power_pwm.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/nrf_atfifo.c</name>

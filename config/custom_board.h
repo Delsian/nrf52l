@@ -46,28 +46,15 @@ extern "C" {
 
 #include "nrf_gpio.h"
 
-#define LEDS_NUMBER    3
-
-#define LED_START      28
-#define LED_1          28
-#define LED_2          29
-#define LED_3          30
-#define LED_STOP       30
-
-#define LEDS_ACTIVE_STATE 0
-
-#define LEDS_LIST { LED_1, LED_2, LED_3}
-
-#define LEDS_INV_MASK  LEDS_MASK
-
-#define BSP_LED_0      LED_1
-#define BSP_LED_1      LED_2
-#define BSP_LED_2      LED_3
-
+#define LEDS_NUMBER    0
 #define BUTTONS_NUMBER 0
 
 #define TWI0_SCL	26
 #define TWI0_SDA	27
+
+#define BUZZER_PWM		22
+
+//=====
 
 #define RX_PIN_NUMBER  11
 #define TX_PIN_NUMBER  9
@@ -104,20 +91,6 @@ extern "C" {
 #define SER_APP_SPIM0_SS_PIN        25    // SPI Slave Select GPIO pin number
 #define SER_APP_SPIM0_RDY_PIN       29    // SPI READY GPIO pin number
 #define SER_APP_SPIM0_REQ_PIN       28    // SPI REQUEST GPIO pin number
-
-// serialization CONNECTIVITY board
-#define SER_CON_RX_PIN              28    // UART RX pin number.
-#define SER_CON_TX_PIN              25    // UART TX pin number.
-#define SER_CON_CTS_PIN             29    // UART Clear To Send pin number. Not used if HWFC is set to false.
-#define SER_CON_RTS_PIN             0    // UART Request To Send pin number. Not used if HWFC is set to false.
-
-
-#define SER_CON_SPIS_SCK_PIN        7     // SPI SCK signal.
-#define SER_CON_SPIS_MOSI_PIN       0     // SPI MOSI signal.
-#define SER_CON_SPIS_MISO_PIN       30    // SPI MISO signal.
-#define SER_CON_SPIS_CSN_PIN        25    // SPI CSN signal.
-#define SER_CON_SPIS_RDY_PIN        29    // SPI READY GPIO pin number.
-#define SER_CON_SPIS_REQ_PIN        28    // SPI REQUEST GPIO pin number.
 
 // Low frequency clock source to be used by the SoftDevice
 #ifdef S210

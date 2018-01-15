@@ -11,6 +11,8 @@
 #include "task_manager.h"
 #include "nrf_twi_mngr.h"
 #include "boards.h"
+#include "app_error.h"
+#include "sdk_errors.h"
 #include "nrf_delay.h"
 
 #define PCA9685_ADDR 0x60
