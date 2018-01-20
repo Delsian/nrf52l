@@ -10,14 +10,25 @@
 #include "nrf_soc.h"
 #include "nrf_drv_clock.h"
 #include "nrf_delay.h"
+#include "nrf_gpio.h"
 #ifdef CLIRTT
 #include "rtt_cli.h"
 #endif
 
 // Components
+#include "boards.h"
 #include "custom_service.h"
 #include "pca9685.h"
 #include "buzzer.h"
+
+/**
+ * Keep powered after pressing button 'On'
+ */
+static void power_on()
+{
+	nrf_gpio_cfg_output(PWR_ON);
+	nrf_gpio_pin_set(PWR_ON);
+}
 
 static void hw_init(void)
 {
@@ -40,6 +51,7 @@ static void hw_init(void)
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
 
+    power_on();
 }
 
 int main(void)
@@ -54,11 +66,8 @@ int main(void)
 
     BuzzerPlayTone(70);
     nrf_delay_ms(500);
-    BuzzerPlayTone(120);
-    nrf_delay_ms(500);
-    BuzzerPlayTone(100);
-    nrf_delay_ms(500);
     BuzzerPlayTone(0);
+
 	while (1)
 	{
 		app_sched_execute();

@@ -52,7 +52,12 @@ extern "C" {
 #define TWI0_SCL	26
 #define TWI0_SDA	27
 
-#define BUZZER_PWM		22
+#define BUZZER_PWM		23
+
+#define VBAT_AN		29
+#define PWR_ON		30
+#define BUTTON1     17
+
 
 //=====
 
