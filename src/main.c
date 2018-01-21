@@ -52,7 +52,7 @@ int main(void)
     HwInit();
     ControlInit();
 
-    //PcaInit();
+    PcaInit();
     BuzzerInit();
 
     ble_stack_init();
