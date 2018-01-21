@@ -6,6 +6,7 @@
  */
 
 #include "custom_service.h"
+#include "control.h"
 
 static tCustomServiceVars tWedoDevice;
 static tCharVars tCharBtnHandle;
@@ -58,8 +59,15 @@ static void OnWrCmdEvt(ble_evt_t const * p_ble_evt)
 			printf("StopPiezo\n");
 			break;
 		case 4:
+		{
+			ControlEvent LedEvt = {
+					.type = CE_LED_CHG,
+					.ptr8 = (uint8_t*)&(ubData[3])
+			};
+			ControlPost(&LedEvt);
 			printf("RGB\n");
 			break;
+		}
 		default:
 			printf("Unsupported\n");
 		}

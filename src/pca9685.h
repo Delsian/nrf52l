@@ -9,6 +9,7 @@
 #define PCA9685_H_
 
 void PcaInit(void);
-void PcaWriteChannel(uint8_t ch, uint16_t val_on, uint16_t val_off);
+void PcaWriteChannel(uint8_t ch, uint8_t val);
+void PcaLed(uint8_t color);
 
 #endif /* PCA9685_H_ */

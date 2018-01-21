@@ -13,7 +13,6 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
-#include "leds.h"
 #include "custom_service.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
@@ -123,7 +122,6 @@ static void gap_params_init(void)
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
-    LedsControlSignal signal;
 
     switch (p_ble_evt->header.evt_id)
     {

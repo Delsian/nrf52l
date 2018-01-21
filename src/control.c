@@ -11,6 +11,8 @@
 #include "nrf_queue.h"
 #include "app_scheduler.h"
 
+#include "pca9685.h"
+
 static void ControlEvtH(void * p_evt, uint16_t size)
 {
 	ControlEvent* iEvt = (ControlEvent*)p_evt;
@@ -20,6 +22,7 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 		printf("Batt %d\n", *(iEvt->ptr8));
 		break;
 	case CE_LED_CHG:
+		PcaLed(*(iEvt->ptr8));
 		break;
 	default:
 		break;

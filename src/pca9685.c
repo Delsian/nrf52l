@@ -58,19 +58,62 @@ const nrf_drv_twi_config_t tPcaConfig = {
 
 static const nrf_drv_twi_t tPcaDrv = NRF_DRV_TWI_INSTANCE(0);
 
-// write 2 byte value using auto-increment
-void PcaWriteChannel(uint8_t ch, uint16_t val_on, uint16_t val_off)
+// Set pin to 1
+static void PcaPinOn(uint8_t ch)
+{
+
+}
+
+// Reset pin to 0
+static void PcaPinOff(uint8_t ch)
+{
+
+}
+
+// write byte value using auto-increment
+void PcaWriteChannel(uint8_t ch, uint8_t val)
 {
 	static uint8_t ubData[5];
 
 	if (ch<=PCA9685_MAX_CHANNEL || ch == PCA9685_ALLLED_REG) {
+		uint16_t val_on = 2048 - (val << 3);
+		uint16_t val_off = val << 4;
 		ubData[0] = (ch == PCA9685_ALLLED_REG)? ch : ((ch<<2) + PCA9685_LED0_REG);
 		ubData[1] = val_on&0xFF;
 		ubData[2] = val_on>>8;
-		//ubData[3] = val_off&0xFF;
-		//ubData[4] = val_off>>8;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 3, false);
+		ubData[3] = val_off&0xFF;
+		ubData[4] = val_off>>8;
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
 	}
+}
+
+void PcaLed(uint8_t color)
+{
+#define LED_COLORS 11
+
+	const uint8_t ubLedCh[3] = {
+		PCA9685_LEDR,
+		PCA9685_LEDG,
+		PCA9685_LEDB
+	};
+	const uint8_t ubColors[LED_COLORS][3] = {
+		{0,0,0}, // 0 - Black
+		{240,100,160}, // 1 - Pink
+		{128,0,128}, // 2 - Purple
+		{0,0,255}, // 3 - Blue
+		{0,180,180}, // 4 - Cyan
+		{80,220,80}, // 5 - Light Green
+		{0,255,0}, // 6 - Green
+		{128,128,0}, // 7 - Yellow
+		{240,100,0}, // 8 - Orange
+		{255,0,0}, // 9 - Red
+		{200,200,200} // 10 - White
+	};
+
+	if (color < LED_COLORS)
+		for (int i = 0; i<3; i++) {
+			PcaWriteChannel(ubLedCh[i], ubColors[color][i]);
+		}
 }
 
 void PcaInit(void)
@@ -81,20 +124,14 @@ void PcaInit(void)
     APP_ERROR_CHECK(err_code);
     nrf_drv_twi_enable(&tPcaDrv);
 
-	const uint8_t ubDataSet[2][2] = {
-			{PCA9685_MODE1_REG, 0}, //PCA9685_MODE_SLEEP},
-			//{PCA9685_PRESCALE_REG, 3}, // max pwm freq
-			//{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
+	const uint8_t ubDataSet[5][2] = {
+			{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
+			{PCA9685_PRESCALE_REG, 3}, // max pwm freq
+			{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
+			{PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC},
 			{PCA9685_MODE2_REG, 0x4}
 	};
-	for (int i=0; i<2;i++) {
+	for (int i=0; i<5;i++) {
 		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
 	}
-
-
-	for (int i=0; i<16; i++)
-	{
-		PcaWriteChannel(i,(i+1)*16, 0x80);
-	}
-
 }
