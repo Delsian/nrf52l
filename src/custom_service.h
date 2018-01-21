@@ -32,7 +32,7 @@ typedef enum {
 typedef struct _CharVars {
 	uint16_t 	hval;
 	uint16_t 	hcccd;
-	uint8_t		notif;
+	bool		notif;
 } tCharVars;
 
 typedef void (CustEventReceiver)(ble_evt_t const *);
@@ -64,3 +64,5 @@ extern const tDevDescription gtServices;
 #endif /* CUSTOM_SERVICE_H_ */
 
 ret_code_t CustomServiceInit(const tCustomService* itServ);
+uint16_t GetConnectionHandle(void);
+

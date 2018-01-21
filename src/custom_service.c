@@ -10,6 +10,11 @@
 
 static tCustomServiceVars* ptCustVar;
 
+uint16_t GetConnectionHandle()
+{
+	return ptCustVar->usConnHandle;
+}
+
 static tCustomChar const * GetByCccd(uint16_t iusCccd)
 {
     uint8_t i = 0;

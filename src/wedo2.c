@@ -128,3 +128,25 @@ const tDevDescription gtServices = {
 				NULL
 		}
 };
+
+
+void WedoBattery(uint8_t *pval)
+{
+	ble_gatts_hvx_params_t hvx_params;
+	uint16_t len = 1;
+
+	uint16_t ch = GetConnectionHandle();
+
+	if (ch != BLE_CONN_HANDLE_INVALID && tCharVoltHandle.notif)
+	{
+		memset(&hvx_params, 0, sizeof(hvx_params));
+
+		hvx_params.handle = tCharVoltHandle.hval;
+		hvx_params.p_data = pval;
+		hvx_params.p_len  = &len;
+		hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+
+		sd_ble_gatts_hvx(ch, &hvx_params);
+	}
+}
+

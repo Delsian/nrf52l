@@ -28,12 +28,9 @@ BLE_BAS_DEF(m_bas);
 //====
 
 
-static void battery_level_update(void)
+void battery_level_update(uint8_t battery_level)
 {
     ret_code_t err_code;
-    uint8_t  battery_level;
-
-    battery_level = 50;
 
     err_code = ble_bas_battery_level_update(&m_bas, battery_level);
     if ((err_code != NRF_SUCCESS) &&
@@ -311,5 +308,5 @@ void ble_stack_init()
 
     advertising_start();
 
-    battery_level_update();
+    battery_level_update(50);
 }
