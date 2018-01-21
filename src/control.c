@@ -9,73 +9,30 @@
 #include <stdio.h>
 #include "control.h"
 #include "nrf_queue.h"
+#include "app_scheduler.h"
 
-#define MAX_CONTROL_RECEIVERS 8
-
-static ControlFunction* control_receivers[MAX_CONTROL_RECEIVERS];
-static QueueHandle_t ControlQueue;
-
-static void control_thread(void * arg)
+static void ControlEvtH(void * p_evt, uint16_t size)
 {
-	ControlMessage msg;
-	while(1)
+	ControlEvent* iEvt = (ControlEvent*)p_evt;
+	switch (iEvt->type)
 	{
-		if( xQueueReceive(ControlQueue, &msg, ( TickType_t ) 100))
-		{
-			for(int i=0; i<MAX_CONTROL_RECEIVERS; i++)
-			{
-				if(control_receivers[i])
-				{
-					if ((*control_receivers[i])(msg))
-						break;
-				}
-			}
-		}
+	case CE_BATT_IN:
+		printf("Batt %d\n", *(iEvt->ptr8));
+		break;
+	case CE_LED_CHG:
+		break;
+	default:
+		break;
 	}
 }
 
-void control_register_receiver(ControlFunction* f)
+void ControlPost(const ControlEvent* evt)
 {
-	for(int i=0; i<MAX_CONTROL_RECEIVERS; i++)
-	{
-		if(!control_receivers[i])
-		{
-			control_receivers[i] = f;
-			return;
-		}
-	}
-	APP_ERROR_HANDLER(NRF_ERROR_RESOURCES);
+	app_sched_event_put(evt, sizeof(ControlEvent), ControlEvtH);
 }
 
-void control_delete_receiver(ControlFunction* f)
+void ControlInit()
 {
-	for(int i=0; i<MAX_CONTROL_RECEIVERS; i++)
-	{
-		if(control_receivers[i] == f)
-		{
-			control_receivers[i] = NULL;
-			break;
-		}
-	}
-}
+    APP_SCHED_INIT(sizeof(ControlEvent), 8);
 
-void control_post_event(ControlMessage msg)
-{
-	if (xQueueSend(ControlQueue, &msg, ( TickType_t ) 0) != pdPASS)
-	{
-		APP_ERROR_HANDLER(NRF_ERROR_TIMEOUT);
-	}
-}
-
-void control_init()
-{
-	ControlQueue = xQueueCreate( 10, sizeof( ControlMessage ) );
-	if ( ControlQueue == 0 )
-	{
-		APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
-	}
-    if(pdPASS != xTaskCreate(control_thread, "BLE", 256, NULL, 1, &h_control_thread))
-    {
-        APP_ERROR_HANDLER(NRF_ERROR_NO_MEM);
-    }
 }

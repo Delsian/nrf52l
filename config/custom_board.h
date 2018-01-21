@@ -54,7 +54,8 @@ extern "C" {
 
 #define BUZZER_PWM		23
 
-#define VBAT_AN		29
+#define VBAT_AIN		NRF_SAADC_INPUT_AIN5
+
 #define PWR_ON		30
 #define BUTTON1     17
 

@@ -8,33 +8,22 @@
 #ifndef CONTROL_H_
 #define CONTROL_H_
 
-typedef enum _controlSignals {
-	BT_ADVERT,
-	BT_CONNECT,
-	BT_UART_RX
-} ControlSignal;
+typedef enum {
+	CE_BUTTON,
+	CE_LED_CHG,
+	CE_BATT_IN,
+	CE_BUZZER
+} ControlEventType;
 
-typedef struct _controlMessage {
-	ControlSignal type;
+typedef struct {
+	ControlEventType type;
 	union {
-		bool b;
-		uint8_t* ptr;
+		void*		ptr;
+		uint8_t*	ptr8;
 	};
-} ControlMessage;
+} ControlEvent;
 
-/**
- * Handler to receive task
- *
- * @param ControlSignal signal to handle
- *
- * @return pdTRUE if the signal was successfully received
- *
- */
-typedef bool (ControlFunction)( ControlMessage );
-
-void control_register_receiver(ControlFunction* pf);
-void control_delete_receiver(ControlFunction* f);
-void control_post_event(ControlMessage signal);
-void control_init(void);
+void ControlPost(const ControlEvent* pEvt);
+void ControlInit(void);
 
 #endif /* CONTROL_H_ */

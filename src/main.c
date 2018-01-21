@@ -17,20 +17,13 @@
 
 // Components
 #include "boards.h"
+#include "control.h"
+#include "battery.h"
 #include "custom_service.h"
 #include "pca9685.h"
 #include "buzzer.h"
 
-/**
- * Keep powered after pressing button 'On'
- */
-static void power_on()
-{
-	nrf_gpio_cfg_output(PWR_ON);
-	nrf_gpio_pin_set(PWR_ON);
-}
-
-static void hw_init(void)
+static void HwInit(void)
 {
 	ret_code_t err_code;
 
@@ -51,13 +44,13 @@ static void hw_init(void)
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
 
-    power_on();
+    BatteryInit();
 }
 
 int main(void)
 {
-    hw_init();
-    APP_SCHED_INIT(sizeof(void*), 16);
+    HwInit();
+    ControlInit();
 
     //PcaInit();
     BuzzerInit();
@@ -65,7 +58,7 @@ int main(void)
     ble_stack_init();
 
     BuzzerPlayTone(70);
-    nrf_delay_ms(500);
+    nrf_delay_ms(100);
     BuzzerPlayTone(0);
 
 	while (1)
