@@ -59,13 +59,13 @@ const nrf_drv_twi_config_t tPcaConfig = {
 static const nrf_drv_twi_t tPcaDrv = NRF_DRV_TWI_INSTANCE(0);
 
 // Set pin to 1
-static void PcaPinOn(uint8_t ch)
+void PcaPinOn(uint8_t ch)
 {
 
 }
 
 // Reset pin to 0
-static void PcaPinOff(uint8_t ch)
+void PcaPinOff(uint8_t ch)
 {
 
 }
