@@ -14,7 +14,8 @@ typedef enum {
 	DEV_DUMMY,
 	DEV_MOTOR,
 	DEV_BUTTON,
-	DEV_RANGE
+	DEV_RANGE,
+	DEV_GYRO
 } RjPortDevice;
 
 typedef struct {
@@ -30,11 +31,15 @@ typedef struct {
 
 typedef void (*RjPortWritePowerF)(int16_t power);
 typedef uint16_t (*RjPortReadValueF)(uint16_t valId);
+// Call this function for de-allocation memory
+typedef void (*RjPortDisconnectF)(void);
 
 typedef struct {
 	RjPortDevice DevId;
+	void* Context;
 	RjPortWritePowerF WritePower;
 	RjPortReadValueF GetVal;
+	RjPortDisconnectF Disconnect;
 } RjPortSetting;
 
 extern const RjPortNumbering AllPorts[];

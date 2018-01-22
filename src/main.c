@@ -22,6 +22,7 @@
 #include "custom_service.h"
 #include "pca9685.h"
 #include "buzzer.h"
+#include "rj_port.h"
 
 static void HwInit(void)
 {
@@ -54,6 +55,9 @@ int main(void)
 
     PcaInit();
     BuzzerInit();
+
+    RjPortInit();
+    RjPortConnect(3,DEV_GYRO);
 
     ble_stack_init();
 
