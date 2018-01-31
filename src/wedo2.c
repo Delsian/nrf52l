@@ -121,7 +121,7 @@ const tCustomService tServIo = {
 };
 
 const tDevDescription gtServices = {
-		.pubDeviceName = "LPF2 Smart Hub 2 I/O",
+		.pubDeviceName = "Wedo2Emu",
 		.tServices = {
 				&tServDev,
 				&tServIo,

@@ -152,6 +152,7 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 	    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
 	    attr_md.vloc    = BLE_GATTS_VLOC_STACK;
 	    attr_md.vlen    = 1;
+	    attr_md.rd_auth = 1;
 
 		switch(itServ->ptChars[ubChIndex].tMode) {
 		case CCM_WRITE:

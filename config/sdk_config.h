@@ -60,6 +60,29 @@
 
 // </e>
 
+// <h> nRF_DFU
+
+//==========================================================
+// <h> ble_dfu - Device Firmware Update
+
+//==========================================================
+// <q> BLE_DFU_ENABLED  - Enable DFU Service.
+
+
+#ifndef BLE_DFU_ENABLED
+#define BLE_DFU_ENABLED 1
+#endif
+
+// <q> NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS  - Buttonless DFU supports bonds.
+
+
+#ifndef NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS
+#define NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS 0
+#endif
+
+// </h>
+//==========================================================
+
 // <e> APP_SCHEDULER_ENABLED - app_scheduler - Events scheduler
 //==========================================================
 #ifndef APP_SCHEDULER_ENABLED
@@ -198,6 +221,12 @@
 #define NRF_PWR_MGMT_ENABLED 1
 #endif
 
+// <o> NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT - The number of priorities for module handlers.
+// <i> The number of stages of the shutdown process.
+
+#ifndef NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT
+#define NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT 3
+#endif
 
 //========== BT
 // <q> NRF_BLE_GATT_ENABLED  - nrf_ble_gatt - GATT module

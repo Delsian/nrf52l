@@ -13,6 +13,8 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
+#include "ble_dfu.h"
+#include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
@@ -40,6 +42,76 @@ void battery_level_update(uint8_t battery_level)
        )
     {
         APP_ERROR_HANDLER(err_code);
+    }
+}
+
+/**@brief Handler for shutdown preparation.
+ *
+ * @details During shutdown procedures, this function will be called at a 1 second interval
+ *          untill the function returns true. When the function returns true, it means that the
+ *          app is ready to reset to DFU mode.
+ *
+ * @param[in]   event   Power manager event.
+ *
+ * @retval  True if shutdown is allowed by this power manager handler, otherwise false.
+ */
+static bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
+{
+    switch (event)
+    {
+        case NRF_PWR_MGMT_EVT_PREPARE_DFU:
+            printf("Power management wants to reset to DFU mode\n");
+            break;
+
+        default:
+            // Implement any of the other events available from the power management module:
+            //      -NRF_PWR_MGMT_EVT_PREPARE_SYSOFF
+            //      -NRF_PWR_MGMT_EVT_PREPARE_WAKEUP
+            //      -NRF_PWR_MGMT_EVT_PREPARE_RESET
+            return true;
+    }
+    return true;
+}
+
+NRF_PWR_MGMT_HANDLER_REGISTER(app_shutdown_handler, 0);
+
+/**@brief Function for handling dfu events from the Buttonless Secure DFU service
+ *
+ * @param[in]   event   Event from the Buttonless Secure DFU service.
+ */
+static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
+{
+    switch (event)
+    {
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_PREPARE:
+            printf("Device is preparing to enter bootloader mode\n");
+            // YOUR_JOB: Disconnect all bonded devices that currently are connected.
+            //           This is required to receive a service changed indication
+            //           on bootup after a successful (or aborted) Device Firmware Update.
+            break;
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER:
+            // YOUR_JOB: Write app-specific unwritten data to FLASH, control finalization of this
+            //           by delaying reset by reporting false in app_shutdown_handler
+            printf("Device will enter bootloader mode\n");
+            break;
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_FAILED:
+            printf("Request to enter bootloader mode failed asynchroneously\n");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            break;
+
+        case BLE_DFU_EVT_RESPONSE_SEND_ERROR:
+            printf("Request to send a response to client failed\n");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            APP_ERROR_CHECK(false);
+            break;
+
+        default:
+            printf("Unknown event from ble_dfu_buttonless\n");
+            break;
     }
 }
 
@@ -120,6 +192,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
 
+    printf("Ble evt %x\n",p_ble_evt->header.evt_id);
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
@@ -244,6 +317,18 @@ static void services_init(void)
 
     err_code = ble_bas_init(&m_bas, &bas_init);
     APP_ERROR_CHECK(err_code);
+
+    ble_dfu_buttonless_init_t dfus_init =
+    {
+        .evt_handler = ble_dfu_evt_handler
+    };
+
+    // Initialize the async SVCI interface to bootloader.
+    err_code = ble_dfu_buttonless_async_svci_init();
+    if(err_code == NRF_SUCCESS) {
+    	err_code = ble_dfu_buttonless_init(&dfus_init);
+    	APP_ERROR_CHECK(err_code);
+    }
 
     uint8_t i = 0;
     while (gtServices.tServices[i]) {
