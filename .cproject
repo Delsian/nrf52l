@@ -166,8 +166,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\GCC\nrf52&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\CMSIS\nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_section_vars&quot;"/>
