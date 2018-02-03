@@ -3,9 +3,6 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537" moduleId="org.eclipse.cdt.core.settings" name="Debug">
-				<macros>
-					<stringMacro name="SDK" type="VALUE_TEXT" value="${env_var:NRF52_SDK}"/>
-				</macros>
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -72,7 +69,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\device&quot;"/>
 									<listOptionValue builtIn="false" value=".././config"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
@@ -90,7 +86,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\log&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
@@ -131,6 +126,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dfu&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bootloader\dfu&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -174,7 +170,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\log&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
