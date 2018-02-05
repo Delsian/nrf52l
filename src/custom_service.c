@@ -7,6 +7,7 @@
 
 #include "custom_service.h"
 #include "sdk_macros.h"
+#include "nrf_log.h"
 
 static tCustomServiceVars* ptCustVar;
 
@@ -54,7 +55,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         return;
     }
 
-    printf("evt %d\n", p_ble_evt->header.evt_id);
+    NRF_LOG_INFO("evt %d", p_ble_evt->header.evt_id);
 
     switch (p_ble_evt->header.evt_id)
     {
@@ -72,7 +73,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         	tCustomChar const * tCh = GetByCccd(p_evt_write->handle);
         	if (tCh) {
         		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);
-        		printf("Notification %s\n", tCh->ptHandle->notif?"On":"Off");
+        		NRF_LOG_INFO("Notification %s", tCh->ptHandle->notif?"On":"Off");
         		break;
         	}
         	tCh = GetByVal(p_evt_write->handle);
@@ -184,7 +185,7 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 		                                           &attr_char_value,
 		                                           &tNewHandle);
 		VERIFY_SUCCESS(err_code);
-		printf("Ch %x '%s' Hnd %x %x\n", itServ->ptChars[ubChIndex].usUuid, itServ->ptChars[ubChIndex].ubName, tNewHandle.value_handle, tNewHandle.cccd_handle);
+		NRF_LOG_INFO("Ch %x '%s' Hnd %x %x", itServ->ptChars[ubChIndex].usUuid, itServ->ptChars[ubChIndex].ubName, tNewHandle.value_handle, tNewHandle.cccd_handle);
 		if (itServ->ptChars[ubChIndex].ptHandle) {
 			itServ->ptChars[ubChIndex].ptHandle->hval = tNewHandle.value_handle;
 			itServ->ptChars[ubChIndex].ptHandle->hcccd = tNewHandle.cccd_handle;

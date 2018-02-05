@@ -11,9 +11,9 @@
 #include "nrf_drv_clock.h"
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
-#ifdef CLIRTT
-#include "rtt_cli.h"
-#endif
+#include "nrf_log.h"
+#include "nrf_log_ctrl.h"
+#include "nrf_log_default_backends.h"
 
 // Components
 #include "boards.h"
@@ -27,10 +27,6 @@
 static void HwInit(void)
 {
 	ret_code_t err_code;
-
-#ifdef CLIRTT
-	rtt_cli_init();
-#endif
 
     /* initializing the Power manager. */
     err_code = nrf_pwr_mgmt_init();
@@ -50,6 +46,11 @@ static void HwInit(void)
 
 int main(void)
 {
+    (void) NRF_LOG_INIT(NULL);
+    NRF_LOG_DEFAULT_BACKENDS_INIT();
+
+    NRF_LOG_WARNING("Inside main");
+
     HwInit();
     ControlInit();
 

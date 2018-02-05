@@ -53,3 +53,4 @@ dkms.conf
 /Debug/
 
 /_build
+/.settings/language.settings.xml

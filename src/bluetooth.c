@@ -14,6 +14,7 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
 #include "ble_dfu.h"
+#include "nrf_log.h"
 #include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
 
@@ -60,7 +61,7 @@ static bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
     switch (event)
     {
         case NRF_PWR_MGMT_EVT_PREPARE_DFU:
-            printf("Power management wants to reset to DFU mode\n");
+        	NRF_LOG_INFO("Power management wants to reset to DFU mode");
             break;
 
         default:
@@ -196,7 +197,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
-            printf("Connected\n");
+        	NRF_LOG_INFO("Connected");
             // call on connect
 //            signal = LED3_ON;
 //            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
