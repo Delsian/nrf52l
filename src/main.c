@@ -49,7 +49,7 @@ int main(void)
     (void) NRF_LOG_INIT(NULL);
     NRF_LOG_DEFAULT_BACKENDS_INIT();
 
-    NRF_LOG_WARNING("Inside main");
+    NRF_LOG_INFO("Inside main");
 
     HwInit();
     ControlInit();
