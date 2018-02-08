@@ -14,9 +14,11 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
 #include "ble_dfu.h"
+#include "ble_dis.h"
 #include "nrf_log.h"
 #include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
+#include "fw_version.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -162,8 +164,6 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
-//    LedsControlSignal signal = LED1_ON;
-//    app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
 }
 
 static void gap_params_init(void)
@@ -303,6 +303,7 @@ static void services_init(void)
 {
     ret_code_t     err_code;
     ble_bas_init_t bas_init;
+    ble_dis_init_t dis_init;
 
     // Here the sec level for the Battery Service can be changed/increased.
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
@@ -336,6 +337,17 @@ static void services_init(void)
     	err_code = CustomServiceInit(gtServices.tServices[i++]);
     	APP_ERROR_CHECK(err_code);
     }
+
+    // Initialize Device Information Service
+    memset(&dis_init, 0, sizeof(dis_init));
+
+    ble_srv_ascii_to_utf8(&dis_init.fw_rev_str, FW_VERSION_STRING);
+
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&dis_init.dis_attr_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&dis_init.dis_attr_md.write_perm);
+
+    err_code = ble_dis_init(&dis_init);
+    APP_ERROR_CHECK(err_code);
 }
 
 static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)

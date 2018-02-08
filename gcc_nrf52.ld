@@ -8,10 +8,17 @@ MEMORY
   FLASH (rx) : ORIGIN = 0x23000, LENGTH = 0x55000
   RAM (rwx) :  ORIGIN = 0x20003000, LENGTH = 0xd000
   
+  bootloader_settings_page (r) : ORIGIN = 0x0007F000, LENGTH = 0x1000
 }
 
 SECTIONS
 {
+  .bootloader_settings_page(NOLOAD) :
+  {
+    PROVIDE(__start_bootloader_settings_page = .);
+    KEEP(*(SORT(.bootloader_settings_page*)))
+    PROVIDE(__stop_bootloader_settings_page = .);
+  } > bootloader_settings_page
 }
 
 SECTIONS
