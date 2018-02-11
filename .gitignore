@@ -54,3 +54,6 @@ dkms.conf
 
 /_build
 /.settings/language.settings.xml
+/Release/
+
+/dfu.zip

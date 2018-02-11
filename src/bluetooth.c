@@ -18,7 +18,7 @@
 #include "nrf_log.h"
 #include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
-#include "fw_version.h"
+#include "nrf_dfu_types.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -340,8 +340,16 @@ static void services_init(void)
 
     // Initialize Device Information Service
     memset(&dis_init, 0, sizeof(dis_init));
+    nrf_dfu_settings_t* ptNrfDfuSettings = (nrf_dfu_settings_t*)BOOTLOADER_SETTINGS_ADDRESS;
 
-    ble_srv_ascii_to_utf8(&dis_init.fw_rev_str, FW_VERSION_STRING);
+    uint32_t ulVer = ptNrfDfuSettings->app_version;
+    uint8_t v1 = ulVer/10000;
+    uint8_t v2 = (ulVer-v1*10000)/100;
+    uint8_t v3 = ulVer-v1*10000-v2*100;
+
+    static uint8_t ubVerStr[12];
+    dis_init.fw_rev_str.p_str = ubVerStr;
+    dis_init.fw_rev_str.length = sprintf(ubVerStr, "%d.%d.%d", v1, v2, v3);
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&dis_init.dis_attr_md.read_perm);
     BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&dis_init.dis_attr_md.write_perm);
