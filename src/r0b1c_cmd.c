@@ -46,8 +46,6 @@ void OnPortWriteEvt(ble_evt_t const * p_ble_evt)
 
 void OnPortNotifyEvt(ble_evt_t const * p_ble_evt)
 {
-	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
-	tCharPortHandle.notif = ble_srv_is_notification_enabled(p_evt_write->data);
 	NRF_LOG_DEBUG("PortNotify %d", tCharPortHandle.notif);
 	if (tCharPortHandle.notif)
 	{
