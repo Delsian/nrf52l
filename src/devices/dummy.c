@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include "rj_port.h"
 
-void DummySetPort(RjPortSetting* port) {
+void DummySetPort(uint8_t port) {
 
 }
 

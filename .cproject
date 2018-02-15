@@ -102,7 +102,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
@@ -127,6 +126,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../config&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -173,7 +173,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
@@ -209,6 +208,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/../config&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -262,7 +262,7 @@
 					<sourceEntries>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -396,7 +396,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
@@ -421,6 +420,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../config&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.1021875076" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -467,7 +467,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Lua}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
@@ -503,6 +502,7 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/../config&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.979899096" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1928155634" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -556,7 +556,7 @@
 					<sourceEntries>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

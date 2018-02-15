@@ -10,22 +10,22 @@
 #include "control.h"
 #include "nrf_queue.h"
 #include "app_scheduler.h"
+#include "nrf_log.h"
 
 #include "pca9685.h"
-#include "wedo2.h"
 
 extern void battery_level_update(uint8_t battery_level);
 
 static void ControlEvtH(void * p_evt, uint16_t size)
 {
 	ControlEvent* iEvt = (ControlEvent*)p_evt;
+	NRF_LOG_DEBUG("Evt type %d", iEvt->type);
 	switch (iEvt->type)
 	{
 	case CE_BATT_IN:
 	    battery_level_update(*(iEvt->ptr8));
 	    // Check if battery low
 		//WedoBattery(iEvt->ptr8);
-		printf("Batt %d\n", *(iEvt->ptr8));
 		break;
 	case CE_LED_CHG:
 		PcaLed(*(iEvt->ptr8));

@@ -14,6 +14,7 @@
 #include "bluetooth.h"
 #include "ble_srv_common.h"
 #include "nrf_sdh_ble.h"
+#include "nrf_mtx.h"
 
 typedef struct _CustomServiceVars {
 	nrf_ble_gatt_t *		 ptGatt;
@@ -26,6 +27,7 @@ typedef enum {
 	CCM_WRITE,
 	CCM_READNOTIFY,
 	CCM_READWRITE,
+	CCM_WRITENOTIFY,
 	CCM_NOTIFY
 } CustomCharMode;
 
@@ -42,8 +44,8 @@ typedef struct _CustomChar {
 	uint8_t*			ubName;
 	CustomCharMode		tMode;
 	tCharVars* 			ptHandle;
-	CustEventReceiver*  wrEvt;
-	CustEventReceiver*	rdEvt;
+	CustEventReceiver*  wrEvt; /* Call this function on write event */
+	CustEventReceiver*	notifyEvt; /* Call this function on notification enable/disable */
 } tCustomChar;
 
 typedef struct _CustomService {
@@ -65,4 +67,4 @@ extern const tDevDescription gtServices;
 
 ret_code_t CustomServiceInit(const tCustomService* itServ);
 uint16_t GetConnectionHandle(void);
-
+void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen);

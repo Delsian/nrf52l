@@ -30,16 +30,13 @@ uint16_t GyroGetVal(uint16_t valId)
 	return 0;
 }
 
-void GyroInit(RjPortSetting* settings, uint8_t port)
+void GyroInit(uint8_t port)
 {
 	ret_code_t err_code;
 
-	settings->DevId = DEV_GYRO;
-	settings->GetVal = GyroGetVal;
-
 	// configure
-	tMpuConfig.scl = AllPorts[port].logic1;
-	tMpuConfig.sda = AllPorts[port].logic2;
+	tMpuConfig.scl = ExtPorts[port].logic1;
+	tMpuConfig.sda = ExtPorts[port].logic2;
 	err_code = nrf_drv_twi_init(&tMpuDrv, &tMpuConfig, NULL, NULL);
 	APP_ERROR_CHECK(err_code);
 	nrf_drv_twi_enable(&tMpuDrv);

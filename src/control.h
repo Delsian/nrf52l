@@ -12,7 +12,8 @@ typedef enum {
 	CE_BUTTON,
 	CE_LED_CHG,
 	CE_BATT_IN,
-	CE_BUZZER
+	CE_BUZZER,
+	CE_PWR_OFF
 } ControlEventType;
 
 typedef struct {

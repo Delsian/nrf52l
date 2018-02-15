@@ -10,6 +10,7 @@
 #include "nrf_log.h"
 
 static tCustomServiceVars* ptCustVar;
+static nrf_mtx_t tMtxNotify;
 
 uint16_t GetConnectionHandle()
 {
@@ -73,6 +74,8 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         	tCustomChar const * tCh = GetByCccd(p_evt_write->handle);
         	if (tCh) {
         		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);
+        		if (tCh->notifyEvt)
+        			(*tCh->wrEvt)(p_ble_evt);
         		NRF_LOG_INFO("Notification %s", tCh->ptHandle->notif?"On":"Off");
         		break;
         	}
@@ -95,17 +98,24 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
     }
 }
 
-void CustomServiceSend(uint16_t iusConn, uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
+void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
 {
+	static uint16_t len;
+	nrf_mtx_trylock(&tMtxNotify);
 	ble_gatts_hvx_params_t hvx_params;
-	uint16_t len = iusLen;
-	hvx_params.handle = iusChar;
-	hvx_params.p_data = pubData;
-	hvx_params.p_len  = &len;
-	hvx_params.offset = 0;
-	hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+	uint16_t ch = GetConnectionHandle();
+	len = iusLen;
+	if (ch != BLE_CONN_HANDLE_INVALID)
+	{
+		hvx_params.handle = iusChar;
+		hvx_params.p_data = pubData;
+		hvx_params.p_len  = &len;
+		hvx_params.offset = 0;
+		hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
 
-	sd_ble_gatts_hvx(iusConn, &hvx_params);
+		sd_ble_gatts_hvx(ch, &hvx_params);
+	}
+	nrf_mtx_unlock(&tMtxNotify);
 }
 
 NRF_SDH_BLE_OBSERVER(cust_obs, 2, ble_custom_on_ble_evt, NULL);
@@ -130,6 +140,10 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 	VERIFY_SUCCESS(err_code);
 
 	uint8_t ubChIndex = 0;
+
+	// Initialize notification mutex
+	nrf_mtx_init(&tMtxNotify);
+
 	while (itServ->ptChars[ubChIndex].usUuid)
 	{
 		ble_gatts_char_handles_t tNewHandle;
@@ -169,6 +183,10 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 		case CCM_READWRITE:
 			char_md.char_props.write = 1;
 			char_md.char_props.read = 1;
+			break;
+		case CCM_WRITENOTIFY:
+		    char_md.char_props.notify = 1;
+		    char_md.char_props.write = 1;
 			break;
 		}
 

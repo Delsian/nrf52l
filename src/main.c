@@ -58,7 +58,6 @@ int main(void)
     BuzzerInit();
 
     RjPortInit();
-    RjPortConnect(3,DEV_GYRO);
 
     ble_stack_init();
 
