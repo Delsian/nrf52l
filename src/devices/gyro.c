@@ -14,6 +14,7 @@
 #include "rj_port.h"
 #include "nrf_drv_twi.h"
 #include "app_util_platform.h"
+#include "r0b1c_device.h"
 
 #define MPU6050_ADDR 0x69
 static const nrf_drv_twi_t tMpuDrv = NRF_DRV_TWI_INSTANCE(1);
@@ -30,7 +31,7 @@ uint16_t GyroGetVal(uint16_t valId)
 	return 0;
 }
 
-void GyroInit(uint8_t port)
+RDevErrCode RDevGyroInit(int8_t port)
 {
 	ret_code_t err_code;
 
@@ -49,4 +50,12 @@ void GyroInit(uint8_t port)
 	nrf_drv_twi_tx(&tMpuDrv, MPU6050_ADDR, ubData, 2, true);
 	nrf_drv_twi_rx(&tMpuDrv, MPU6050_ADDR, ubData, 14);
 	nrf_drv_twi_disable(&tMpuDrv);
+	return RDERR_OK;
 }
+
+RDevErrCode RDevGyroCmd(uint8_t port, const uint8_t* pData, uint8_t len)
+{
+
+	return RDERR_OK;
+}
+

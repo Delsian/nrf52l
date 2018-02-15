@@ -6,11 +6,20 @@
  *      Author: ekrashtan
  */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "rj_port.h"
+#include "r0b1c_device.h"
 
-void DummySetPort(uint8_t port) {
+RDevErrCode RDevDummyInit(uint8_t port)
+{
+	// GPIO as input
 
+	// PWM off
+
+	return RDERR_OK;
 }
 
+RDevErrCode RDevDummyCmd(uint8_t port, const uint8_t* pData, uint8_t len)
+{
+	return RDERR_NOT_SUPPORTED;
+}
