@@ -11,12 +11,12 @@
 #include "pca9685.h"
 #include "r0b1c_device.h"
 
-RDevErrCode RDevMotorInit(int8_t port)
+RDevErrCode RDevMotorInit(uint8_t port)
 {
 	return RDERR_OK;
 }
 
-RDevErrCode RDevMotorCmd(uint8_t port, const uint8_t* pData, uint8_t len)
+RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len)
 {
 
 	return RDERR_OK;

@@ -13,13 +13,8 @@
 RDevErrCode RDevDummyInit(uint8_t port)
 {
 	// GPIO as input
-
+	RjPortResetInputs(port);
 	// PWM off
-
+	RjPortResetPwm(port);
 	return RDERR_OK;
-}
-
-RDevErrCode RDevDummyCmd(uint8_t port, const uint8_t* pData, uint8_t len)
-{
-	return RDERR_NOT_SUPPORTED;
 }

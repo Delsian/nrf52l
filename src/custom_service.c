@@ -56,7 +56,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         return;
     }
 
-    NRF_LOG_INFO("evt %d", p_ble_evt->header.evt_id);
+    NRF_LOG_DEBUG("cust evt %d", p_ble_evt->header.evt_id);
 
     switch (p_ble_evt->header.evt_id)
     {
@@ -76,7 +76,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);
         		if (tCh->notifyEvt)
         			(*tCh->wrEvt)(p_ble_evt);
-        		NRF_LOG_INFO("Notification %s", tCh->ptHandle->notif?"On":"Off");
+        		NRF_LOG_DEBUG("Notification %s", tCh->ptHandle->notif?"On":"Off");
         		break;
         	}
         	tCh = GetByVal(p_evt_write->handle);
@@ -105,6 +105,7 @@ void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
 	ble_gatts_hvx_params_t hvx_params;
 	uint16_t ch = GetConnectionHandle();
 	len = iusLen;
+	NRF_LOG_DEBUG("notif from %d len %d head 0x%02X", iusChar, len, pubData[0]);
 	if (ch != BLE_CONN_HANDLE_INVALID)
 	{
 		hvx_params.handle = iusChar;

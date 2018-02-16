@@ -18,11 +18,9 @@
 // Components
 #include "boards.h"
 #include "control.h"
-#include "battery.h"
 #include "custom_service.h"
-#include "pca9685.h"
 #include "buzzer.h"
-#include "rj_port.h"
+#include "r0b1c_device.h"
 
 static void HwInit(void)
 {
@@ -40,8 +38,12 @@ static void HwInit(void)
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
+}
 
-    BatteryInit();
+
+void PowerOff()
+{
+	nrf_gpio_pin_clear(PWR_ON);
 }
 
 int main(void)
@@ -53,11 +55,9 @@ int main(void)
 
     HwInit();
     ControlInit();
+    RDeviceInit();
 
-    PcaInit();
     BuzzerInit();
-
-    RjPortInit();
 
     ble_stack_init();
 

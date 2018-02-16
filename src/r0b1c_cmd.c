@@ -36,7 +36,7 @@ void OnPortWriteEvt(ble_evt_t const * p_ble_evt)
 				}
 			}
 		}
-		if (tCharPortHandle.notif)
+		//if (tCharPortHandle.notif)
 		{
 			CustomServiceSend(tCharPortHandle.hcccd, ptConnectedDevs, 4);
 		}

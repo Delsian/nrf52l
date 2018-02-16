@@ -57,6 +57,7 @@ const nrf_drv_twi_config_t tPcaConfig = {
 };
 
 static const nrf_drv_twi_t tPcaDrv = NRF_DRV_TWI_INSTANCE(0);
+static bool eInitialized = false;
 
 // Set pin to 1
 void PcaPinOn(uint8_t ch)
@@ -118,20 +119,20 @@ void PcaLed(uint8_t color)
 
 void PcaInit(void)
 {
-    ret_code_t err_code;
+    if (!eInitialized) {
+		APP_ERROR_CHECK(nrf_drv_twi_init(&tPcaDrv, &tPcaConfig, NULL, NULL));
+		nrf_drv_twi_enable(&tPcaDrv);
 
-    err_code = nrf_drv_twi_init(&tPcaDrv, &tPcaConfig, NULL, NULL);
-    APP_ERROR_CHECK(err_code);
-    nrf_drv_twi_enable(&tPcaDrv);
-
-	const uint8_t ubDataSet[5][2] = {
-			{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
-			{PCA9685_PRESCALE_REG, 3}, // max pwm freq
-			{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
-			{PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC},
-			{PCA9685_MODE2_REG, 0x4}
-	};
-	for (int i=0; i<5;i++) {
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
-	}
+		const uint8_t ubDataSet[5][2] = {
+				{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
+				{PCA9685_PRESCALE_REG, 3}, // max pwm freq
+				{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
+				{PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC},
+				{PCA9685_MODE2_REG, 0x4}
+		};
+		for (int i=0; i<5;i++) {
+			nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
+		}
+		eInitialized = true;
+    }
 }

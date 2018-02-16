@@ -19,8 +19,9 @@ typedef struct {
 	uint8_t logic2; // CPU pin to CON2
 } RjPortPins;
 
-extern const RjPortPins ExtPorts[];
-
-void RjPortInit(void);
+void RjPortResetPwm(uint8_t port);
+void RjPortResetInputs(uint8_t port);
+void RjPortSetPwmOut(uint8_t port, int16_t val);
+void RjPortSetPin1asInput(uint8_t port);
 
 #endif /* RJ_PORT_H_ */

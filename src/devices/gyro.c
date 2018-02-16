@@ -31,13 +31,13 @@ uint16_t GyroGetVal(uint16_t valId)
 	return 0;
 }
 
-RDevErrCode RDevGyroInit(int8_t port)
+RDevErrCode RDevGyroInit(uint8_t port)
 {
 	ret_code_t err_code;
 
 	// configure
-	tMpuConfig.scl = ExtPorts[port].logic1;
-	tMpuConfig.sda = ExtPorts[port].logic2;
+	//tMpuConfig.scl = ExtPorts[port].logic1;
+	//tMpuConfig.sda = ExtPorts[port].logic2;
 	err_code = nrf_drv_twi_init(&tMpuDrv, &tMpuConfig, NULL, NULL);
 	APP_ERROR_CHECK(err_code);
 	nrf_drv_twi_enable(&tMpuDrv);
