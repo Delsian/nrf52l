@@ -7,13 +7,14 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "nrf_log.h"
 #include "boards.h"
 #include "nrf_drv_saadc.h"
 #include "nrf_error.h"
 #include "control.h"
 #include "r0b1c_device.h"
 
-#define BATTERY_MEASURE_TICKS 5000
+#define BATTERY_MEASURE_TICKS 500
 #define BATTERY_GAIN NRF_SAADC_GAIN1_3
 
 static uint8_t guBattValue;
@@ -41,6 +42,7 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 	static uint16_t ticks;
 
 	if (BATTERY_MEASURE_TICKS < ++ticks) {
+		NRF_LOG_INFO("Batt tick");
 		nrf_drv_saadc_sample();
 		ticks = 0;
 	}
@@ -65,4 +67,22 @@ RDevErrCode BatteryInit(uint8_t port)
     APP_ERROR_CHECK(err_code);
 
     return RDERR_OK;
+}
+
+RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len)
+{
+	RDevErrCode tErr = RDERR_NOT_SUPPORTED;
+	RDevCmdCode ubCommand = (RDevCmdCode)pData[1];
+	switch (ubCommand) {
+	case RDCMD_SET:
+		tErr = RDERR_DONE;
+		break;
+	case RDCMD_GET:
+		tErr = RDERR_DONE;
+		break;
+	default:
+		break;
+	}
+
+	return tErr;
 }

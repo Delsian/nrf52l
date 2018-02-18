@@ -11,6 +11,9 @@
 #include "nrf_log.h"
 #include "r0b1c_cmd.h"
 
+extern tCharVars tCharCmdHandle;
+extern tCharVars tCharPortHandle;
+
 static tCustomServiceVars tR0b1cDevice;
 static tCharVars tCharBattHandle;
 static tCharVars tCharBtnHandle;
@@ -31,14 +34,18 @@ static void OnPwrWriteEvt(ble_evt_t const * p_ble_evt)
 	}
 }
 
+static void InitComplete()
+{
+	CmdInitComplete();
+}
 
 const tCustomService tServDev = {
 		.tUuid = {0x11, 0x5F, 0x80, 0x34, 0xE8, 0x96, /*-*/ 0x4F, 0x88, /*-*/ 0xD3, 0x4D, /*-*/ 0x19, 0xD0, /*-*/ 0x3A, 0x97, 0xAE, 0x60},
 		.ubServiceType = BLE_GATTS_SRVC_TYPE_PRIMARY,
 		.ptVars = &tR0b1cDevice,
 		.ptChars = {
-				{ 0x973Bu, "Port", 			CCM_WRITENOTIFY, 	&tCharPortHandle	, OnPortWriteEvt, OnPortNotifyEvt },
-				{ 0x973Cu, "Cmd", 			CCM_WRITENOTIFY, 	&tCharCmdHandle		, OnCmdWriteEvt	, NULL },
+				{ 0x973Bu, "Port", 			CCM_READWRITE, 		&tCharPortHandle	, OnPortWriteEvt, NULL },
+				{ 0x973Cu, "Cmd", 			CCM_READWRITENOTIFY,&tCharCmdHandle		, OnCmdWriteEvt	, NULL },
 				{ 0x973Du, "BattLow", 		CCM_NOTIFY, 		&tCharBattHandle	, NULL			, NULL },
 				{ 0x973Eu, "Btn",			CCM_READNOTIFY,		&tCharBtnHandle		, NULL			, NULL },
 				{ 0x973Fu, "PwrOff", 		CCM_WRITE, 			&tCharPwrOffHandle  , OnPwrWriteEvt	, NULL },
@@ -49,6 +56,7 @@ const tCustomService tServDev = {
 
 const tDevDescription gtServices = {
 		.pubDeviceName = "r0b1c",
+		.initCompl = &InitComplete,
 		.tServices = {
 				&tServDev,
 				NULL
@@ -58,17 +66,17 @@ const tDevDescription gtServices = {
 void SendBatteryNotification(uint8_t *pval)
 {
 	if (tCharBattHandle.notif)
-		CustomServiceSend(tCharBattHandle.hcccd, pval, 1);
+		CustomServiceSend(tCharBattHandle.hval, pval, 1);
 }
 
 void SendOverloadNotification(uint8_t *pval)
 {
 	if (tCharOverloadHandle.notif)
-		CustomServiceSend(tCharOverloadHandle.hcccd, pval, 1);
+		CustomServiceSend(tCharOverloadHandle.hval, pval, 1);
 }
 
 void SendButtonNotification(uint8_t *pval)
 {
 	if (tCharBtnHandle.notif)
-		CustomServiceSend(tCharBtnHandle.hcccd, pval, 1);
+		CustomServiceSend(tCharBtnHandle.hval, pval, 1);
 }

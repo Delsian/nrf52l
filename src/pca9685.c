@@ -20,10 +20,6 @@
 #define PCA9685_ADDR 0x60
 #define PCA9685_MAX_CHANNEL         15
 
-#define PCA9685_LEDR				0
-#define PCA9685_LEDG				1
-#define PCA9685_LEDB				15
-
 // Register addresses from data sheet
 #define PCA9685_MODE1_REG           0x00
 #define PCA9685_MODE2_REG           0x01
@@ -57,25 +53,31 @@ const nrf_drv_twi_config_t tPcaConfig = {
 };
 
 static const nrf_drv_twi_t tPcaDrv = NRF_DRV_TWI_INSTANCE(0);
-static bool eInitialized = false;
+static uint8_t ubData[5];
 
 // Set pin to 1
 void PcaPinOn(uint8_t ch)
 {
-
+	if (ch<=PCA9685_MAX_CHANNEL) {
+		ubData[0] = ((ch<<2) + PCA9685_LED0_REG + 1);
+		ubData[1] = 0x10;
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 2, false);
+	}
 }
 
 // Reset pin to 0
 void PcaPinOff(uint8_t ch)
 {
-
+	if (ch<=PCA9685_MAX_CHANNEL) {
+		ubData[0] = ((ch<<2) + PCA9685_LED0_REG + 3);
+		ubData[1] = 0x10;
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 2, false);
+	}
 }
 
 // write byte value using auto-increment
 void PcaWriteChannel(uint8_t ch, uint8_t val)
 {
-	static uint8_t ubData[5];
-
 	if (ch<=PCA9685_MAX_CHANNEL || ch == PCA9685_ALLLED_REG) {
 		uint16_t val_on = 2048 - (val << 3);
 		uint16_t val_off = val << 4;
@@ -119,20 +121,17 @@ void PcaLed(uint8_t color)
 
 void PcaInit(void)
 {
-    if (!eInitialized) {
-		APP_ERROR_CHECK(nrf_drv_twi_init(&tPcaDrv, &tPcaConfig, NULL, NULL));
-		nrf_drv_twi_enable(&tPcaDrv);
+	APP_ERROR_CHECK(nrf_drv_twi_init(&tPcaDrv, &tPcaConfig, NULL, NULL));
+	nrf_drv_twi_enable(&tPcaDrv);
 
-		const uint8_t ubDataSet[5][2] = {
-				{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
-				{PCA9685_PRESCALE_REG, 3}, // max pwm freq
-				{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
-				{PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC},
-				{PCA9685_MODE2_REG, 0x4}
-		};
-		for (int i=0; i<5;i++) {
-			nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
-		}
-		eInitialized = true;
-    }
+	const uint8_t ubDataSet[5][2] = {
+			{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
+			{PCA9685_PRESCALE_REG, 3}, // max pwm freq
+			{PCA9685_MODE1_REG, PCA9685_MODE_RESTART},
+			{PCA9685_MODE1_REG, PCA9685_MODE_AUTOINC},
+			{PCA9685_MODE2_REG, 0x4}
+	};
+	for (int i=0; i<5;i++) {
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
+	}
 }

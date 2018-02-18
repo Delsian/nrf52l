@@ -5,9 +5,11 @@
  *      Author: ekrashtan
  */
 
+#include <stdlib.h>
 #include "app_timer.h"
 #include "nrf_drv_gpiote.h"
 #include "r0b1c_device.h"
+#include "pca9685.h"
 #include "rj_port.h"
 #include "custom_service.h"
 #include "r0b1c_cmd.h"
@@ -21,9 +23,12 @@ RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevButtonInit(uint8_t port);
 RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
+RDevErrCode RDevLedInit(uint8_t port);
+RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevGyroInit(uint8_t port);
 RDevErrCode RDevGyroCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryTick(uint8_t port, uint32_t time);
+RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryInit(uint8_t port);
 
 const RDevDescriptor ptRDevices[] = {
@@ -48,7 +53,9 @@ const RDevDescriptor ptRDevices[] = {
 /* Next section for internal devices only */
 		// LED
 		{
-				.id = RDEV_LED
+				.id = RDEV_LED,
+				.hInit = &RDevLedInit,
+				.hCmd = &RDevLedCmd
 		},
 		// Gyro
 		{
@@ -64,7 +71,8 @@ const RDevDescriptor ptRDevices[] = {
 		{
 				.id = RDEV_BATTERY,
 				.hTick = &BatteryTick,
-				.hInit = &BatteryInit
+				.hInit = &BatteryInit,
+				.hCmd = RDevBattCmd
 		},
 
 
@@ -94,6 +102,10 @@ RDevErrCode RDeviceChange(uint8_t port, RDevType id)
 	int devindex = FindDevById(id);
 	if (devindex < 0)
 		return RDERR_UNKNOWN_DEVICE;
+	if (gpDevInPort[port].hUnInit) {
+		// De-init old device
+		(gpDevInPort[port].hUnInit)(port);
+	}
 	memcpy(&(gpDevInPort[port]), &(ptRDevices[devindex]), sizeof(RDevDescriptor));
 	if (ptRDevices[devindex].hInit)
 	{
@@ -104,31 +116,22 @@ RDevErrCode RDeviceChange(uint8_t port, RDevType id)
 
 RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len)
 {
-	RDevErrCode tErr = RDERR_NOT_SUPPORTED;
+	RDevErrCode tErr = RDERR_NOTIMPLEMENTED;
 	uint8_t port = pData[0];
 	RDevCmdCode tCmd = (RDevCmdCode)pData[1];
 	if (port >= TOTAL_RJ_PORTS) {
-		if (tCmd != RDCMD_ID) { // no id request for internal devices
-			// Internal devices - port number equals to device Id
-			int id = FindDevById(port);
-			if (id > 0) {
-				if (ptRDevices[id].hCmd)
-					tErr = (ptRDevices[id].hCmd)(pData, len);
+		// Internal devices - port number equals to device Id
+		int id = FindDevById(port);
+		if (id > 0) {
+			if (ptRDevices[id].hCmd) {
+				tErr = (ptRDevices[id].hCmd)(pData, len);
 			}
+		} else {
+			tErr = RDERR_UNKNOWN_DEVICE;
 		}
 	} else {
 		// External devices
-		if (tCmd == RDCMD_ID) {
-			// Send type notification
-			if (tCharCmdHandle.notif) {
-				uint8_t uNi[3];
-				uNi[0] = port;
-				uNi[1] = RDCMD_ID;
-				uNi[2] = gpDevInPort[port].id;
-				CustomServiceSend(tCharCmdHandle.hcccd, uNi, 3);
-			}
-			tErr = RDERR_OK;
-		} else if (gpDevInPort[port].hCmd) {
+		if (gpDevInPort[port].hCmd) {
 			// Executre command for external device
 			tErr = (gpDevInPort[port].hCmd)(pData, len);
 		}
@@ -157,6 +160,7 @@ static void RDevTickHandler()
 // Prepare internal devices on startup
 void RDeviceInit(void)
 {
+	PcaInit();
 	int i = 0;
 	for (;i<TOTAL_RJ_PORTS;i++) {
 		// By default - dummy devices on all ports

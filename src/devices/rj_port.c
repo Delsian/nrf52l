@@ -17,36 +17,36 @@
 static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 // Port0
 		{
-				.pwm = 2,
-				.in1 = 3,
-				.in2 = 4,
+				.pwm = PCA9685_PWMA,
+				.in1 = PCA9685_IN1A,
+				.in2 = PCA9685_IN2A,
 
 				.logic1 = 12,
 				.logic2 = 13
 		},
 // Port1
 		{
-				.pwm = 5,
-				.in1 = 6,
-				.in2 = 7,
+				.pwm = PCA9685_PWMB,
+				.in1 = PCA9685_IN1B,
+				.in2 = PCA9685_IN2B,
 
 				.logic1 = 14,
 				.logic2 = 15
 		},
 // Port2
 		{
-				.pwm = 8,
-				.in1 = 9,
-				.in2 = 10,
+				.pwm = PCA9685_PWMC,
+				.in1 = PCA9685_IN1C,
+				.in2 = PCA9685_IN2C,
 
 				.logic1 = 18,
 				.logic2 = 16
 		},
 // Port3
 		{
-				.pwm = 11,
-				.in1 = 12,
-				.in2 = 13,
+				.pwm = PCA9685_PWMD,
+				.in1 = PCA9685_IN1D,
+				.in2 = PCA9685_IN2D,
 
 				.logic1 = 19,
 				.logic2 = 17
@@ -55,7 +55,6 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 
 void RjPortResetPwm(uint8_t port)
 {
-	PcaInit();
 	// Set to high impedance - In1,In2 = 0, PWM = 1
 	PcaPinOff(ExtPorts[port].in1);
 	PcaPinOff(ExtPorts[port].in2);

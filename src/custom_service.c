@@ -119,6 +119,15 @@ void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
 	nrf_mtx_unlock(&tMtxNotify);
 }
 
+ret_code_t CustomServiceValueSet(uint16_t iusChar, uint8_t* ipubData, uint8_t iubLen)
+{
+	ble_gatts_value_t tValue = {0};
+	uint16_t ch = GetConnectionHandle();
+	tValue.len = iubLen;
+	tValue.p_value = ipubData;
+	return sd_ble_gatts_value_set(ch, iusChar, &tValue);
+}
+
 NRF_SDH_BLE_OBSERVER(cust_obs, 2, ble_custom_on_ble_evt, NULL);
 
 ret_code_t CustomServiceInit(const tCustomService* itServ)
@@ -148,15 +157,11 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 	while (itServ->ptChars[ubChIndex].usUuid)
 	{
 		ble_gatts_char_handles_t tNewHandle;
-		ble_gatts_char_md_t char_md;
-	    ble_gatts_attr_md_t cccd_md;
+		ble_gatts_char_md_t char_md = {0};
+	    ble_gatts_attr_md_t cccd_md = {0};
 		ble_gatts_attr_md_t attr_md;
-		ble_gatts_attr_t    attr_char_value;
+		ble_gatts_attr_t    attr_char_value = {0};
 		ble_uuid_t          ble_uuid;
-
-		memset(&char_md, 0, sizeof(char_md));
-		memset(&attr_char_value, 0, sizeof(attr_char_value));
-		memset(&cccd_md, 0, sizeof(cccd_md));
 
 		BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.read_perm);
 		BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.write_perm);
@@ -168,7 +173,6 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 	    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
 	    attr_md.vloc    = BLE_GATTS_VLOC_STACK;
 	    attr_md.vlen    = 1;
-	    attr_md.rd_auth = 1;
 
 		switch(itServ->ptChars[ubChIndex].tMode) {
 		case CCM_WRITE:
@@ -184,6 +188,11 @@ ret_code_t CustomServiceInit(const tCustomService* itServ)
 		case CCM_READWRITE:
 			char_md.char_props.write = 1;
 			char_md.char_props.read = 1;
+			break;
+		case CCM_READWRITENOTIFY:
+			char_md.char_props.write = 1;
+			char_md.char_props.read = 1;
+			char_md.char_props.notify = 1;
 			break;
 		case CCM_WRITENOTIFY:
 		    char_md.char_props.notify = 1;

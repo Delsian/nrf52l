@@ -15,6 +15,6 @@ RDevErrCode RDevDummyInit(uint8_t port)
 	// GPIO as input
 	RjPortResetInputs(port);
 	// PWM off
-	RjPortResetPwm(port);
+	//RjPortResetPwm(port);
 	return RDERR_OK;
 }

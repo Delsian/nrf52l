@@ -87,7 +87,7 @@ static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
     switch (event)
     {
         case BLE_DFU_EVT_BOOTLOADER_ENTER_PREPARE:
-            printf("Device is preparing to enter bootloader mode\n");
+        	NRF_LOG_INFO("Device is preparing to enter bootloader mode");
             // YOUR_JOB: Disconnect all bonded devices that currently are connected.
             //           This is required to receive a service changed indication
             //           on bootup after a successful (or aborted) Device Firmware Update.
@@ -96,11 +96,11 @@ static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
         case BLE_DFU_EVT_BOOTLOADER_ENTER:
             // YOUR_JOB: Write app-specific unwritten data to FLASH, control finalization of this
             //           by delaying reset by reporting false in app_shutdown_handler
-            printf("Device will enter bootloader mode\n");
+        	NRF_LOG_INFO("Device will enter bootloader mode");
             break;
 
         case BLE_DFU_EVT_BOOTLOADER_ENTER_FAILED:
-            printf("Request to enter bootloader mode failed asynchroneously\n");
+        	NRF_LOG_INFO("Request to enter bootloader mode failed asynchroneously");
             // YOUR_JOB: Take corrective measures to resolve the issue
             //           like calling APP_ERROR_CHECK to reset the device.
             break;
@@ -113,7 +113,7 @@ static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
             break;
 
         default:
-            printf("Unknown event from ble_dfu_buttonless\n");
+        	NRF_LOG_INFO("Unknown event from ble_dfu_buttonless");
             break;
     }
 }
@@ -193,7 +193,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
 
-    printf("Ble evt %x\n",p_ble_evt->header.evt_id);
+    NRF_LOG_DEBUG("Ble evt %x",p_ble_evt->header.evt_id);
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
@@ -207,7 +207,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
-            printf("Disconnected\n");
+        	NRF_LOG_INFO("Disconnected");
 //            signal = LED3_OFF;
 //            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -226,7 +226,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 #ifndef S140
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
         {
-            printf("PHY update request\n");
+        	NRF_LOG_INFO("PHY update request");
             ble_gap_phys_t const phys =
             {
                 .rx_phys = BLE_GAP_PHY_AUTO,
@@ -245,7 +245,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
-            printf("GATT Client Timeout\n");
+        	NRF_LOG_INFO("GATT Client Timeout");
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
                                              BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);
@@ -253,7 +253,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
         case BLE_GATTS_EVT_TIMEOUT:
             // Disconnect on GATT Server timeout event.
-            printf("GATT Server Timeout\n");
+        	NRF_LOG_INFO("GATT Server Timeout");
             err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
                                              BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);

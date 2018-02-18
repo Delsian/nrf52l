@@ -11,18 +11,22 @@
 
 // Command codes
 typedef enum {
-	RDCMD_RESET,
-	RDCMD_ID,
-	RDCMD_SET,
-	RDCMD_GET
+	RDCMD_RESET = 0x00,
+	RDCMD_ID = 0x01,
+	RDCMD_SET = 0x02,
+	RDCMD_GET = 0x03,
+	RDCMD_SET2 = 0x04,
+	RDCMD_GET2 = 0x05
 } RDevCmdCode;
 
 // Error codes
 typedef enum {
-	RDERR_OK,
-	RDERR_UNKNOWN_DEVICE,
-	RDERR_NOT_SUPPORTED,
-	RDERR_INCOMPLETE
+	RDERR_DONE = 0x00, // If command have no response
+	RDERR_OK = 0x01, // Command executed successfully with result in write register
+	RDERR_NOT_SUPPORTED = 0x05,
+	RDERR_UNKNOWN_DEVICE = 0x0D,
+	RDERR_INCOMPLETE = 0x1C,
+	RDERR_NOTIMPLEMENTED = 0xDE
 } RDevErrCode;
 
 typedef enum {
@@ -35,11 +39,11 @@ typedef enum {
 	//====
 	RDEV_INTERNAL = 0xC0, // Not used for real device, for devid checking only
 	RDEV_LED = 0xC1,
-	RDEV_GYRO,
-	RDEV_BUZZ,
-	RDEV_BATTERY,
+	RDEV_GYRO = 0xC2,
+	RDEV_BUZZ = 0xC3,
+	RDEV_BATTERY = 0xC4,
 	//====
-	RDEV_LAST
+	RDEV_LAST = 0xFD
 } RDevType;
 
 typedef RDevErrCode (*RDevInit)(uint8_t port);
@@ -49,6 +53,7 @@ typedef RDevErrCode (*RDevTick)(uint8_t port, uint32_t time);
 typedef struct _RDevDescriptor {
 	RDevType id;
 	RDevInit hInit;
+	RDevInit hUnInit; // Call on device removal (stop timers, free memory etc.)
 	RDevCmd hCmd;
 	RDevTick hTick;
 } RDevDescriptor;

@@ -40,12 +40,6 @@ static void HwInit(void)
     APP_ERROR_CHECK(err_code);
 }
 
-
-void PowerOff()
-{
-	nrf_gpio_pin_clear(PWR_ON);
-}
-
 int main(void)
 {
     (void) NRF_LOG_INIT(NULL);

@@ -28,6 +28,7 @@ typedef enum {
 	CCM_READNOTIFY,
 	CCM_READWRITE,
 	CCM_WRITENOTIFY,
+	CCM_READWRITENOTIFY,
 	CCM_NOTIFY
 } CustomCharMode;
 
@@ -38,6 +39,7 @@ typedef struct _CharVars {
 } tCharVars;
 
 typedef void (CustEventReceiver)(ble_evt_t const *);
+typedef void (CustServInitComplete)(void);
 
 typedef struct _CustomChar {
 	uint16_t			usUuid;
@@ -57,7 +59,8 @@ typedef struct _CustomService {
 
 typedef struct _DeviceDescription {
 	uint8_t*				pubDeviceName;
-	const tCustomService*			tServices[];
+	CustServInitComplete*	initCompl; // Custom service init complete callback
+	const tCustomService*	tServices[];
 } tDevDescription;
 
 // Define this structure in external module
@@ -68,3 +71,5 @@ extern const tDevDescription gtServices;
 ret_code_t CustomServiceInit(const tCustomService* itServ);
 uint16_t GetConnectionHandle(void);
 void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen);
+ret_code_t CustomServiceValueSet(uint16_t iusChar, uint8_t* ipubData, uint8_t iubLen);
+

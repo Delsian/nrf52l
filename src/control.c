@@ -9,9 +9,11 @@
 #include <stdio.h>
 #include "control.h"
 #include "nrf_queue.h"
+#include "nrf_gpio.h"
 #include "app_scheduler.h"
 #include "nrf_log.h"
 
+#include "boards.h"
 #include "pca9685.h"
 
 extern void battery_level_update(uint8_t battery_level);
@@ -29,6 +31,9 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 		break;
 	case CE_LED_CHG:
 		PcaLed(*(iEvt->ptr8));
+		break;
+	case CE_PWR_OFF:
+		nrf_gpio_pin_clear(PWR_ON);
 		break;
 	default:
 		break;
