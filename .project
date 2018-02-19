@@ -320,6 +320,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_util_platform.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/crc32.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/SDK/components/libraries/crc32/crc32.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/fds.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/fds/fds.c</locationURI>

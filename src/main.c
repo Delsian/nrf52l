@@ -16,6 +16,7 @@
 #include "nrf_log_default_backends.h"
 
 // Components
+#include "fs.h"
 #include "boards.h"
 #include "control.h"
 #include "custom_service.h"
@@ -48,7 +49,9 @@ int main(void)
     NRF_LOG_INFO("Inside main");
 
     HwInit();
+
     ControlInit();
+    FsInit();
     RDeviceInit();
 
     BuzzerInit();

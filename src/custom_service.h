@@ -58,7 +58,7 @@ typedef struct _CustomService {
 } tCustomService;
 
 typedef struct _DeviceDescription {
-	uint8_t*				pubDeviceName;
+	uint8_t					pubDeviceName[20]; // Size equal to AdvName in DFU
 	CustServInitComplete*	initCompl; // Custom service init complete callback
 	const tCustomService*	tServices[];
 } tDevDescription;

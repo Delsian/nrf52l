@@ -9,10 +9,10 @@
 #define FS_H_
 
 
-void fs_init(void);
-ret_code_t fs_write(uint16_t addr, uint8_t* data, uint32_t len);
-ret_code_t fs_read(uint16_t addr, uint8_t* data, uint32_t len);
-ret_code_t fs_erase(uint16_t page, uint32_t len);
+void FsInit(void);
+ret_code_t FsWrite(uint32_t addr, uint8_t* data, uint32_t len);
+ret_code_t FsRead(uint32_t addr, uint8_t* data, uint32_t len);
+ret_code_t FsErase(uint32_t page, uint32_t len);
 uint32_t nrf5_flash_end_addr_get(void);
 
 #endif /* FS_H_ */
