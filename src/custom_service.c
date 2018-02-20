@@ -5,12 +5,30 @@
  *      Author: Eug
  */
 
+#include <stdlib.h>
+#include "ble_gap.h"
 #include "custom_service.h"
 #include "sdk_macros.h"
 #include "nrf_log.h"
+#include "fs.h"
+#include "nrf_dfu_types.h"
+#include "crc32.h"
+#include "control.h"
+
+#define DEVICE_NAME_LEN 20
+
+uint8_t m_dfu_settings_buffer[1024]
+    __attribute__((section(".bootloader_settings_page")))
+    __attribute__((used));
 
 static tCustomServiceVars* ptCustVar;
 static nrf_mtx_t tMtxNotify;
+
+static uint8_t pName[DEVICE_NAME_LEN];
+const ControlEvent NameChgEvt = {
+		.type = CE_DEVNAME_CHG,
+		.ptr8 = pName
+};
 
 uint16_t GetConnectionHandle()
 {
@@ -49,14 +67,37 @@ static tCustomChar const * GetByVal(uint16_t iusVal)
     return NULL;
 }
 
+void CustSetDeviceName( uint8_t* ipubName)
+{
+	NRF_LOG_INFO("New name %s", ipubName);
+	nrf_dfu_settings_t* ptSettings = malloc(sizeof(nrf_dfu_settings_t));
+	memcpy((void*)ptSettings, m_dfu_settings_buffer, sizeof(nrf_dfu_settings_t));
+    nrf_dfu_adv_name_t * pAdvName = &(ptSettings->adv_name);
+    strncpy(pAdvName->name, ipubName, DEVICE_NAME_LEN-1);
+    pAdvName->name[DEVICE_NAME_LEN-1] = '\0';
+    pAdvName->len = strlen(pAdvName->name);
+    pAdvName->crc = crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL);
+    FsErase((uint32_t)m_dfu_settings_buffer, 1);
+    FsWriteFree((uint32_t)m_dfu_settings_buffer, (uint8_t*)ptSettings, sizeof(nrf_dfu_settings_t));
+}
+
+uint8_t* CustGetDeviceName(void)
+{
+    nrf_dfu_settings_t* ptSettings = (nrf_dfu_settings_t*)m_dfu_settings_buffer;
+    nrf_dfu_adv_name_t* pAdvName = &(ptSettings->adv_name);
+    if (pAdvName->crc == crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL)) {
+    	memcpy(pName, pAdvName->name, DEVICE_NAME_LEN);
+    } else {
+    	memcpy(pName, gtServices.pubDeviceName, DEVICE_NAME_LEN);
+    	ControlPost(&NameChgEvt);
+    }
+    pName[DEVICE_NAME_LEN-1] = '\0';
+	return pName;
+}
+
 static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
-    if (p_ble_evt == NULL)
-    {
-        return;
-    }
-
-    NRF_LOG_DEBUG("cust evt %d", p_ble_evt->header.evt_id);
+    if (p_ble_evt == NULL) return;
 
     switch (p_ble_evt->header.evt_id)
     {
@@ -71,6 +112,15 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GATTS_EVT_WRITE:
         {
         	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+        	NRF_LOG_DEBUG("Evt Wr to 0x%x", p_evt_write->handle);
+        	if (p_evt_write->uuid.uuid == BLE_UUID_GAP_CHARACTERISTIC_DEVICE_NAME) {
+        		ble_gap_conn_sec_mode_t sec_mode;
+        		// Device name update
+            	memcpy(pName, p_evt_write->data, DEVICE_NAME_LEN-1);
+            	ControlPost(&NameChgEvt);
+            	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
+            	sd_ble_gap_device_name_set(&sec_mode,(uint8_t const *) pName, strlen(pName));
+        	}
         	tCustomChar const * tCh = GetByCccd(p_evt_write->handle);
         	if (tCh) {
         		tCh->ptHandle->notif = ble_srv_is_notification_enabled(p_evt_write->data);

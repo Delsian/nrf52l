@@ -15,6 +15,7 @@
 
 #include "boards.h"
 #include "pca9685.h"
+#include "custom_service.h"
 
 extern void battery_level_update(uint8_t battery_level);
 
@@ -34,6 +35,9 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 		break;
 	case CE_PWR_OFF:
 		nrf_gpio_pin_clear(PWR_ON);
+		break;
+	case CE_DEVNAME_CHG:
+		CustSetDeviceName(iEvt->ptr8);
 		break;
 	default:
 		break;

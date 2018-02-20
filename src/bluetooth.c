@@ -11,7 +11,6 @@
 #include "app_scheduler.h"
 
 #include "nrf_sdh.h"
-#include "nrf_soc.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
 #include "ble_dfu.h"
@@ -20,7 +19,6 @@
 #include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
 #include "nrf_dfu_types.h"
-#include "crc32.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -29,10 +27,6 @@
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
-
-uint8_t m_dfu_settings_buffer[1024]
-    __attribute__((section(".bootloader_settings_page")))
-    __attribute__((used));
 
 // Used UUIDs
 BLE_BAS_DEF(m_bas);
@@ -178,25 +172,10 @@ static void gap_params_init(void)
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
 
-    //=== Check name in DFU params
-    nrf_dfu_settings_t s_dfu_settings;
-    // Copy the DFU settings out of flash and into a buffer in RAM.
-    memcpy((void*)&s_dfu_settings, m_dfu_settings_buffer, sizeof(nrf_dfu_settings_t));
-    nrf_dfu_adv_name_t * pAdvName = &(s_dfu_settings.adv_name);
-    uint32_t crc = crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL);
-    if (pAdvName->crc != crc) {
-        strncpy(pAdvName->name, gtServices.pubDeviceName, 20);
-        pAdvName->name[19] = '\0';
-        pAdvName->len = strlen(pAdvName->name);
-        pAdvName->crc = crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL);
-        sd_flash_page_erase((uint32_t)m_dfu_settings_buffer/0x1000);
-        sd_flash_write((uint32_t*)m_dfu_settings_buffer, (uint32_t*)&s_dfu_settings, sizeof(nrf_dfu_settings_t)/4);
-    }
-    //===
-
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
-    err_code = sd_ble_gap_device_name_set(&sec_mode, pAdvName->name, pAdvName->len);
+    uint8_t* pubName = CustGetDeviceName();
+    err_code = sd_ble_gap_device_name_set(&sec_mode, pubName, strlen(pubName));
     APP_ERROR_CHECK(err_code);
 
     memset(&gap_conn_params, 0, sizeof(gap_conn_params));

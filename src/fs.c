@@ -5,7 +5,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include "nrf.h"
+#include "nrf_log.h"
 #include "nrf_soc.h"
 #include "nordic_common.h"
 #include "nrf_sdh.h"
@@ -14,6 +16,7 @@
 
 static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt);
 static nrf_fstorage_api_t * p_fs_api = &nrf_fstorage_sd;
+static uint8_t* pubWrPtr;
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t fstorage) =
 {
@@ -25,7 +28,7 @@ NRF_FSTORAGE_DEF(nrf_fstorage_t fstorage) =
      * The function nrf5_flash_end_addr_get() can be used to retrieve the last address on the
      * last page of flash available to write data. */
     .start_addr = 0x3e000,
-    .end_addr   = 0x7ffff,
+    .end_addr   = 0x80000,
 };
 
 uint32_t nrf5_flash_end_addr_get()
@@ -42,13 +45,16 @@ static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt)
 {
     if (p_evt->result != NRF_SUCCESS)
     {
-        printf("--> Event received: ERROR while executing an fstorage operation.\n");
-        return;
+    	NRF_LOG_ERROR("FStorage %x", p_evt->result);
     }
 
     switch (p_evt->id)
     {
         case NRF_FSTORAGE_EVT_WRITE_RESULT:
+        	if (pubWrPtr) {
+        		free(pubWrPtr);
+        		pubWrPtr = 0;
+        	}
         	break;
         case NRF_FSTORAGE_EVT_ERASE_RESULT:
         	break;
@@ -57,36 +63,39 @@ static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt)
     }
 }
 
-static void wait_for_flash_ready(nrf_fstorage_t const * p_fstorage)
-{
-    while (nrf_fstorage_is_busy(p_fstorage))
-    {
-		//vTaskDelay(1);
-    }
-}
-
+// to write static data
 ret_code_t FsWrite(uint32_t addr, uint8_t* data, uint32_t len)
 {
-	wait_for_flash_ready(&fstorage);
-	return nrf_fstorage_write(&fstorage, addr, data, len, NULL);
+	ret_code_t err = nrf_fstorage_write(&fstorage, addr, data, len, NULL);
+	if (err) NRF_LOG_ERROR("FsWrite Err %x", err);
+	return err;
+}
+
+// If we have dynamically allocated buffer
+ret_code_t FsWriteFree(uint32_t addr, uint8_t* data, uint32_t len)
+{
+	while (nrf_fstorage_is_busy(&fstorage));
+	pubWrPtr = data;
+	ret_code_t err = nrf_fstorage_write(&fstorage, addr, data, len, NULL);
+	if (err) NRF_LOG_ERROR("FsWrite Err %x", err);
+	return err;
 }
 
 ret_code_t FsRead(uint32_t addr, uint8_t* data, uint32_t len)
 {
-	wait_for_flash_ready(&fstorage);
 	return nrf_fstorage_read(&fstorage, addr, data, len);
 }
 
 ret_code_t FsErase(uint32_t page, uint32_t len)
 {
-	wait_for_flash_ready(&fstorage);
-	return nrf_fstorage_erase(&fstorage, page, len, NULL);
+	ret_code_t err = nrf_fstorage_erase(&fstorage, page, len, NULL);
+	if (err) NRF_LOG_ERROR("FsErase Err %x", err);
+	return err;
 }
 
 void FsInit()
 {
     ret_code_t rc;
-
     rc = nrf_fstorage_init(&fstorage, p_fs_api, NULL);
     APP_ERROR_CHECK(rc);
 
