@@ -21,8 +21,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 				.in1 = PCA9685_IN1A,
 				.in2 = PCA9685_IN2A,
 
-				.logic1 = 12,
-				.logic2 = 13
+				.logic1 = PIN_EXT7,
+				.logic2 = PIN_EXT1
 		},
 // Port1
 		{
@@ -30,8 +30,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 				.in1 = PCA9685_IN1B,
 				.in2 = PCA9685_IN2B,
 
-				.logic1 = 14,
-				.logic2 = 15
+				.logic1 = PIN_EXT2,
+				.logic2 = PIN_EXT3
 		},
 // Port2
 		{
@@ -39,8 +39,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 				.in1 = PCA9685_IN1C,
 				.in2 = PCA9685_IN2C,
 
-				.logic1 = 18,
-				.logic2 = 16
+				.logic1 = PIN_EXT0,
+				.logic2 = PIN_EXT6
 		},
 // Port3
 		{
@@ -48,8 +48,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 				.in1 = PCA9685_IN1D,
 				.in2 = PCA9685_IN2D,
 
-				.logic1 = 19,
-				.logic2 = 17
+				.logic1 = PIN_EXT5,
+				.logic2 = PIN_EXT4
 		}
 };
 
