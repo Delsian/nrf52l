@@ -59,9 +59,12 @@ static uint8_t ubData[5];
 void PcaPinOn(uint8_t ch)
 {
 	if (ch<=PCA9685_MAX_CHANNEL) {
-		ubData[0] = ((ch<<2) + PCA9685_LED0_REG + 1);
-		ubData[1] = 0x10;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 2, false);
+		ubData[0] = ((ch<<2) + PCA9685_LED0_REG);
+		ubData[1] = 0;
+		ubData[2] = 0x10;
+		ubData[3] = 0;
+		ubData[4] = 0;
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
 	}
 }
 
@@ -69,9 +72,12 @@ void PcaPinOn(uint8_t ch)
 void PcaPinOff(uint8_t ch)
 {
 	if (ch<=PCA9685_MAX_CHANNEL) {
-		ubData[0] = ((ch<<2) + PCA9685_LED0_REG + 3);
-		ubData[1] = 0x10;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 2, false);
+		ubData[0] = ((ch<<2) + PCA9685_LED0_REG);
+		ubData[1] = 0;
+		ubData[2] = 0;
+		ubData[3] = 0;
+		ubData[4] = 0x10;
+		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
 	}
 }
 

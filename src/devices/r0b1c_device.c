@@ -25,6 +25,7 @@ RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedInit(uint8_t port);
 RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
+RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
 RDevErrCode RDevGyroInit(uint8_t port);
 RDevErrCode RDevGyroCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryTick(uint8_t port, uint32_t time);
@@ -55,7 +56,8 @@ const RDevDescriptor ptRDevices[] = {
 		{
 				.id = RDEV_LED,
 				.hInit = &RDevLedInit,
-				.hCmd = &RDevLedCmd
+				.hCmd = &RDevLedCmd,
+				.hTick = &RDevLedTick
 		},
 		// Gyro
 		{
