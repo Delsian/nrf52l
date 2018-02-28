@@ -85,15 +85,27 @@ void PcaPinOff(uint8_t ch)
 void PcaWriteChannel(uint8_t ch, uint8_t val)
 {
 	if (ch<=PCA9685_MAX_CHANNEL || ch == PCA9685_ALLLED_REG) {
-		uint16_t val_on = 2048 - (val << 3);
-		uint16_t val_off = val << 4;
-		ubData[0] = (ch == PCA9685_ALLLED_REG)? ch : ((ch<<2) + PCA9685_LED0_REG);
-		ubData[1] = val_on&0xFF;
-		ubData[2] = val_on>>8;
-		ubData[3] = val_off&0xFF;
-		ubData[4] = val_off>>8;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
+		if (val == 0) {
+			PcaPinOff (ch);
+		} else if (val == 0xFF) {
+			PcaPinOn (ch);
+		} else {
+			uint16_t val_on = 2048 - (val << 3);
+			uint16_t val_off = val << 4;
+			ubData[0] = (ch == PCA9685_ALLLED_REG)? ch : ((ch<<2) + PCA9685_LED0_REG);
+			ubData[1] = val_on&0xFF;
+			ubData[2] = val_on>>8;
+			ubData[3] = val_off&0xFF;
+			ubData[4] = val_off>>8;
+			nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
+		}
 	}
+}
+
+void PcaSetLed(uint8_t r, uint8_t g, uint8_t b) {
+	PcaWriteChannel(PCA9685_LEDG, 0xFF - g);
+	PcaWriteChannel(PCA9685_LEDB, 0xFF - b);
+	PcaWriteChannel(PCA9685_LEDR, 0xFF - r);
 }
 
 void PcaLed(uint8_t color)
