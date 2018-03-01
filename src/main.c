@@ -41,6 +41,8 @@ static void HwInit(void)
     APP_ERROR_CHECK(err_code);
 }
 
+RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
+
 int main(void)
 {
     (void) NRF_LOG_INIT(NULL);
@@ -50,7 +52,11 @@ int main(void)
 
     ControlInit();
     FsInit();
+
     RDeviceInit();
+//    while(1) {
+//    	RDevLedTick(0,0);
+//    }
 
     BuzzerInit();
 

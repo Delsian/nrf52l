@@ -47,7 +47,7 @@
 const nrf_drv_twi_config_t tPcaConfig = {
 	.scl                = TWI0_SCL,
 	.sda                = TWI0_SDA,
-	.frequency          = NRF_TWI_FREQ_100K,
+	.frequency          = NRF_TWI_FREQ_400K,
 	.interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
 	.clear_bus_init     = false
 };
@@ -90,13 +90,12 @@ void PcaWriteChannel(uint8_t ch, uint8_t val)
 		} else if (val == 0xFF) {
 			PcaPinOn (ch);
 		} else {
-			uint16_t val_on = 2048 - (val << 3);
-			uint16_t val_off = val << 4;
+			uint16_t val_on = val << 4;
 			ubData[0] = (ch == PCA9685_ALLLED_REG)? ch : ((ch<<2) + PCA9685_LED0_REG);
-			ubData[1] = val_on&0xFF;
-			ubData[2] = val_on>>8;
-			ubData[3] = val_off&0xFF;
-			ubData[4] = val_off>>8;
+			ubData[1] = 0xFF;
+			ubData[2] = 0xF;
+			ubData[3] = val_on&0xFF;
+			ubData[4] = val_on>>8;
 			nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
 		}
 	}

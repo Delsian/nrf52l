@@ -10,9 +10,7 @@
 
 typedef struct _LedPattern {
 	uint8_t ticks; // ticks in x10 intervals, bit 7 indicates fade-in/fade-out
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
+	uint8_t color[3];
 } LedPattern;
 
 typedef void (*RDevLedCB)(void* context);
