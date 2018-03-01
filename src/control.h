@@ -10,6 +10,7 @@
 
 typedef enum {
 	CE_BUTTON,
+	CE_BT_CONN,
 	CE_LED_CHG,
 	CE_BATT_IN, // Battery measurement complete
 	CE_BUZZER,

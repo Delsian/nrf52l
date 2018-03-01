@@ -48,4 +48,6 @@ typedef struct {
 	LedPattern pt[];
 } LedPatternSeq;
 
+LedPatternSeq* RDevLedSetPattern(LedPatternSeq* ipSeq);
+
 #endif /* DEVICES_RDEV_LED_H_ */

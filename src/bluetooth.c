@@ -19,6 +19,7 @@
 #include "nrf_pwr_mgmt.h"
 #include "custom_service.h"
 #include "nrf_dfu_types.h"
+#include "control.h"
 
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
@@ -192,6 +193,9 @@ static void gap_params_init(void)
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
+    const ControlEvent ConnEvt = {
+    		.type = CE_BT_CONN
+    };
 
     NRF_LOG_DEBUG("Ble evt %x",p_ble_evt->header.evt_id);
     switch (p_ble_evt->header.evt_id)
@@ -199,10 +203,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_CONNECTED:
         	NRF_LOG_INFO("Connected");
             // call on connect
-//            signal = LED3_ON;
-//            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
-//            signal = LED1_OFF;
-//            app_sched_event_put(&signal, sizeof(LedsControlSignal), leds_scheduler);
+        	ControlPost(&ConnEvt);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
