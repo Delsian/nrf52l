@@ -16,6 +16,7 @@
 #include "nrf_delay.h"
 #include "nrf_drv_twi.h"
 #include "app_util_platform.h"
+#include "rdev_led.h"
 
 #define PCA9685_ADDR 0x60
 #define PCA9685_MAX_CHANNEL         15
@@ -101,39 +102,32 @@ void PcaWriteChannel(uint8_t ch, uint8_t val)
 	}
 }
 
-void PcaSetLed(uint8_t r, uint8_t g, uint8_t b) {
-	PcaWriteChannel(PCA9685_LEDG, 0xFF - g);
-	PcaWriteChannel(PCA9685_LEDB, 0xFF - b);
-	PcaWriteChannel(PCA9685_LEDR, 0xFF - r);
+static uint8_t PcaLedLookupTable(uint8_t val)
+{
+	const uint8_t table[64] = {
+			0,  2,  3,  4,  4,  5,  6,  6,
+			7,  8,  9, 10, 11, 12, 13, 15,
+			16, 17, 19, 20, 22, 24, 26, 28,
+			30, 32, 34, 37, 39, 42, 45, 48,
+			51, 54, 57, 61, 65, 68, 72, 77,
+			81, 86, 91, 96,101,107,112,118,
+			125,131,138,145,152,160,168,176,
+			185,194,203,213,223,234,244,256
+	};
+	return table[val&0x3F];
 }
 
-void PcaLed(uint8_t color)
+void PcaLedValue(uint8_t r, uint8_t g, uint8_t b) {
+	PcaWriteChannel(PCA9685_LEDG, 0xFF - PcaLedLookupTable(g));
+	PcaWriteChannel(PCA9685_LEDB, 0xFF - PcaLedLookupTable(b));
+	PcaWriteChannel(PCA9685_LEDR, 0xFF - PcaLedLookupTable(r));
+}
+
+void PcaLedColor(LedColor color)
 {
-#define LED_COLORS 11
-
-	const uint8_t ubLedCh[3] = {
-		PCA9685_LEDR,
-		PCA9685_LEDG,
-		PCA9685_LEDB
-	};
-	const uint8_t ubColors[LED_COLORS][3] = {
-		{0,0,0}, // 0 - Black
-		{240,100,160}, // 1 - Pink
-		{128,0,128}, // 2 - Purple
-		{0,0,255}, // 3 - Blue
-		{0,180,180}, // 4 - Cyan
-		{80,220,80}, // 5 - Light Green
-		{0,255,0}, // 6 - Green
-		{128,128,0}, // 7 - Yellow
-		{240,100,0}, // 8 - Orange
-		{255,0,0}, // 9 - Red
-		{200,200,200} // 10 - White
-	};
-
-	if (color < LED_COLORS)
-		for (int i = 0; i<3; i++) {
-			PcaWriteChannel(ubLedCh[i], ubColors[color][i]);
-		}
+	PcaWriteChannel(PCA9685_LEDG, 0xFF - PcaLedLookupTable(color>>5));
+	PcaWriteChannel(PCA9685_LEDB, 0xFF - PcaLedLookupTable(color<<1));
+	PcaWriteChannel(PCA9685_LEDR, 0xFF - PcaLedLookupTable((color>>10)&0x3E));
 }
 
 void PcaInit(void)

@@ -31,7 +31,7 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 		//WedoBattery(iEvt->ptr8);
 		break;
 	case CE_LED_CHG:
-		PcaLed(*(iEvt->ptr8));
+		PcaLedColor(*(iEvt->ptr8));
 		break;
 	case CE_PWR_OFF:
 		nrf_gpio_pin_clear(PWR_ON);
