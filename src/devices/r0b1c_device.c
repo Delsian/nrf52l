@@ -20,6 +20,7 @@
 RDevErrCode RDevDummyInit(uint8_t port);
 RDevErrCode RDevMotorInit(uint8_t port);
 RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len);
+RDevErrCode RDevMotorTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonInit(uint8_t port);
 RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
@@ -42,7 +43,8 @@ const RDevDescriptor ptRDevices[] = {
 		{
 				.id = RDEV_MOTOR,
 				.hInit = &RDevMotorInit,
-				.hCmd = &RDevMotorCmd
+				.hCmd = &RDevMotorCmd,
+				.hTick = &RDevMotorTick
 		},
 		// Button
 		{

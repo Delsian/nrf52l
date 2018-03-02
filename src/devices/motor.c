@@ -11,6 +11,8 @@
 #include "pca9685.h"
 #include "r0b1c_device.h"
 
+static uint16_t usPortTimer[4];
+
 RDevErrCode RDevMotorInit(uint8_t port)
 {
 	return RDERR_OK;
@@ -18,6 +20,30 @@ RDevErrCode RDevMotorInit(uint8_t port)
 
 RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len)
 {
+	uint8_t port = pData[0];
+	RDevCmdCode ubCommand = (RDevCmdCode)pData[1];
+	switch (ubCommand) {
+		case RDCMD_SET:
+			if (len>3) {
+				// 1st byte (pData[2]) - power, 2nd (pData[3]) - ticks x16
+				RjPortSetPwmOut( port, pData[2]);
+				usPortTimer[port] = pData[2]*16;
+				return RDERR_DONE;
+			} else {
+				return RDERR_INCOMPLETE;
+			}
+		default:
+			break;
+	}
+	return RDERR_NOT_SUPPORTED;
+}
 
+RDevErrCode RDevMotorTick(uint8_t port, uint32_t time)
+{
+	if (usPortTimer[port] > 0) {
+		if (--usPortTimer[port] == 0) {
+			RjPortResetPwm(port);
+		}
+	}
 	return RDERR_OK;
 }
