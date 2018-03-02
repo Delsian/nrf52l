@@ -52,8 +52,9 @@ void OnCmdWriteEvt(ble_evt_t const * p_ble_evt)
 		uint8_t port = ubData[0];
 		RDevCmdCode tCmd = (RDevCmdCode)ubData[1];
 		NRF_LOG_DEBUG("Cmd %x to %x", tCmd, port);
-		if (tCmd == RDCMD_RESET) {
-			// Like re-insert the same device
+		if (tCmd == RDCMD_RESET && port < TOTAL_RJ_PORTS) {
+			// Like re-insert the same device (for ext ports only)
+			// Internal devices will handle reset as normal command
 			RDeviceChange(port, ptConnectedDevs[port]);
 		} else if (tCmd == RDCMD_ID) {
 			if (port < TOTAL_RJ_PORTS) {

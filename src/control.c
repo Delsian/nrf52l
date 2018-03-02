@@ -17,26 +17,9 @@
 #include "boards.h"
 #include "pca9685.h"
 #include "custom_service.h"
-#include "rdev_led.c"
+#include "rdev_led.h"
 
 extern void battery_level_update(uint8_t battery_level);
-static LedPatternSeq* ptKeepPatt;
-
-static void ControlRestoreLedPattern()
-{
-	if (ptKeepPatt) {
-		RDevLedSetPattern(ptKeepPatt);
-		ptKeepPatt = NULL;
-	}
-}
-
-const LedPatternSeq BtConnLed = {
-		.repeats = 6,
-		.length = 2,
-		.patEnd = &ControlRestoreLedPattern,
-		.pt = { {0x10, COLOR_BLUE },
-				{0x20, COLOR_BLACK }}
-};
 
 static void ControlEvtH(void * p_evt, uint16_t size)
 {
@@ -49,17 +32,15 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 	    // Check if battery low
 		//WedoBattery(iEvt->ptr8);
 		break;
-	case CE_LED_CHG:
-		PcaLedColor(*(iEvt->ptr8));
+	case CE_LED_SET:
+		RDevLedSetPattern((LedPatternSeq*)(iEvt->ptr));
 		break;
 	case CE_PWR_OFF:
+		// ToDo: store settings to flash
 		nrf_gpio_pin_clear(PWR_ON);
 		break;
 	case CE_DEVNAME_CHG:
 		CustSetDeviceName(iEvt->ptr8);
-		break;
-	case CE_BT_CONN:
-		ptKeepPatt = RDevLedSetPattern(&BtConnLed);
 		break;
 	default:
 		break;

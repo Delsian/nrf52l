@@ -10,12 +10,10 @@
 #include <stdio.h>
 #include "pca9685.h"
 #include "boards.h"
+#include "twi_mngr.h"
 #include "nrf.h"
 #include "app_error.h"
 #include "sdk_errors.h"
-#include "nrf_delay.h"
-#include "nrf_drv_twi.h"
-#include "app_util_platform.h"
 #include "rdev_led.h"
 
 #define PCA9685_ADDR 0x60
@@ -45,15 +43,6 @@
 #define PCA9685_SW_RESET            0x06 // Sent to address 0x00 to reset all devices on Wire line
 #define PCA9685_PWM_FULL            0x01000 // Special value for full on/full off LEDx modes
 
-const nrf_drv_twi_config_t tPcaConfig = {
-	.scl                = TWI0_SCL,
-	.sda                = TWI0_SDA,
-	.frequency          = NRF_TWI_FREQ_400K,
-	.interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
-	.clear_bus_init     = false
-};
-
-static const nrf_drv_twi_t tPcaDrv = NRF_DRV_TWI_INSTANCE(0);
 static uint8_t ubData[5];
 
 // Set pin to 1
@@ -65,7 +54,7 @@ void PcaPinOn(uint8_t ch)
 		ubData[2] = 0x10;
 		ubData[3] = 0;
 		ubData[4] = 0;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
+		nrf_drv_twi_tx(TwiGetDrv(), PCA9685_ADDR, ubData, 5, false);
 	}
 }
 
@@ -78,7 +67,7 @@ void PcaPinOff(uint8_t ch)
 		ubData[2] = 0;
 		ubData[3] = 0;
 		ubData[4] = 0x10;
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
+		nrf_drv_twi_tx(TwiGetDrv(), PCA9685_ADDR, ubData, 5, false);
 	}
 }
 
@@ -97,7 +86,7 @@ void PcaWriteChannel(uint8_t ch, uint8_t val)
 			ubData[2] = 0xF;
 			ubData[3] = val_on&0xFF;
 			ubData[4] = val_on>>8;
-			nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubData, 5, false);
+			nrf_drv_twi_tx(TwiGetDrv(), PCA9685_ADDR, ubData, 5, false);
 		}
 	}
 }
@@ -132,9 +121,7 @@ void PcaLedColor(LedColor color)
 
 void PcaInit(void)
 {
-	APP_ERROR_CHECK(nrf_drv_twi_init(&tPcaDrv, &tPcaConfig, NULL, NULL));
-	nrf_drv_twi_enable(&tPcaDrv);
-
+	TwiMngrInit();
 	const uint8_t ubDataSet[5][2] = {
 			{PCA9685_MODE1_REG, PCA9685_MODE_SLEEP},
 			{PCA9685_PRESCALE_REG, 3}, // max pwm freq
@@ -143,6 +130,6 @@ void PcaInit(void)
 			{PCA9685_MODE2_REG, 0x4}
 	};
 	for (int i=0; i<5;i++) {
-		nrf_drv_twi_tx(&tPcaDrv, PCA9685_ADDR, ubDataSet[i], 2, false);
+		nrf_drv_twi_tx(TwiGetDrv(), PCA9685_ADDR, ubDataSet[i], 2, false);
 	}
 }

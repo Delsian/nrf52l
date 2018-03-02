@@ -62,7 +62,7 @@ const RDevDescriptor ptRDevices[] = {
 		// Gyro
 		{
 				.id = RDEV_GYRO,
-				//.hInit = &RDevGyroInit,
+				.hInit = &RDevGyroInit,
 				.hCmd = &RDevGyroCmd
 		},
 		// Buzzer

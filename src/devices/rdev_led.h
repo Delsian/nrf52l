@@ -44,10 +44,10 @@ typedef void (*RDevLedCB)(void* context);
 typedef struct {
 	uint8_t repeats;
 	uint8_t length;
-	RDevLedCB patEnd;
 	LedPattern pt[];
 } LedPatternSeq;
 
-LedPatternSeq* RDevLedSetPattern(LedPatternSeq* ipSeq);
+void RDevLedSetPattern(const LedPatternSeq * ipSeq);
+void RDevLedStopPattern(const LedPatternSeq* ipSeq);
 
 #endif /* DEVICES_RDEV_LED_H_ */

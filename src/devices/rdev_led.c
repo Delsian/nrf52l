@@ -11,8 +11,9 @@
 #include "r0b1c_device.h"
 #include "r0b1c_cmd.h"
 #include "rdev_led.h"
+#include "nrf_log.h"
 
-static LedPatternSeq* ptPatternSeq;
+static LedPatternSeq *ptPatternSeq, *ptPatternKeep;
 static uint8_t ubPatternCounter; // Loops. If pattern counter = 0xFF - continuous
 static uint8_t ubPatternPtr;
 static uint16_t usTickCounter;
@@ -21,24 +22,32 @@ static LedColor tExternalColor;
 const LedPatternSeq tPatternIdle = {
 		.repeats = 0xFF,
 		.length = 4,
-		.patEnd = NULL,
 		.pt = { {0x38, COLOR_CYAN },
 				{0x38, COLOR_GREEN },
 				{0x38, COLOR_FIREBRICK },
 				{0x40, COLOR_MAGENTA } }
 };
 
-LedPatternSeq* RDevLedSetPattern(LedPatternSeq* ipSeq) {
-	LedPatternSeq* oldP = ptPatternSeq;
+void RDevLedSetPattern(const LedPatternSeq * ipSeq) {
+	ptPatternKeep = ptPatternSeq;
 	ubPatternPtr = 0;
 	ubPatternCounter = ipSeq->repeats;
-	ptPatternSeq = ipSeq;
+	ptPatternSeq = (LedPatternSeq *)ipSeq;
 	usTickCounter = 0x8000; // bigger than max counter value to activate LED init on next tick
-	return oldP;
+	NRF_LOG_DEBUG("set %p", ipSeq);
+}
+
+void RDevLedStopPattern(const LedPatternSeq* ipSeq) {
+	if (ptPatternKeep == ipSeq) ptPatternKeep = NULL;
+	else if (ptPatternSeq == ipSeq) {
+		RDevLedSetPattern(ptPatternKeep);
+	}
 }
 
 RDevErrCode RDevLedInit(uint8_t port)
 {
+	tExternalColor = COLOR_BLACK;
+	ptPatternKeep = NULL;
 	RDevLedSetPattern(&tPatternIdle);
 	return RDERR_DONE;
 }
@@ -48,15 +57,18 @@ RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len)
 	RDevCmdCode ubCommand = (RDevCmdCode)pData[1];
 	switch (ubCommand) {
 	case RDCMD_SET:
-		tExternalColor = pData[2] + ((uint16_t)pData[3])<<8;
-		// Turn off pattern blinking
-		ubPatternPtr = 0xFF;
-		PcaLedColor(tExternalColor);
-		return RDERR_DONE;
+		if (len>3) {
+			uint16_t col = pData[3] * 256 + pData[2];
+			tExternalColor = (LedColor)col;
+			// Turn off pattern blinking
+			ubPatternPtr = 0xFF;
+			PcaLedColor(tExternalColor);
+			return RDERR_DONE;
+		} else {
+			return RDERR_INCOMPLETE;
+		}
 	case RDCMD_RESET:
-		tExternalColor = COLOR_BLACK;
-		if (ptPatternSeq)
-			ubPatternPtr = 0; // Restart pattern
+		RDevLedInit(0);
 		return RDERR_DONE;
 	default:
 		break;
@@ -77,14 +89,13 @@ RDevErrCode RDevLedTick(uint8_t port, uint32_t time)
 				ubPatternPtr = 0;
 				if (ubPatternCounter != 0xFF) { // 0xFF if pattern never expires
 					if (--ubPatternCounter == 0) {
-						if (ptPatternSeq->patEnd) { // Callback on pattern end (restore LED state?)
-							// ToDo: Move this to control thread
-							(ptPatternSeq->patEnd)(ptPatternSeq);
+						if (ptPatternKeep) { // restore LED state on temporary pattern end
+							RDevLedSetPattern(ptPatternKeep);
+							ptPatternKeep = NULL;
 						} else {
 							PcaLedColor(tExternalColor);
+							ptPatternSeq = NULL;
 						}
-						ptPatternSeq = NULL;
-
 						return RDERR_DONE;
 					}
 				}
