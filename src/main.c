@@ -23,9 +23,55 @@
 #include "buzzer.h"
 #include "r0b1c_device.h"
 
+
+#define BUTTON_SHORT_PRESS 4
+#define BUTTON_LONG_PRESS 400
+#define BUTTON_TICK_MS 5
+APP_TIMER_DEF(tBtnTimer);
+
+static void ButtonTickHandler()
+{
+	static uint16_t usBtnPressed;
+	static ControlEvent BtnEvt;
+
+	if (nrf_gpio_pin_read(BUTTON1) == 0) { // if pressed
+		if (++usBtnPressed == BUTTON_SHORT_PRESS) {
+			// send notif
+			BtnEvt.type = CE_BUTTON;
+			BtnEvt.b = true;
+			ControlPost(&BtnEvt);
+		}
+		if (usBtnPressed > BUTTON_LONG_PRESS) {
+			// Shut down, no more checking
+			app_timer_stop(tBtnTimer);
+			BtnEvt.type = CE_PWR_OFF;
+			ControlPost(&BtnEvt);
+		}
+	} else {
+		if (usBtnPressed > BUTTON_SHORT_PRESS) {
+			// send notif
+			BtnEvt.type = CE_BUTTON;
+			BtnEvt.b = false;
+			ControlPost(&BtnEvt);
+		}
+		usBtnPressed = 0;
+	}
+}
+
+static void ButtonInit()
+{
+	nrf_gpio_cfg_input(BUTTON1, NRF_GPIO_PIN_PULLUP);
+	app_timer_create(&tBtnTimer, APP_TIMER_MODE_REPEATED, ButtonTickHandler);
+	app_timer_start(tBtnTimer, APP_TIMER_TICKS(BUTTON_TICK_MS), NULL);
+}
+
 static void HwInit(void)
 {
 	ret_code_t err_code;
+
+	/* Enable power switch */
+	nrf_gpio_cfg_output(PWR_ON);
+	nrf_gpio_pin_set(PWR_ON);
 
     /* initializing the Power manager. */
     err_code = nrf_pwr_mgmt_init();
@@ -39,9 +85,9 @@ static void HwInit(void)
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
-}
 
-RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
+    ButtonInit();
+}
 
 int main(void)
 {
@@ -54,9 +100,6 @@ int main(void)
     FsInit();
 
     RDeviceInit();
-//    while(1) {
-//    	RDevLedTick(0,0);
-//    }
 
     BuzzerInit();
 

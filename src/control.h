@@ -7,6 +7,7 @@
 
 #ifndef CONTROL_H_
 #define CONTROL_H_
+#include <stdbool.h>
 
 typedef enum {
 	CE_BUTTON,
@@ -22,6 +23,7 @@ typedef struct {
 	union {
 		void*		ptr;
 		uint8_t*	ptr8;
+		bool b;
 	};
 } ControlEvent;
 

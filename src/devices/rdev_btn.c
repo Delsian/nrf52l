@@ -1,6 +1,6 @@
 /*
  * rdev_btn.c
- *
+ * External button - touch sensor
  *  Created on: 16.02.18
  *      Author: ekrashtan
  */
