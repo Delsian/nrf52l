@@ -8,7 +8,7 @@
 #ifndef BUZZER_H_
 #define BUZZER_H_
 
-void BuzzerPlayTone(uint8_t tone);
+void BuzzerPlayTone(uint16_t tone);
 void BuzzerLoudness(uint8_t loud);
 void BuzzerInit(void);
 

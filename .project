@@ -305,6 +305,11 @@
 			<locationURI>$%7BSDK%7D/components/libraries/util/app_error_weak.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/Libraries/app_pwm.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/SDK/components/libraries/pwm/app_pwm.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/Libraries/app_scheduler.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/scheduler/app_scheduler.c</locationURI>
