@@ -20,14 +20,32 @@
 static nrf_drv_pwm_t tBuzzerPwm = NRF_DRV_PWM_INSTANCE(0);
 static uint8_t usLoud = 5;
 
+static nrf_pwm_values_common_t seq_values[1];
+nrf_pwm_sequence_t const seq =
+{
+    .values.p_common = seq_values,
+    .length          = NRF_PWM_VALUES_LENGTH(seq_values),
+    .repeats         = 0,
+    .end_delay       = 0
+};
 
+// base octave, frequency will double every 12 notes
+const nrf_pwm_values_common_t notes[12] = {
+		440, 466, 494, 523,
+		554, 587, 622, 659,
+		699, 740, 784, 831
+};
+
+// 700 = 710 , 2000 = 249, 500 = 995, 100 = 4960, 1000 = 497
 void BuzzerPlayTone(uint16_t tone)
 {
 	if (tone) {
-		nrf_pwm_enable(tBuzzerPwm.p_registers);
+		seq_values[0] = tone/usLoud+1;
 		nrf_pwm_configure(tBuzzerPwm.p_registers,
-				NRF_PWM_CLK_250kHz, NRF_PWM_MODE_UP, tone);
+				NRF_PWM_CLK_1MHz, NRF_PWM_MODE_UP, tone);
+		nrf_drv_pwm_simple_playback(&tBuzzerPwm, &seq, 3, NRF_DRV_PWM_FLAG_LOOP);
 	} else {
+		seq_values[0] = 0;
 		nrf_drv_pwm_stop(&tBuzzerPwm, false);
 	}
 }
@@ -51,12 +69,13 @@ void BuzzerInit(void)
 				},
 	        // These are the common configuration options we use for all PWM
 	        // instances.
-	        .irq_priority = APP_IRQ_PRIORITY_LOWEST,
-			.base_clock   = NRF_PWM_CLK_250kHz,
+	        .irq_priority = APP_IRQ_PRIORITY_LOW,
+			.base_clock   = NRF_PWM_CLK_1MHz,
+			.top_value	  = 1000,
 	        .count_mode   = NRF_PWM_MODE_UP,
+			.load_mode    = NRF_PWM_LOAD_COMMON,
 	        .step_mode    = NRF_PWM_STEP_AUTO,
 	    };
 
 	APP_ERROR_CHECK(nrf_drv_pwm_init(&tBuzzerPwm, &config, NULL));
-
 }
