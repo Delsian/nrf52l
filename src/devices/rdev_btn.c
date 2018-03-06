@@ -19,6 +19,7 @@ RDevErrCode RDevButtonInit(uint8_t port)
 
 RDevErrCode RDevButtonTick(uint8_t port, uint32_t time)
 {
+	static uint8_t state[4];
 
 	return RDERR_OK;
 }

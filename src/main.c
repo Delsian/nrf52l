@@ -106,11 +106,9 @@ int main(void)
     ble_stack_init();
 
     BuzzerPlayTone(500);
-    nrf_delay_ms(100);
-    BuzzerPlayTone(100);
-    nrf_delay_ms(100);
-    BuzzerPlayTone(1000);
-    nrf_delay_ms(100);
+    nrf_delay_ms(50);
+    BuzzerPlayTone(400);
+    nrf_delay_ms(70);
     BuzzerPlayTone(0);
 
 	while (1)

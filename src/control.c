@@ -13,13 +13,26 @@
 #include "nrf_gpio.h"
 #include "app_scheduler.h"
 #include "nrf_log.h"
+#include "nrf_delay.h"
 
 #include "boards.h"
 #include "pca9685.h"
 #include "custom_service.h"
 #include "rdev_led.h"
+#include "buzzer.h"
 
 extern void battery_level_update(uint8_t battery_level);
+
+static void CntPwrOff()
+{
+    BuzzerPlayTone(500);
+    nrf_delay_ms(50);
+    BuzzerPlayTone(700);
+    nrf_delay_ms(70);
+    BuzzerPlayTone(0);
+	// ToDo: store settings to flash
+	nrf_gpio_pin_clear(PWR_ON);
+}
 
 static void ControlEvtH(void * p_evt, uint16_t size)
 {
@@ -36,8 +49,7 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 		RDevLedSetPattern((LedPatternSeq*)(iEvt->ptr));
 		break;
 	case CE_PWR_OFF:
-		// ToDo: store settings to flash
-		nrf_gpio_pin_clear(PWR_ON);
+		CntPwrOff();
 		break;
 	case CE_DEVNAME_CHG:
 		CustSetDeviceName(iEvt->ptr8);

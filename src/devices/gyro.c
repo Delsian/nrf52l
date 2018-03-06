@@ -14,6 +14,7 @@
 #include "rj_port.h"
 #include "twi_mngr.h"
 #include "r0b1c_device.h"
+#include "r0b1c_cmd.h"
 
 #define MPU6050_ADDR 0x68
 static uint8_t ubData[16];

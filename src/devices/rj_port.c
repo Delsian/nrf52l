@@ -85,3 +85,23 @@ void RjPortSetPin1asInput(uint8_t port)
 {
 	nrf_gpio_cfg_input(ExtPorts[port].logic1, NRF_GPIO_PIN_PULLUP);
 }
+
+void RjPortSetPin2asOutput(uint8_t port)
+{
+	nrf_gpio_cfg_output(ExtPorts[port].logic2);
+}
+
+void RjPortSetPin1asOutput(uint8_t port)
+{
+	nrf_gpio_cfg_output(ExtPorts[port].logic1);
+}
+
+uint32_t RjPortGetPin1(uint8_t port) {
+	return nrf_gpio_pin_read(ExtPorts[port].logic1);
+}
+
+uint32_t RjPortGetPin2(uint8_t port) {
+	return nrf_gpio_pin_read(ExtPorts[port].logic2);
+}
+
+

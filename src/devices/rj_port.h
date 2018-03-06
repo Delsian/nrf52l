@@ -22,6 +22,11 @@ typedef struct {
 void RjPortResetPwm(uint8_t port);
 void RjPortResetInputs(uint8_t port);
 void RjPortSetPwmOut(uint8_t port, int16_t val);
+
 void RjPortSetPin1asInput(uint8_t port);
+void RjPortSetPin1asOutput(uint8_t port);
+void RjPortSetPin2asOutput(uint8_t port);
+uint32_t RjPortGetPin1(uint8_t port);
+uint32_t RjPortGetPin2(uint8_t port);
 
 #endif /* RJ_PORT_H_ */

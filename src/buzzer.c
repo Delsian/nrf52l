@@ -18,7 +18,7 @@
 #include "nrf_drv_pwm.h"
 
 static nrf_drv_pwm_t tBuzzerPwm = NRF_DRV_PWM_INSTANCE(0);
-static uint8_t usLoud = 5;
+static uint8_t usLoud = 2;
 
 static nrf_pwm_values_common_t seq_values[1];
 nrf_pwm_sequence_t const seq =
@@ -40,7 +40,7 @@ const nrf_pwm_values_common_t notes[12] = {
 void BuzzerPlayTone(uint16_t tone)
 {
 	if (tone) {
-		seq_values[0] = tone/usLoud+1;
+		seq_values[0] = tone-(tone/usLoud+1);
 		nrf_pwm_configure(tBuzzerPwm.p_registers,
 				NRF_PWM_CLK_1MHz, NRF_PWM_MODE_UP, tone);
 		nrf_drv_pwm_simple_playback(&tBuzzerPwm, &seq, 3, NRF_DRV_PWM_FLAG_LOOP);
