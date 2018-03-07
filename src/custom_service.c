@@ -117,7 +117,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         		ble_gap_conn_sec_mode_t sec_mode;
         		// Device name update
             	memcpy(pName, p_evt_write->data, DEVICE_NAME_LEN-1);
-            	ControlPost(&NameChgEvt);
+            	ControlPost(&NameChgEvt); // writing to flash from separate thread
             	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
             	sd_ble_gap_device_name_set(&sec_mode,(uint8_t const *) pName, strlen(pName));
         	}

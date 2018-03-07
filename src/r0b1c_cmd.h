@@ -15,5 +15,6 @@ void OnCmdWriteEvt(ble_evt_t const * p_ble_evt);
 void CmdInitComplete(void);
 void CmdErrWrite(RDevErrCode itErrCode);
 void SendCmdResp(uint8_t* ipubData, uint8_t iubLen);
+void SendCmdNotif(uint8_t* ipubData, uint8_t iubLen);
 
 #endif /* R0B1C_CMD_H_ */

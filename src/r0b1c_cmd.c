@@ -79,6 +79,12 @@ void SendCmdResp(uint8_t* ipubData, uint8_t iubLen)
 	CustomServiceValueSet(tCharCmdHandle.hval, ipubData, iubLen);
 }
 
+void SendCmdNotif(uint8_t* ipubData, uint8_t iubLen)
+{
+	if (tCharCmdHandle.notif)
+		CustomServiceSend(tCharCmdHandle.hval, ipubData, iubLen);
+}
+
 void CmdErrWrite(RDevErrCode itErrCode)
 {
 	uint8_t pubErr[2] = {0xFE, (uint8_t)itErrCode};

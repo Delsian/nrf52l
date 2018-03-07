@@ -37,20 +37,31 @@ typedef enum {
 	COLOR_WHITE = 0xFFFF  			/* 255, 255, 255 */
 } LedColor;
 
+typedef enum {
+	LED_IND_NONE 		= 0x0000,
+	LED_IND_IDLE 		= 0x0001,
+	LED_IND_BTCONN 		= 0x0002, // Bluetooth connected
+	LED_IND_CHARGING 	= 0x0004,
+	LED_IND_CHARGED 	= 0x0008,
+	LED_IND_LOWBATT 	= 0x0010,
+
+	LED_IND_RUNNING		= 0x4000,
+	LED_IND_EXTCOLOR 	= 0x8000 // Maximum priority for external color set
+} LedIndication;
+
 typedef struct _LedPattern {
 	uint8_t ticks; // ticks in x8 intervals
 	LedColor color; // color in RGB565 format
 } LedPattern;
 
-typedef void (*RDevLedCB)(void* context);
-
 typedef struct {
-	uint8_t repeats;
+	LedIndication type;
 	uint8_t length;
-	LedPattern pt[];
+	LedPattern pt[4]; // Max pattern length, enough to implement 2 short blinks
 } LedPatternSeq;
 
-void RDevLedSetPattern(const LedPatternSeq * ipSeq);
-void RDevLedStopPattern(const LedPatternSeq* ipSeq);
+void RDevLedSetIndication(LedIndication ind);
+void RDevLedClearIndication(LedIndication ind);
+void RDevLedSetColor(LedColor c);
 
 #endif /* DEVICES_RDEV_LED_H_ */

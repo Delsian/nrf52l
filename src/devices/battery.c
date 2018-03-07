@@ -14,18 +14,58 @@
 #include "control.h"
 #include "r0b1c_device.h"
 #include "r0b1c_cmd.h"
+#include "rdev_led.h"
 
 #define BATTERY_MEASURE_TICKS 5000
 #define BATTERY_GAIN NRF_SAADC_GAIN1_3
 
+typedef enum { BSNONE, BSCHRG, BSSTDBY, BSEMPTY } BatStates;
+
 static uint8_t guBattValue;
 static nrf_saadc_value_t BattBuffer;
+static BatStates tBstate;
 
 const ControlEvent BattEvt = {
 		.type = CE_BATT_IN,
 		.ptr8 = &guBattValue
 };
 
+static void BatteryStateChange (BatStates b) {
+	if (tBstate != b) {
+		NRF_LOG_DEBUG("Batt new state %d", b);
+
+		// Clean old indication
+		switch(tBstate) {
+		case BSCHRG:
+			RDevLedClearIndication(LED_IND_CHARGING);
+			break;
+		case BSSTDBY:
+			RDevLedClearIndication(LED_IND_CHARGED);
+			break;
+		case BSEMPTY:
+			RDevLedClearIndication(LED_IND_LOWBATT);
+			break;
+		default:
+			break;
+		}
+
+		// Indicate new state
+		switch(b) {
+		case BSCHRG:
+			RDevLedSetIndication(LED_IND_CHARGING);
+			break;
+		case BSSTDBY:
+			RDevLedSetIndication(LED_IND_CHARGED);
+			// Set new battery max value
+			break;
+		case BSEMPTY:
+			RDevLedSetIndication(LED_IND_LOWBATT);
+			break;
+		default:
+			break;
+		}
+	}
+}
 
 void BatteryMeasureCb(nrf_drv_saadc_evt_t const * p_event)
 {
@@ -42,8 +82,18 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 {
 	static uint16_t ticks;
 
+
+	if (nrf_gpio_pin_read(PIN_CHRG) == 0) {
+		BatteryStateChange(BSCHRG);
+	} else if (nrf_gpio_pin_read(PIN_STDBY) == 0) {
+		BatteryStateChange(BSSTDBY);
+	} else {
+		// no signals from charger
+		if (tBstate == BSCHRG || tBstate == BSSTDBY ) {
+			BatteryStateChange(BSNONE);
+		}
+	}
 	if (BATTERY_MEASURE_TICKS < ++ticks) {
-		//NRF_LOG_INFO("Batt tick");
 		nrf_drv_saadc_sample();
 		ticks = 0;
 	}
@@ -58,6 +108,10 @@ RDevErrCode BatteryInit(uint8_t port)
         NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(VBAT_AIN);
     channel_config.gain = BATTERY_GAIN;
     channel_config.acq_time = NRF_SAADC_ACQTIME_20US;
+
+    // Set pins to read charger state
+    nrf_gpio_cfg_input(PIN_CHRG, NRF_GPIO_PIN_PULLUP);
+    nrf_gpio_cfg_input(PIN_STDBY, NRF_GPIO_PIN_PULLUP);
 
 	err_code = nrf_drv_saadc_init(NULL, BatteryMeasureCb);
 	APP_ERROR_CHECK(err_code);

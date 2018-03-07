@@ -13,42 +13,125 @@
 #include "rdev_led.h"
 #include "nrf_log.h"
 
-static LedPatternSeq *ptPatternSeq, *ptPatternKeep;
-static uint8_t ubPatternCounter; // Loops. If pattern counter = 0xFF - continuous
+static LedPatternSeq *ptPatternSeq;
 static uint8_t ubPatternPtr;
 static uint16_t usTickCounter;
 static LedColor tExternalColor;
+static uint16_t usIndication;
 
-const LedPatternSeq tPatternIdle = {
-		.repeats = 0xFF,
-		.length = 4,
-		.pt = { {0x38, COLOR_CYAN },
-				{0x38, COLOR_GREEN },
-				{0x38, COLOR_FIREBRICK },
-				{0x40, COLOR_MAGENTA } }
+const LedPatternSeq tPatterns[] = {
+		{
+				.type = LED_IND_IDLE,
+				.length = 3,
+				.pt = {
+						{20, COLOR_GREEN},
+						{10, COLOR_TEAL},
+						{100, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_BTCONN,
+				.length = 2,
+				.pt = {
+						{5, COLOR_BLUE},
+						{40, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_CHARGED,
+				.length = 2,
+				.pt = {
+						{210, COLOR_GREEN},
+						{30, COLOR_LIME}
+				}
+		},
+
+		{
+				.type = LED_IND_CHARGING,
+				.length = 4,
+				.pt = {
+						{10, COLOR_OLIVE},
+						{5, COLOR_SILVER},
+						{10, COLOR_YELLOW},
+						{15, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_LOWBATT,
+				.length = 2,
+				.pt = {
+						{5, COLOR_RED},
+						{150, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_LOWBATT|LED_IND_BTCONN,
+				.length = 4,
+				.pt = {
+						{5, COLOR_RED},
+						{30, COLOR_BLACK},
+						{5, COLOR_BLUE},
+						{100, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_RUNNING,
+				.length = 2,
+				.pt = {
+						{10, COLOR_LIME},
+						{5, COLOR_BLACK}
+				}
+		},
+
+		{
+				.type = LED_IND_NONE
+		}
 };
 
-void RDevLedSetPattern(const LedPatternSeq * ipSeq) {
-	ptPatternKeep = ptPatternSeq;
+void RDevLedSetColor(LedColor c) { tExternalColor = c; }
+
+static void RDevLedUpdatePattern() {
 	ubPatternPtr = 0;
-	ubPatternCounter = ipSeq->repeats;
-	ptPatternSeq = (LedPatternSeq *)ipSeq;
+	if (usIndication & LED_IND_EXTCOLOR) {
+		PcaLedColor(tExternalColor);
+		ptPatternSeq = 0;
+	} else {
+		LedPatternSeq* ps = &(tPatterns[0]);
+		while (ps->type != LED_IND_NONE) {
+			if ((usIndication & ps->type) == ps->type) {
+				ptPatternSeq = ps;
+			}
+			ps++;
+		}
+	}
 	usTickCounter = 0x8000; // bigger than max counter value to activate LED init on next tick
-	NRF_LOG_DEBUG("set %p", ipSeq);
 }
 
-void RDevLedStopPattern(const LedPatternSeq* ipSeq) {
-	if (ptPatternKeep == ipSeq) ptPatternKeep = NULL;
-	else if (ptPatternSeq == ipSeq) {
-		RDevLedSetPattern(ptPatternKeep);
-	}
+void RDevLedSetIndication(LedIndication ind)
+{
+	usIndication ^= ind;
+	RDevLedUpdatePattern();
+}
+
+void RDevLedClearIndication(LedIndication ind)
+{
+	usIndication &= ~ind;
+	RDevLedUpdatePattern();
 }
 
 RDevErrCode RDevLedInit(uint8_t port)
 {
 	tExternalColor = COLOR_BLACK;
-	ptPatternKeep = NULL;
-	RDevLedSetPattern(&tPatternIdle);
+	if (usIndication == LED_IND_NONE) {
+		// if not initialized by other modules
+		usIndication = LED_IND_IDLE;
+		RDevLedUpdatePattern();
+	}
 	return RDERR_DONE;
 }
 
@@ -60,15 +143,15 @@ RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len)
 		if (len>3) {
 			uint16_t col = pData[3] * 256 + pData[2];
 			tExternalColor = (LedColor)col;
-			// Turn off pattern blinking
-			ubPatternPtr = 0xFF;
-			PcaLedColor(tExternalColor);
+			RDevLedSetIndication(LED_IND_EXTCOLOR);
+			RDevLedUpdatePattern();
 			return RDERR_DONE;
 		} else {
 			return RDERR_INCOMPLETE;
 		}
 	case RDCMD_RESET:
-		RDevLedInit(0);
+		RDevLedClearIndication(LED_IND_EXTCOLOR);
+		RDevLedUpdatePattern();
 		return RDERR_DONE;
 	default:
 		break;
@@ -79,26 +162,12 @@ RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len)
 RDevErrCode RDevLedTick(uint8_t port, uint32_t time)
 {
 	int i;
-	if (ubPatternPtr == 0xff)
-		return RDERR_DONE; // fixed color
 
 	if (ptPatternSeq) {
 		usTickCounter++;
 		if  ((usTickCounter>>4) > (ptPatternSeq->pt[ubPatternPtr].ticks)) {
 			if(++ubPatternPtr >=  ptPatternSeq->length) {
 				ubPatternPtr = 0;
-				if (ubPatternCounter != 0xFF) { // 0xFF if pattern never expires
-					if (--ubPatternCounter == 0) {
-						if (ptPatternKeep) { // restore LED state on temporary pattern end
-							RDevLedSetPattern(ptPatternKeep);
-							ptPatternKeep = NULL;
-						} else {
-							PcaLedColor(tExternalColor);
-							ptPatternSeq = NULL;
-						}
-						return RDERR_DONE;
-					}
-				}
 			}
 			usTickCounter = 0;
 			PcaLedColor(ptPatternSeq->pt[ubPatternPtr].color);

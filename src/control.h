@@ -11,7 +11,6 @@
 
 typedef enum {
 	CE_BUTTON,
-	CE_LED_SET, // Set new blinking pattern
 	CE_BATT_IN, // Battery measurement complete
 	CE_BUZZER,
 	CE_PWR_OFF,
@@ -27,7 +26,13 @@ typedef struct {
 	};
 } ControlEvent;
 
+typedef void (*ControlEvtCb)(const ControlEvent* pEvt);
+
 void ControlPost(const ControlEvent* pEvt);
 void ControlInit(void);
+
+// Register callback for specific event
+void ControlRegisterCb(ControlEventType type, ControlEvtCb cb);
+// ToDo: De-register?
 
 #endif /* CONTROL_H_ */

@@ -33,13 +33,6 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 BLE_BAS_DEF(m_bas);
 //====
 
-const LedPatternSeq BtConnLed = {
-		.repeats = 0xFF,
-		.length = 2,
-		.pt = { {0x2, COLOR_BLUE },
-				{0x30, COLOR_BLACK }}
-};
-
 void battery_level_update(uint8_t battery_level)
 {
     ret_code_t err_code;
@@ -206,13 +199,13 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_CONNECTED:
         	NRF_LOG_INFO("Connected");
             // call on connect
-        	RDevLedSetPattern(&BtConnLed);
+        	RDevLedSetIndication(LED_IND_BTCONN);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
         	NRF_LOG_INFO("Disconnected");
-        	RDevLedStopPattern(&BtConnLed);
+        	RDevLedClearIndication(LED_IND_BTCONN);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             advertising_start();
             break;

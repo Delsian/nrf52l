@@ -34,9 +34,17 @@ static void OnPwrWriteEvt(ble_evt_t const * p_ble_evt)
 	}
 }
 
+
+void SendButtonNotification(const ControlEvent* pEvt)
+{
+	if (tCharBtnHandle.notif)
+		CustomServiceSend(tCharBtnHandle.hval, (uint8_t *)&(pEvt->b), 1);
+}
+
 static void InitComplete()
 {
 	CmdInitComplete();
+	ControlRegisterCb(CE_BUTTON, SendButtonNotification);
 }
 
 const tCustomService tServDev = {
@@ -75,8 +83,3 @@ void SendOverloadNotification(uint8_t *pval)
 		CustomServiceSend(tCharOverloadHandle.hval, pval, 1);
 }
 
-void SendButtonNotification(uint8_t *pval)
-{
-	if (tCharBtnHandle.notif)
-		CustomServiceSend(tCharBtnHandle.hval, pval, 1);
-}
