@@ -13,6 +13,7 @@
 #include "nrf_error.h"
 #include "control.h"
 #include "r0b1c_device.h"
+#include "r0b1c_service.h"
 #include "r0b1c_cmd.h"
 #include "rdev_led.h"
 
@@ -21,16 +22,17 @@
 
 typedef enum { BSNONE, BSCHRG, BSSTDBY, BSEMPTY } BatStates;
 
-static uint8_t guBattValue;
+static uint16_t guBattValue;
 static nrf_saadc_value_t BattBuffer;
 static BatStates tBstate;
 
 const ControlEvent BattEvt = {
 		.type = CE_BATT_IN,
-		.ptr8 = &guBattValue
+		.ptr16 = &guBattValue
 };
 
 static void BatteryStateChange (BatStates b) {
+
 	if (tBstate != b) {
 		NRF_LOG_DEBUG("Batt new state %d", b);
 
@@ -53,13 +55,15 @@ static void BatteryStateChange (BatStates b) {
 		switch(b) {
 		case BSCHRG:
 			RDevLedSetIndication(LED_IND_CHARGING);
+			SendBatteryNotification(4);
 			break;
 		case BSSTDBY:
 			RDevLedSetIndication(LED_IND_CHARGED);
-			// Set new battery max value
+			SendBatteryNotification(2);
 			break;
 		case BSEMPTY:
 			RDevLedSetIndication(LED_IND_LOWBATT);
+			SendBatteryNotification(1);
 			break;
 		default:
 			break;
@@ -71,7 +75,7 @@ void BatteryMeasureCb(nrf_drv_saadc_evt_t const * p_event)
 {
 	if (p_event->type == NRF_DRV_SAADC_EVT_DONE)
 	{
-		guBattValue = (BattBuffer>>4)&0xFF;
+		guBattValue = BattBuffer;
 		ret_code_t err_code = nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
 		//if(err_code) printf("%d Err %x\n", __LINE__, err_code);
 		ControlPost(&BattEvt);
@@ -135,8 +139,8 @@ RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len)
 		break;
 	case RDCMD_GET:
 		{
-			uint8_t pubResp[3] = {RDEV_BATTERY, RDCMD_GET, guBattValue };
-			SendCmdResp(pubResp, 3);
+			uint8_t pubResp[4] = {RDEV_BATTERY, RDCMD_GET, guBattValue&0xFF, guBattValue>>8 };
+			SendCmdResp(pubResp, 4);
 			tErr = RDERR_OK;
 		}
 		break;

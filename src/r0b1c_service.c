@@ -71,10 +71,10 @@ const tDevDescription gtServices = {
 		}
 };
 
-void SendBatteryNotification(uint8_t *pval)
+void SendBatteryNotification(const uint8_t mask)
 {
 	if (tCharBattHandle.notif)
-		CustomServiceSend(tCharBattHandle.hval, pval, 1);
+		CustomServiceSend(tCharBattHandle.hval, &mask, 1);
 }
 
 void SendOverloadNotification(uint8_t *pval)

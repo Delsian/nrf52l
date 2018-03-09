@@ -10,6 +10,6 @@
 
 void SendOverloadNotification(uint8_t *pval);
 void SendButtonNotification(uint8_t *pval);
-void SendBatteryNotification(uint8_t *pval);
+void SendBatteryNotification(const uint8_t mask);
 
 #endif /* R0B1C_SERVICE_H_ */

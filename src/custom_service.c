@@ -9,13 +9,12 @@
 #include "ble_gap.h"
 #include "custom_service.h"
 #include "sdk_macros.h"
+#include "app_scheduler.h"
 #include "nrf_log.h"
 #include "fs.h"
 #include "nrf_dfu_types.h"
 #include "crc32.h"
 #include "control.h"
-
-#define DEVICE_NAME_LEN 20
 
 uint8_t m_dfu_settings_buffer[1024]
     __attribute__((section(".bootloader_settings_page")))
@@ -23,12 +22,6 @@ uint8_t m_dfu_settings_buffer[1024]
 
 static tCustomServiceVars* ptCustVar;
 static nrf_mtx_t tMtxNotify;
-
-static uint8_t pName[DEVICE_NAME_LEN];
-const ControlEvent NameChgEvt = {
-		.type = CE_DEVNAME_CHG,
-		.ptr8 = pName
-};
 
 uint16_t GetConnectionHandle()
 {
@@ -67,8 +60,12 @@ static tCustomChar const * GetByVal(uint16_t iusVal)
     return NULL;
 }
 
-void CustSetDeviceName( uint8_t* ipubName)
+static void CustSetDeviceName( void* ipName, uint16_t size)
 {
+	ble_gap_conn_sec_mode_t sec_mode;
+	uint8_t* ipubName = (uint8_t*)ipName;
+	(void)size;
+
 	NRF_LOG_INFO("New name %s", ipubName);
 	nrf_dfu_settings_t* ptSettings = malloc(sizeof(nrf_dfu_settings_t));
 	memcpy((void*)ptSettings, m_dfu_settings_buffer, sizeof(nrf_dfu_settings_t));
@@ -79,20 +76,26 @@ void CustSetDeviceName( uint8_t* ipubName)
     pAdvName->crc = crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL);
     FsErase((uint32_t)m_dfu_settings_buffer, 1);
     FsWriteFree((uint32_t)m_dfu_settings_buffer, (uint8_t*)ptSettings, sizeof(nrf_dfu_settings_t));
+
+	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
+	sd_ble_gap_device_name_set(&sec_mode,(uint8_t const *) ipubName, strlen(ipubName));
+    free(ipubName);
 }
 
-uint8_t* CustGetDeviceName(void)
+void CustGetDeviceName(uint8_t* opubBuf)
 {
     nrf_dfu_settings_t* ptSettings = (nrf_dfu_settings_t*)m_dfu_settings_buffer;
     nrf_dfu_adv_name_t* pAdvName = &(ptSettings->adv_name);
     if (pAdvName->crc == crc32_compute((uint8_t*)pAdvName + 4, sizeof(nrf_dfu_adv_name_t) - 4, NULL)) {
-    	memcpy(pName, pAdvName->name, DEVICE_NAME_LEN);
+    	strncpy(opubBuf, (uint8_t*)pAdvName + 4, DEVICE_NAME_LEN -1);
+    	opubBuf[DEVICE_NAME_LEN-1] = '\0';
     } else {
-    	memcpy(pName, gtServices.pubDeviceName, DEVICE_NAME_LEN);
-    	ControlPost(&NameChgEvt);
+    	uint8_t* pName = (uint8_t*) malloc(DEVICE_NAME_LEN);
+    	strncpy(pName, gtServices.pubDeviceName, DEVICE_NAME_LEN);
+    	APP_ERROR_CHECK(app_sched_event_put(pName, sizeof(uint8_t*), CustSetDeviceName));
+    	strncpy(opubBuf, gtServices.pubDeviceName, DEVICE_NAME_LEN -1);
     }
-    pName[DEVICE_NAME_LEN-1] = '\0';
-	return pName;
+    NRF_LOG_DEBUG("Get name: %s", opubBuf);
 }
 
 static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
@@ -114,12 +117,11 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
         	NRF_LOG_DEBUG("Evt Wr to 0x%x", p_evt_write->handle);
         	if (p_evt_write->uuid.uuid == BLE_UUID_GAP_CHARACTERISTIC_DEVICE_NAME) {
-        		ble_gap_conn_sec_mode_t sec_mode;
         		// Device name update
-            	memcpy(pName, p_evt_write->data, DEVICE_NAME_LEN-1);
-            	ControlPost(&NameChgEvt); // writing to flash from separate thread
-            	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
-            	sd_ble_gap_device_name_set(&sec_mode,(uint8_t const *) pName, strlen(pName));
+        		uint8_t* pName = (uint8_t*) malloc(DEVICE_NAME_LEN);
+            	strncpy(pName, p_evt_write->data, DEVICE_NAME_LEN-1);
+            	pName[DEVICE_NAME_LEN-1] = '\0';
+            	APP_ERROR_CHECK(app_sched_event_put(pName, sizeof(uint8_t*), CustSetDeviceName)); // writing to flash from separate thread
         	}
         	tCustomChar const * tCh = GetByCccd(p_evt_write->handle);
         	if (tCh) {

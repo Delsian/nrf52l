@@ -174,7 +174,8 @@ static void gap_params_init(void)
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
-    uint8_t* pubName = CustGetDeviceName();
+    uint8_t pubName[DEVICE_NAME_LEN];
+    CustGetDeviceName(pubName);
     err_code = sd_ble_gap_device_name_set(&sec_mode, pubName, strlen(pubName));
     APP_ERROR_CHECK(err_code);
 

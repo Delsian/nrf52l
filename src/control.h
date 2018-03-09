@@ -13,8 +13,7 @@ typedef enum {
 	CE_BUTTON,
 	CE_BATT_IN, // Battery measurement complete
 	CE_BUZZER,
-	CE_PWR_OFF,
-	CE_DEVNAME_CHG // Device name change
+	CE_PWR_OFF
 } ControlEventType;
 
 typedef struct {
@@ -22,6 +21,7 @@ typedef struct {
 	union {
 		void*		ptr;
 		uint8_t*	ptr8;
+		uint16_t*	ptr16;
 		bool b;
 	};
 } ControlEvent;

@@ -66,9 +66,6 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 	case CE_PWR_OFF:
 		CntPwrOff();
 		break;
-	case CE_DEVNAME_CHG:
-		CustSetDeviceName(iEvt->ptr8);
-		break;
 	default:
 		break;
 	}

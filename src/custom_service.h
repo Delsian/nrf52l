@@ -16,6 +16,8 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_mtx.h"
 
+#define DEVICE_NAME_LEN 20
+
 typedef struct _CustomServiceVars {
 	nrf_ble_gatt_t *		 ptGatt;
 	ble_uuid_t               tUuid;                    /**< UUID type for Service Base UUID. */
@@ -72,5 +74,4 @@ ret_code_t CustomServiceInit(const tCustomService* itServ);
 uint16_t GetConnectionHandle(void);
 void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen);
 ret_code_t CustomServiceValueSet(uint16_t iusChar, uint8_t* ipubData, uint8_t iubLen);
-uint8_t* CustGetDeviceName(void);
-void CustSetDeviceName( uint8_t* ipubName);
+void CustGetDeviceName(uint8_t* opubBuf);
