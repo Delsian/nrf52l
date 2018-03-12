@@ -24,6 +24,9 @@ RDevErrCode RDevMotorTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonInit(uint8_t port);
 RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
+RDevErrCode RDevRangeInit(uint8_t port);
+RDevErrCode RDevRangeTick(uint8_t port, uint32_t time);
+RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedInit(uint8_t port);
 RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
@@ -52,6 +55,13 @@ const RDevDescriptor ptRDevices[] = {
 				.hInit = &RDevButtonInit,
 				.hCmd = &RDevButtonCmd,
 				.hTick = &RDevButtonTick
+		},
+		// Range sensor
+		{
+				.id = RDEV_ULTRASONIC,
+				.hInit = &RDevRangeInit,
+				.hCmd = &RDevRangeCmd,
+				.hTick = &RDevRangeTick
 		},
 /* Next section for internal devices only */
 		// LED

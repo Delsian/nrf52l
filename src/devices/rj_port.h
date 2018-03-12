@@ -7,6 +7,7 @@
 
 #ifndef RJ_PORT_H_
 #define RJ_PORT_H_
+#include <stdbool.h>
 
 #define TOTAL_RJ_PORTS 4
 
@@ -14,6 +15,7 @@ typedef struct {
 	uint8_t pwm; // pin number in PCA9685
 	uint8_t in1;
 	uint8_t in2;
+	bool	pwmdir;  // indicates inverted PWM connection
 
 	uint8_t logic1; // CPU pin to CON1
 	uint8_t logic2; // CPU pin to CON2
