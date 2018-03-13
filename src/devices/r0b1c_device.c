@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "app_timer.h"
 #include "nrf_drv_gpiote.h"
+#include "nrf_log.h"
 #include "r0b1c_device.h"
 #include "pca9685.h"
 #include "rj_port.h"
@@ -124,8 +125,9 @@ RDevErrCode RDeviceChange(uint8_t port, RDevType id)
 	if (ptRDevices[devindex].hInit)
 	{
 		return (ptRDevices[devindex].hInit)(port);
-	} else
+	} else {
 		return RDERR_OK;
+	}
 }
 
 RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len)
@@ -156,17 +158,19 @@ RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len)
 static void RDevTickHandler()
 {
 	static uint32_t clock;
+	RDevErrCode tErr;
+
 	int i = 0;
 	for (;i<TOTAL_RJ_PORTS;i++) {
 		if (gpDevInPort[i].hTick)
-			(gpDevInPort[i].hTick)(i, clock);
+			tErr = (gpDevInPort[i].hTick)(i, clock);
 	}
-	i = 0;
+	i = 1;
 	while(1) {
-		if (ptRDevices[++i].id == RDEV_LAST) break;
-		if (ptRDevices[i].id <= RDEV_INTERNAL) continue;
+		if (ptRDevices[++i].id <= RDEV_INTERNAL) continue;
+		if (ptRDevices[i].id == RDEV_LAST) break;
 		if (ptRDevices[i].hTick)
-			(void)(ptRDevices[i].hTick)(0, clock);
+			tErr = (ptRDevices[i].hTick)(0, clock);
 	}
 	clock ++;
 }

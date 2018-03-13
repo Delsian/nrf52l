@@ -21,7 +21,7 @@ RDevErrCode RDevRangeInit(uint8_t port)
 	// Set pin4 as input/pullup
 	RjPortSetPin1asInput(port);
 	RjPortSetPin2asOutput(port);
-	return RDERR_DONE;
+	return RDERR_OK;
 }
 
 RDevErrCode RDevRangeTick(uint8_t port, uint32_t time)

@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "nrf_log.h"
 #include "rj_port.h"
 #include "r0b1c_device.h"
 #include "r0b1c_cmd.h"
@@ -15,18 +16,20 @@
 static uint8_t ubBtnState[4];
 static uint8_t tNotificationMask;
 
+#define TICK_MASK (3)
 RDevErrCode RDevButtonInit(uint8_t port)
 {
-	// Set pin4 as input/pullup
-	RjPortSetPin1asInput(port);
+	// Set yellow pin as input/pullup
+	RjPortSetPin2asInput(port);
 	ubBtnState[port] = 0;
-	return RDERR_DONE;
+	return RDERR_OK;
 }
 
 static void RDevButtonNotify(uint8_t port, bool state)
 {
 	uint8_t notif[3] = {port, RDCMD_GET, state};
 	if (tNotificationMask & (1<<port)) {
+		NRF_LOG_DEBUG("Port %d btn notify %x", port, state);
 		SendCmdNotif(notif, 3);
 	}
 }
@@ -35,12 +38,16 @@ RDevErrCode RDevButtonTick(uint8_t port, uint32_t time)
 {
 	assert(port<4);
 
-	if (RjPortGetPin1(port) == 0) { // if pressed
+	if (time&TICK_MASK != TICK_MASK) { // Skip some ticks
+		return RDERR_DONE;
+	}
+
+	if (RjPortGetPin2(port) == 0) { // if pressed
 		if (++ubBtnState[port] == 2) {
-			// send "press" event on 2nd tick
+			// send "press" event after 2nd tick
 			RDevButtonNotify(port, true);
 		}
-		ubBtnState[port] &= 0x7; // avoid overflow
+		if (ubBtnState[port]>100) ubBtnState[port] = 3; // avoid overflow
 	} else {
 		if (ubBtnState[port] > 2) {
 			// send "release"

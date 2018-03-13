@@ -14,38 +14,42 @@
 #include "pca9685.h"
 
 static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
-// Port0
+// Port0 J4
 		{
-				.pwm = PCA9685_PWMA,
+				.pwm = PCA9685_PWMB,
 				.in1 = PCA9685_IN1A,
 				.in2 = PCA9685_IN2A,
+				.pwmdir = true,
 
 				.logic1 = PIN_EXT7,
 				.logic2 = PIN_EXT1
 		},
-// Port1
+// Port1 J5
 		{
-				.pwm = PCA9685_PWMB,
+				.pwm = PCA9685_PWMA,
 				.in1 = PCA9685_IN1B,
 				.in2 = PCA9685_IN2B,
+				.pwmdir = false,
 
 				.logic1 = PIN_EXT2,
 				.logic2 = PIN_EXT3
 		},
-// Port2
+// Port2 J6
 		{
-				.pwm = PCA9685_PWMC,
+				.pwm = PCA9685_PWMD,
 				.in1 = PCA9685_IN1C,
 				.in2 = PCA9685_IN2C,
+				.pwmdir = true,
 
 				.logic1 = PIN_EXT0,
 				.logic2 = PIN_EXT6
 		},
-// Port3
+// Port3 J7
 		{
-				.pwm = PCA9685_PWMD,
+				.pwm = PCA9685_PWMC,
 				.in1 = PCA9685_IN1D,
 				.in2 = PCA9685_IN2D,
+				.pwmdir = false,
 
 				.logic1 = PIN_EXT5,
 				.logic2 = PIN_EXT4
@@ -83,6 +87,10 @@ void RjPortSetPwmOut(uint8_t port, int16_t val)
 void RjPortSetPin1asInput(uint8_t port)
 {
 	nrf_gpio_cfg_input(ExtPorts[port].logic1, NRF_GPIO_PIN_PULLUP);
+}
+void RjPortSetPin2asInput(uint8_t port)
+{
+	nrf_gpio_cfg_input(ExtPorts[port].logic2, NRF_GPIO_PIN_PULLUP);
 }
 
 void RjPortSetPin2asOutput(uint8_t port)
