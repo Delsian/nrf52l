@@ -31,7 +31,9 @@ typedef enum {
 
 typedef enum {
 	RDEV_DUMMY = 0x00,
-	RDEV_MOTOR,
+	RDEV_MOTOR_S = 0x01,
+	RDEV_MOTOR_M = 0x02,
+	RDEV_MOTOR_L = 0x03,
 	RDEV_SERVO = 0x10,
 	RDEV_BUTTON = 0x20,
 	RDEV_ULTRASONIC = 0x30,

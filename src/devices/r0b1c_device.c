@@ -19,13 +19,17 @@
 
 // Prototypes
 RDevErrCode RDevDummyInit(uint8_t port);
-RDevErrCode RDevMotorInit(uint8_t port);
+RDevErrCode RDevMotorSInit(uint8_t port);
+RDevErrCode RDevMotorMInit(uint8_t port);
+RDevErrCode RDevMotorLInit(uint8_t port);
+RDevErrCode RDevMotorDeInit(uint8_t port);
 RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevMotorTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonInit(uint8_t port);
 RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
 RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevRangeInit(uint8_t port);
+RDevErrCode RDevRangeUnInit(uint8_t port);
 RDevErrCode RDevRangeTick(uint8_t port, uint32_t time);
 RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedInit(uint8_t port);
@@ -43,10 +47,27 @@ const RDevDescriptor ptRDevices[] = {
 				.id = RDEV_DUMMY,
 				.hInit = &RDevDummyInit
 		},
-		// Motor
+		// Motor_S
 		{
-				.id = RDEV_MOTOR,
-				.hInit = &RDevMotorInit,
+				.id = RDEV_MOTOR_S,
+				.hInit = &RDevMotorSInit,
+				.hUnInit = &RDevMotorDeInit,
+				.hCmd = &RDevMotorCmd,
+				.hTick = &RDevMotorTick
+		},
+		// Motor_M
+		{
+				.id = RDEV_MOTOR_M,
+				.hInit = &RDevMotorMInit,
+				.hUnInit = &RDevMotorDeInit,
+				.hCmd = &RDevMotorCmd,
+				.hTick = &RDevMotorTick
+		},
+		// Motor_L
+		{
+				.id = RDEV_MOTOR_L,
+				.hInit = &RDevMotorLInit,
+				.hUnInit = &RDevMotorDeInit,
 				.hCmd = &RDevMotorCmd,
 				.hTick = &RDevMotorTick
 		},
@@ -61,6 +82,7 @@ const RDevDescriptor ptRDevices[] = {
 		{
 				.id = RDEV_ULTRASONIC,
 				.hInit = &RDevRangeInit,
+				.hUnInit = &RDevRangeUnInit,
 				.hCmd = &RDevRangeCmd,
 				.hTick = &RDevRangeTick
 		},
@@ -196,6 +218,6 @@ void RDeviceInit(void)
 	app_timer_create(&tRDevTimer, APP_TIMER_MODE_REPEATED, RDevTickHandler);
 	app_timer_start(tRDevTimer, RDEV_TICK_TIMEOUT, NULL);
 
-	// Init GPIOTE
+	// Init GPIOTE (ultrasonic)
 	nrf_drv_gpiote_init();
 }

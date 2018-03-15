@@ -56,6 +56,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 		}
 };
 
+#define PIN_SELECT(color) ((color==PinBlue)?ExtPorts[port].logic1:ExtPorts[port].logic2)
+
 void RjPortResetPwm(uint8_t port)
 {
 	// Set to high impedance - In1,In2 = 0, PWM = 1
@@ -84,31 +86,34 @@ void RjPortSetPwmOut(uint8_t port, int16_t val)
 	PcaWriteChannel(ExtPorts[port].pwm, absval);
 }
 
-void RjPortSetPin1asInput(uint8_t port)
+
+uint32_t RjPortGetPin(uint8_t port, PinColor c)
 {
-	nrf_gpio_cfg_input(ExtPorts[port].logic1, NRF_GPIO_PIN_PULLUP);
-}
-void RjPortSetPin2asInput(uint8_t port)
-{
-	nrf_gpio_cfg_input(ExtPorts[port].logic2, NRF_GPIO_PIN_PULLUP);
+	return PIN_SELECT(c);
 }
 
-void RjPortSetPin2asOutput(uint8_t port)
+void RjPortSetInput(uint8_t port, PinColor c)
 {
-	nrf_gpio_cfg_output(ExtPorts[port].logic2);
+	nrf_gpio_cfg_input(PIN_SELECT(c), NRF_GPIO_PIN_PULLUP);
 }
 
-void RjPortSetPin1asOutput(uint8_t port)
+void RjPortSetOutput(uint8_t port, PinColor c)
 {
-	nrf_gpio_cfg_output(ExtPorts[port].logic1);
+	nrf_gpio_cfg_output(PIN_SELECT(c));
 }
 
-uint32_t RjPortGetPin1(uint8_t port) {
-	return nrf_gpio_pin_read(ExtPorts[port].logic1);
+
+void RjPortPinSet(uint8_t port, PinColor c, uint8_t value)
+{
+	if (value) {
+		nrf_gpio_pin_set(PIN_SELECT(c));
+	} else {
+		nrf_gpio_pin_clear(PIN_SELECT(c));
+	}
 }
 
-uint32_t RjPortGetPin2(uint8_t port) {
-	return nrf_gpio_pin_read(ExtPorts[port].logic2);
+uint32_t RjPortGetVal(uint8_t port, PinColor c) {
+	return nrf_gpio_pin_read(PIN_SELECT(c));
 }
 
 

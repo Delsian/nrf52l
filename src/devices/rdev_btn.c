@@ -20,7 +20,7 @@ static uint8_t tNotificationMask;
 RDevErrCode RDevButtonInit(uint8_t port)
 {
 	// Set yellow pin as input/pullup
-	RjPortSetPin2asInput(port);
+	RjPortSetInput(port, PinYellow);
 	ubBtnState[port] = 0;
 	return RDERR_OK;
 }
@@ -42,7 +42,7 @@ RDevErrCode RDevButtonTick(uint8_t port, uint32_t time)
 		return RDERR_DONE;
 	}
 
-	if (RjPortGetPin2(port) == 0) { // if pressed
+	if (RjPortGetVal(port, PinYellow) == 0) { // if pressed
 		if (++ubBtnState[port] == 2) {
 			// send "press" event after 2nd tick
 			RDevButtonNotify(port, true);

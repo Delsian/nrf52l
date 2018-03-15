@@ -11,10 +11,38 @@
 #include "pca9685.h"
 #include "r0b1c_device.h"
 
-static uint16_t usPortTimer[4];
+typedef enum {
+	None,
+	MotorS,
+	MotorM,
+	MotorL
+} MotorSize;
 
-RDevErrCode RDevMotorInit(uint8_t port)
+static uint16_t usPortTimer[4];
+static MotorSize usMotorSize[4];
+
+RDevErrCode RDevMotorLInit(uint8_t port)
 {
+	usMotorSize[port] = MotorL;
+	return RDERR_OK;
+}
+
+RDevErrCode RDevMotorMInit(uint8_t port)
+{
+	usMotorSize[port] = MotorM;
+	return RDERR_OK;
+}
+
+RDevErrCode RDevMotorSInit(uint8_t port)
+{
+	usMotorSize[port] = MotorS;
+	return RDERR_OK;
+}
+
+RDevErrCode RDevMotorDeInit(uint8_t port)
+{
+	usMotorSize[port] = None;
+	RjPortResetPwm(port);
 	return RDERR_OK;
 }
 
