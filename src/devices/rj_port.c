@@ -87,9 +87,17 @@ void RjPortSetPwmOut(uint8_t port, int16_t val)
 }
 
 
-uint32_t RjPortGetPin(uint8_t port, PinColor c)
+uint32_t RjPortGetPinNum(uint8_t port, PinColor c)
 {
 	return PIN_SELECT(c);
+}
+
+uint8_t RjPortGetPortByPin(uint8_t pin)
+{
+	for(uint8_t port=0; port<TOTAL_RJ_PORTS; port++) {
+		if (PIN_SELECT(PinBlue)==pin || PIN_SELECT(PinYellow)==pin) return port;
+	}
+	return 0xFF;
 }
 
 void RjPortSetInput(uint8_t port, PinColor c)

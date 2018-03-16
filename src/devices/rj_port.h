@@ -47,7 +47,12 @@ void RjPortSetPwmOut(uint8_t port, int16_t val);
 /**
  * Get pin number by port and wire color
  */
-uint32_t RjPortGetPin(uint8_t port, PinColor c);
+uint32_t RjPortGetPinNum(uint8_t port, PinColor c);
+
+/**
+ * Return port number by pin
+ */
+uint8_t RjPortGetPortByPin(uint8_t pin);
 
 /**
  * Set pin mode to input/pullup

@@ -101,11 +101,6 @@ int main(void)
 
     RDeviceInit();
 
-    RDeviceChange(3, 0x30);
-    while(1) {
-    	nrf_delay_ms(20);
-    }
-
     BuzzerInit();
 
     ble_stack_init();

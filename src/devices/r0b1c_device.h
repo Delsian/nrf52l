@@ -24,6 +24,7 @@ typedef enum {
 	RDERR_DONE = 0x00, // If command have no response
 	RDERR_OK = 0x01, // Command executed successfully with result in write register
 	RDERR_NOT_SUPPORTED = 0x05,
+	RDERR_BUSY = 0x0B, // Device is busy
 	RDERR_UNKNOWN_DEVICE = 0x0D,
 	RDERR_INCOMPLETE = 0x1C,
 	RDERR_NOTIMPLEMENTED = 0xDE
