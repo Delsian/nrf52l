@@ -22,6 +22,7 @@
 #include "custom_service.h"
 #include "buzzer.h"
 #include "r0b1c_device.h"
+#include "js_main.h"
 
 
 #define BUTTON_SHORT_PRESS 4
@@ -100,6 +101,8 @@ int main(void)
     FsInit();
 
     RDeviceInit();
+
+    JsStartup();
 
     BuzzerInit();
 

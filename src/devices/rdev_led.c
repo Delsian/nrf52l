@@ -145,13 +145,10 @@ RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len)
 			tExternalColor = (LedColor)col;
 			RDevLedSetIndication(LED_IND_EXTCOLOR);
 			RDevLedUpdatePattern();
-			return RDERR_DONE;
 		} else {
-			return RDERR_INCOMPLETE;
+			RDevLedClearIndication(LED_IND_EXTCOLOR);
+			RDevLedUpdatePattern();
 		}
-	case RDCMD_RESET:
-		RDevLedClearIndication(LED_IND_EXTCOLOR);
-		RDevLedUpdatePattern();
 		return RDERR_DONE;
 	default:
 		break;

@@ -11,7 +11,7 @@
 
 // Command codes
 typedef enum {
-	RDCMD_RESET = 0x00,
+	RDCMD_CONFIG = 0x00,
 	RDCMD_ID = 0x01,
 	RDCMD_SET = 0x02,
 	RDCMD_GET = 0x03,
@@ -37,6 +37,7 @@ typedef enum {
 	RDEV_MOTOR_L = 0x03,
 	RDEV_SERVO = 0x10,
 	RDEV_BUTTON = 0x20,
+	RDEV_ENCODER = 0x28,
 	RDEV_ULTRASONIC = 0x30,
 	RDEV_LIGHT = 0x40,
 	//====

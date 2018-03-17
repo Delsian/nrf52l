@@ -130,6 +130,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -215,6 +216,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -266,6 +268,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding="src/jspin.c|src/jsspi.c|src/jswrap_espruino.c|src/jswrap_pin.c|src/jswrap_waveform.c|src/jswrap_spi_i2c.c|src/jswrap_flash.c|make|libs/wio_lte|libs/tv|libs/trigger|libs/puckjs|libs/nordic_thingy|libs/network|libs/neopixel|libs/microbit|libs/js|libs/hexbadge|libs/hashlib|libs/graphics|libs/filesystem|libs/crypto|libs/compression|libs/bluetooth|benchmark|boards|scripts|tests|targets|targetlibs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Espruino"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
 						<entry excluding="wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
@@ -430,6 +433,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.1021875076" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -515,6 +519,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.979899096" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1928155634" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -566,6 +571,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding="src/jspin.c|src/jsspi.c|src/jswrap_espruino.c|src/jswrap_pin.c|src/jswrap_waveform.c|src/jswrap_spi_i2c.c|src/jswrap_flash.c|make|libs/wio_lte|libs/tv|libs/trigger|libs/puckjs|libs/nordic_thingy|libs/network|libs/neopixel|libs/microbit|libs/js|libs/hexbadge|libs/hashlib|libs/graphics|libs/filesystem|libs/crypto|libs/compression|libs/bluetooth|benchmark|boards|scripts|tests|targets|targetlibs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Espruino"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
 						<entry excluding="wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|Espruino|Lua/nlua.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
