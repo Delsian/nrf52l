@@ -38,9 +38,13 @@ static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t acti
 	if(action==NRF_GPIOTE_POLARITY_TOGGLE && ubPortPlus1 && isWaiting) {
 		if (nrf_gpio_pin_read(pin) == 0) {
 			uint32_t diff = app_timer_cnt_diff_compute(app_timer_cnt_get(), ulRtcCnt);
+			if (diff <= DIFF_MIN_VALUE) {
+				// pulse from previous scan
+				return;
+			}
 			isWaiting = false;
 			NRF_LOG_DEBUG("L=%d", diff);
-			if (diff > DIFF_MIN_VALUE && diff < DIFF_MAX_VALUE) {
+			if (diff < DIFF_MAX_VALUE) {
 				ubRange =  (uint8_t)(diff - DIFF_MIN_VALUE);
 				app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
 			}
