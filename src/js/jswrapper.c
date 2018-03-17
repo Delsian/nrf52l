@@ -37,6 +37,8 @@
 #include "libs/neopixel/jswrap_neopixel.h"
 #include "platform_config.h"
 
+#include "js/devices/jswrap_port.h"
+
 
 // -----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------- AUTO-GENERATED WRAPPERS
@@ -270,6 +272,10 @@ static JsVar* gen_jswrap_LoopbackB() {
   return jspNewObject("LoopbackB", "Serial") /* needs JSWAT_EXECUTE_IMMEDIATELY */;
 }
 
+static JsVar* gen_jswrap_Port_find() {
+  return jsvNewFromString("port");
+}
+
 //static void gen_jswrap_Serial_setConsole(JsVar *parent, bool force) {
 //}
 //
@@ -377,22 +383,6 @@ static JsVarFloat gen_jswrap_Math_max(JsVar* args) {
   return jswrap_math_minmax(args, true);
 }
 
-static Pin gen_jswrap_LED1() {
-  return LED1_PININDEX;
-}
-
-static Pin gen_jswrap_LED2() {
-  return LED2_PININDEX;
-}
-
-static Pin gen_jswrap_LED3() {
-  return LED3_PININDEX;
-}
-
-static Pin gen_jswrap_LED() {
-  return LED1_PININDEX;
-}
-
 static JsVar* gen_jswrap_ArrayBufferView_ArrayBufferView() {
   return jsvNewWithFlags(JSV_OBJECT);
 }
@@ -402,10 +392,6 @@ static JsVar* gen_jswrap_E_E() {
 }
 
 static JsVar* gen_jswrap_Flash_Flash() {
-  return jsvNewWithFlags(JSV_OBJECT);
-}
-
-static JsVar* gen_jswrap_console_console() {
   return jsvNewWithFlags(JSV_OBJECT);
 }
 
@@ -454,10 +440,6 @@ static JsVar* gen_jswrap_Socket_Socket() {
 }
 
 static JsVar* gen_jswrap_dgram_dgram() {
-  return jsvNewWithFlags(JSV_OBJECT);
-}
-
-static JsVar* gen_jswrap_dgramSocket_dgramSocket() {
   return jsvNewWithFlags(JSV_OBJECT);
 }
 
@@ -595,6 +577,7 @@ static const JswSymPtr jswSymbols_global[] FLASH_SECT = {
   {419, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_constructor},
   {427, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_referenceerror_constructor},
   {442, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_regexp_constructor},
+  {449, JSWAT_VOID, (void (*)(void))jswrap_port_constructor},
   {483, JSWAT_JSVAR, (void (*)(void))gen_jswrap_Server_Server},
   {490, JSWAT_JSVAR, (void (*)(void))gen_jswrap_Socket_Socket},
   {497, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_constructor},
@@ -819,6 +802,16 @@ static const JswSymPtr jswSymbols_RegExp_proto[] FLASH_SECT = {
 };
 static const unsigned char jswSymbolIndex_RegExp_proto = 28;
 
+static const JswSymPtr jswSymbols_Port[] FLASH_SECT = {
+  {0, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY , (void (*)(void))gen_jswrap_Port_find}
+};
+static const unsigned char jswSymbolIndex_Port = 31;
+
+static const JswSymPtr jswSymbols_Port_proto[] FLASH_SECT = {
+  {5, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_port_set}
+};
+static const unsigned char jswSymbolIndex_Port_proto = 32;
+
 static const unsigned char jswSymbolIndex_String_proto = 35;
 static const JswSymPtr jswSymbols_String[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_fromCharCode}
@@ -857,7 +850,7 @@ static const JswSymPtr jswSymbols_Math[] FLASH_SECT = {
 };
 static const unsigned char jswSymbolIndex_Math = 38;
 
-FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0BTN\0BTN1\0BTN2\0BTN3\0BTN4\0Bluetooth\0BluetoothDevice\0BluetoothRemoteGATTCharacteristic\0BluetoothRemoteGATTServer\0BluetoothRemoteGATTService\0Boolean\0DataView\0Date\0E\0Error\0Float32Array\0Float64Array\0Function\0Graphics\0HIGH\0I2C\0I2C1\0I2C2\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LED\0LED1\0LED2\0LED3\0LED4\0LOW\0LoopbackA\0LoopbackB\0Math\0Modules\0NRF\0NaN\0Number\0Object\0OneWire\0Pin\0Promise\0ReferenceError\0RegExp\0SPI\0SPI1\0SPI2\0SPI3\0Serial\0Serial1\0Server\0Socket\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0Waveform\0analogRead\0analogWrite\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0clearWatch\0console\0decodeURIComponent\0dgramSocket\0digitalPulse\0digitalRead\0digitalWrite\0dump\0echo\0edit\0encodeURIComponent\0eval\0fs\0getPinMode\0getSerial\0getTime\0global\0httpCRq\0httpCRs\0httpSRq\0httpSRs\0httpSrv\0isNaN\0load\0parseFloat\0parseInt\0peek16\0peek32\0peek8\0pinMode\0poke16\0poke32\0poke8\0print\0process\0require\0reset\0save\0setBusyIndicator\0setDeepSleep\0setInterval\0setSleepIndicator\0setTime\0setTimeout\0setWatch\0shiftOut\0trace\0url\0");
+FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0Bluetooth\0BluetoothDevice\0BluetoothRemoteGATTCharacteristic\0BluetoothRemoteGATTServer\0BluetoothRemoteGATTService\0Boolean\0DataView\0Date\0E\0Error\0Float32Array\0Float64Array\0Function\0Graphics\0HIGH\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LOW\0LoopbackA\0LoopbackB\0Math\0Modules\0NRF\0NaN\0Number\0Object\0Promise\0ReferenceError\0RegExp\0Port\0Serial\0Serial1\0Server\0Socket\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0Waveform\0analogRead\0analogWrite\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0clearWatch\0console\0decodeURIComponent\0dgramSocket\0digitalPulse\0digitalRead\0digitalWrite\0dump\0echo\0edit\0encodeURIComponent\0eval\0fs\0getPinMode\0getSerial\0getTime\0global\0httpCRq\0httpCRs\0httpSRq\0httpSRs\0httpSrv\0isNaN\0load\0parseFloat\0parseInt\0peek16\0peek32\0peek8\0pinMode\0poke16\0poke32\0poke8\0print\0process\0require\0reset\0save\0setBusyIndicator\0setDeepSleep\0setInterval\0setSleepIndicator\0setTime\0setTimeout\0setWatch\0shiftOut\0trace\0url\0");
 FLASH_STR(jswSymbols_Array_proto_str, "concat\0every\0fill\0filter\0forEach\0indexOf\0join\0length\0map\0pop\0push\0reduce\0reverse\0shift\0slice\0some\0sort\0splice\0toString\0unshift\0");
 FLASH_STR(jswSymbols_Array_str, "isArray\0");
 FLASH_STR(jswSymbols_ArrayBufferView_proto_str, "buffer\0byteLength\0byteOffset\0fill\0forEach\0indexOf\0join\0map\0reduce\0reverse\0set\0slice\0sort\0");
@@ -883,6 +876,7 @@ FLASH_STR(jswSymbols_Function_proto_str, "apply\0bind\0call\0replaceWith\0");
 FLASH_STR(jswSymbols_process_str, "env\0memory\0version\0");
 FLASH_STR(jswSymbols_Promise_str, "all\0reject\0resolve\0");
 FLASH_STR(jswSymbols_Promise_proto_str, "catch\0then\0");
+FLASH_STR(jswSymbols_Port_proto_str, "set\0");
 FLASH_STR(jswSymbols_RegExp_proto_str, "exec\0test\0");
 FLASH_STR(jswSymbols_String_proto_str, "charAt\0charCodeAt\0indexOf\0lastIndexOf\0length\0replace\0slice\0split\0substr\0substring\0toLowerCase\0toUpperCase\0trim\0");
 FLASH_STR(jswSymbols_String_str, "fromCharCode\0");
@@ -911,6 +905,7 @@ const JswSymList jswSymbolTables[] FLASH_SECT = {
   {jswSymbols_process, jswSymbols_process_str, 3},
   {jswSymbols_Promise, jswSymbols_Promise_str, 3},
   {jswSymbols_Promise_proto, jswSymbols_Promise_proto_str, 2},
+  {jswSymbols_Port_proto, jswSymbols_Port_proto_str, 1},
   {jswSymbols_RegExp_proto, jswSymbols_RegExp_proto_str, 2},
   {jswSymbols_String, jswSymbols_String_str, 1},
   {jswSymbols_Math, jswSymbols_Math_str, 28},
@@ -928,6 +923,7 @@ const JswSymList *jswGetSymbolListForConstructorProto(JsVar *constructor) {
   if (constructorPtr==(void*)jswrap_referenceerror_constructor) return &jswSymbolTables[jswSymbolIndex_ReferenceError_proto];
   if (constructorPtr==(void*)jswrap_promise_constructor) return &jswSymbolTables[jswSymbolIndex_Promise_proto];
   if (constructorPtr==(void*)jswrap_regexp_constructor) return &jswSymbolTables[jswSymbolIndex_RegExp_proto];
+  if (constructorPtr==(void*)jswrap_port_constructor) return &jswSymbolTables[jswSymbolIndex_Port_proto];
   return 0;
 }
 
@@ -1005,6 +1001,7 @@ const JswSymList *jswGetSymbolListForObject(JsVar *parent) {
     if ((void*)parent->varData.native.ptr==(void*)jswrap_promise_constructor) return &jswSymbolTables[jswSymbolIndex_Promise];
     if ((void*)parent->varData.native.ptr==(void*)jswrap_string_constructor) return &jswSymbolTables[jswSymbolIndex_String];
     if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_Math_Math) return &jswSymbolTables[jswSymbolIndex_Math];
+    if ((void*)parent->varData.native.ptr==(void*)jswrap_port_constructor) return &jswSymbolTables[jswSymbolIndex_Port];
   }
   if (parent==execInfo.root) return &jswSymbolTables[jswSymbolIndex_global];
   return 0;
@@ -1055,12 +1052,11 @@ strcmp(name, "Array")==0 ||
     strcmp(name, "TypeError")==0 ||
     strcmp(name, "InternalError")==0 ||
     strcmp(name, "ReferenceError")==0 ||
-    strcmp(name, "E")==0 ||
     strcmp(name, "Function")==0 ||
     strcmp(name, "console")==0 ||
     strcmp(name, "JSON")==0 ||
     strcmp(name, "Modules")==0 ||
-    strcmp(name, "Pin")==0 ||
+    strcmp(name, "Port")==0 ||
     strcmp(name, "Number")==0 ||
     strcmp(name, "Object")==0 ||
     strcmp(name, "Boolean")==0 ||

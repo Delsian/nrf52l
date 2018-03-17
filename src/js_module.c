@@ -15,13 +15,15 @@
 JsiStatus jsiStatus = 0;
 
 const char script[] =
-		"var i=false";
+		"var i=12;\n"
+		"Port.set(i);\n";
 
 void js_run()
 {
 	jsvInit();
 	jspInit();
-	jspEvaluate(script, true);
+	JsVar *evCode = jsvNewFromString(script);
+	JsVar *moduleExport = jspEvaluateModule(evCode);
 }
 
 NO_INLINE void jsiConsolePrintString(const char *str) {
