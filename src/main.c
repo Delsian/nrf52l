@@ -22,7 +22,6 @@
 #include "custom_service.h"
 #include "buzzer.h"
 #include "r0b1c_device.h"
-#include "js_main.h"
 
 
 #define BUTTON_SHORT_PRESS 4
@@ -90,6 +89,7 @@ static void HwInit(void)
     ButtonInit();
 }
 
+void js_run(void);
 int main(void)
 {
     (void) NRF_LOG_INIT(NULL);
@@ -100,9 +100,10 @@ int main(void)
     ControlInit();
     FsInit();
 
-    RDeviceInit();
+    js_run();
+    while (1);
 
-    JsStartup();
+    RDeviceInit();
 
     BuzzerInit();
 
