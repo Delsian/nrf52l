@@ -416,7 +416,10 @@ void jsfGetJSONWithCallback(JsVar *var, JSONFlags flags, const char *whitespace,
         if (isBasicArrayBuffer) cbprintf(user_callback, user_data, ".buffer");
       }
     } else if (jsvIsObject(var)) {
-      {
+      IOEventFlags device = (flags & JSON_SHOW_DEVICES) ? jsiGetDeviceFromClass(var) : EV_NONE;
+      if (device!=EV_NONE) {
+        cbprintf(user_callback, user_data, "%s", jshGetDeviceString(device));
+      } else {
         if (flags & JSON_SHOW_OBJECT_NAMES) {
           JsVar *proto = jsvObjectGetChild(var, JSPARSE_INHERITS_VAR, 0);
           if (jsvHasChildren(proto)) {

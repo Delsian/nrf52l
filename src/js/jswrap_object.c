@@ -270,6 +270,18 @@ void jswrap_object_keys_or_property_names_cb(
       jsvUnLock(name);
     }
   }
+
+  // If this is the root object, add all the pins (as these are not part of the symbol table)
+  if (jsvIsRoot(obj)) {
+    int i;
+    for (i=0;i<JSH_PIN_COUNT;i++) {
+      char buf[10];
+      jshGetPinString(buf, (Pin)i);
+      JsVar *str = jsvNewFromString(buf);
+      callback(data, str);
+      jsvUnLock(str);
+    }
+  }
 }
 
 JsVar *jswrap_object_keys_or_property_names(
@@ -825,7 +837,8 @@ void jswrap_object_removeAllListeners_cstr(JsVar *parent, const char *event) {
     ["newFunc","JsVar","The new function to replace this function with"]
   ]
 }
-This replaces the function with the one in the argument - while keeping the old function's scope. This allows inner functions to be edited, and is used when edit() is called on an inner function.
+This replaces the function with the one in the argument - while keeping the old function's scope.
+This allows inner functions to be edited, and is used when edit() is called on an inner function.
  */
 void jswrap_function_replaceWith(JsVar *oldFunc, JsVar *newFunc) {
   if (!jsvIsFunction(newFunc)) {
@@ -847,8 +860,9 @@ void jswrap_function_replaceWith(JsVar *oldFunc, JsVar *newFunc) {
       oldFunc->flags = (oldFunc->flags&~JSV_VARTYPEMASK) |JSV_FUNCTION;
   }
 
-  // Grab scope - the one thing we want to keep
+  // Grab scope and prototype - the things we want to keep
   JsVar *scope = jsvFindChildFromString(oldFunc, JSPARSE_FUNCTION_SCOPE_NAME, false);
+  JsVar *prototype = jsvFindChildFromString(oldFunc, JSPARSE_PROTOTYPE_VAR, false);
   // so now remove all existing entries
   jsvRemoveAllChildren(oldFunc);
   // now re-add scope
@@ -860,7 +874,8 @@ void jswrap_function_replaceWith(JsVar *oldFunc, JsVar *newFunc) {
   while (jsvObjectIteratorHasValue(&it)) {
     JsVar *el = jsvObjectIteratorGetKey(&it);
     jsvObjectIteratorNext(&it);
-    if (!jsvIsStringEqual(el, JSPARSE_FUNCTION_SCOPE_NAME)) {
+    if (!jsvIsStringEqual(el, JSPARSE_FUNCTION_SCOPE_NAME) &&
+        !jsvIsStringEqual(el, JSPARSE_PROTOTYPE_VAR)) {
       JsVar *copy = jsvCopy(el, true);
       if (copy) {
         jsvAddName(oldFunc, copy);
@@ -870,7 +885,9 @@ void jswrap_function_replaceWith(JsVar *oldFunc, JsVar *newFunc) {
     jsvUnLock(el);
   }
   jsvObjectIteratorFree(&it);
-
+  // re-add prototype (it needs to come after other hidden vars)
+  if (prototype) jsvAddName(oldFunc, prototype);
+  jsvUnLock(prototype);
 }
 
 /*JSON{

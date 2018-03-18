@@ -772,6 +772,7 @@ void vcbprintf(
         user_callback(n, user_data);
         break;
       }
+      case 'p': jshGetPinString(buf, (Pin)va_arg(argp, int/*Pin*/)); user_callback(buf, user_data); break;
       default: assert(0); return; // eep
       }
     } else {

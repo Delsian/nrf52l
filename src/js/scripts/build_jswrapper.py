@@ -72,6 +72,7 @@ def getTestFor(className, static):
     return getConstructorTestFor(className, "parent");
   else:
     if className=="String": return "jsvIsString(parent)"
+    if className=="Pin": return "jsvIsPin(parent)"
     if className=="Integer": return "jsvIsInt(parent)"
     if className=="Double": return "jsvIsFloat(parent)"
     if className=="Number": return "jsvIsNumeric(parent)"
@@ -86,6 +87,7 @@ def toArgumentType(argName):
   if argName=="JsVar": return "JSWAT_JSVAR";
   if argName=="JsVarArray": return "JSWAT_ARGUMENT_ARRAY";
   if argName=="bool": return "JSWAT_BOOL";
+  if argName=="pin": return "JSWAT_PIN";
   if argName=="int32": return "JSWAT_INT32";
   if argName=="int": return "JSWAT_INT32";
   if argName=="float": return "JSWAT_JSVARFLOAT";
@@ -97,6 +99,7 @@ def toCType(argName):
   if argName=="JsVar": return "JsVar*";
   if argName=="JsVarArray": return "JsVar*";
   if argName=="bool": return "bool";
+  if argName=="pin": return "Pin";
   if argName=="int32": return "int";
   if argName=="int": return "JsVarInt";
   if argName=="float": return "JsVarFloat";
@@ -444,6 +447,15 @@ codeOut('    // ------------------------------------------ METHODS ON OBJECT')
 if "parent" in builtins:
   codeOutBuiltins("    v = ", builtins["parent"])
   codeOut('    if (v) return v;');
+codeOut('  } else { /* if (!parent) */')
+codeOut('    // ------------------------------------------ FUNCTIONS')
+codeOut('    // Handle pin names - eg LED1 or D5 (this is hardcoded in build_jsfunctions.py)')
+codeOut('    Pin pin = jshGetPinFromString(name);')
+codeOut('    if (pin != PIN_UNDEFINED) {')
+codeOut('      return jsvNewFromPin(pin);')
+codeOut('    }')
+if "!parent" in builtins:
+  codeOutBuiltins("    return ", builtins["!parent"])
 codeOut('  }');
 
 codeOut('  return 0;')
@@ -464,6 +476,7 @@ for className in builtins:
   builtin = builtins[className]
   if not className in ["parent","!parent"] and not builtin["isProto"] and not className.startswith(nativeTestStr):
     codeOut("  if ("+className+") return &jswSymbolTables["+builtin["indexName"]+"];");
+codeOut("  if (parent==execInfo.root) return &jswSymbolTables[jswSymbolIndex_global];");
 codeOut("  return 0;")
 codeOut('}')
 
@@ -517,13 +530,12 @@ codeOut('')
 
 codeOut('void *jswGetBuiltInLibrary(const char *name) {')
 for lib in libraries:
-  codeOut('if (strcmp(name, "'+lib+'")==0) return (void*)gen_jswrap_'+lib+'_'+lib+';');
+  codeOut('  if (strcmp(name, "'+lib+'")==0) return (void*)gen_jswrap_'+lib+'_'+lib+';');
 codeOut('  return 0;')
 codeOut('}')
 
 codeOut('')
 codeOut('')
-
 
 objectChecks = {}
 for jsondata in jsondatas:
@@ -585,10 +597,22 @@ for jsondata in jsondatas:
 codeOut('}')
 
 codeOut("/** If we have a built-in module with the given name, return the module's contents - or 0 */")
-codeOut('const char *jswGetBuiltinModule(const char *name) {')
+codeOut('const char *jswGetBuiltInJSLibrary(const char *name) {')
 for modulename in jsmodules:
   codeOut("  if (!strcmp(name,\""+modulename+"\")) return "+json.dumps(jsmodules[modulename])+";")
 codeOut('  return 0;')
+codeOut('}')
+
+codeOut('')
+codeOut('')
+
+codeOut('const char *jswGetBuiltInLibraryNames() {')
+librarynames = []
+for lib in libraries:
+  librarynames.append(lib);
+for lib in jsmodules:
+  librarynames.append(lib);
+codeOut('  return "'+','.join(librarynames)+'";')
 codeOut('}')
 
 codeOut('')

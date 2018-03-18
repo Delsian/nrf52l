@@ -132,6 +132,9 @@ JsVar *jsnCallFunction(void *function, JsnArgumentType argumentSpecifier, JsVar 
     case JSWAT_INT32: // 32 bit int
       argData[argCount++] = (uint32_t)jsvGetInteger(param);
       break;
+    case JSWAT_PIN: // 16 bit int
+      argData[argCount++] = (uint32_t)jshGetPinFromVar(param);
+      break;
     case JSWAT_JSVARFLOAT: { // 64 bit float
       JsVarFloat f = jsvGetFloat(param);
 #ifdef USE_SEPARATE_DOUBLES

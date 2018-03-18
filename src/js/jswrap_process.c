@@ -17,6 +17,7 @@
 #include "jsparse.h"
 #include "jswrap_process.h"
 #include "jswrap_interactive.h"
+#include "jswrapper.h"
 #include "jsinteractive.h"
 
 /*JSON{
@@ -50,22 +51,35 @@ Returns the version of Espruino as a String
  */
 
 #ifndef SAVE_ON_FLASH
-// TODO: the jspeiFindInScopes export won't be needed soon
+/* NOTE: The order of these is very important, as 
+the online compiler has its own copy of this table */
 const void *exportPtrs[] = {
-    jsvLock,jsvLockAgainSafe,jsvUnLock,jsvSkipName,jsvMathsOp,jsvMathsOpSkipNames,
-    jsvNewFromFloat,jsvNewFromInteger,jsvNewFromString,jsvNewFromBool,
-    jsvGetFloat,jsvGetInteger,jsvGetBool,
-    jspeiFindInScopes,jspReplaceWith,jspeFunctionCall,
-    jspGetNamedVariable,jspGetNamedField,jspGetVarNamedField,
+    jsvLockAgainSafe,
+    jsvUnLock,
+    jsvSkipName,
+    jsvMathsOp,
     jsvNewWithFlags,
+    jsvNewFromFloat,
+    jsvNewFromInteger,
+    jsvNewFromString,
+    jsvNewFromBool,
+    jsvGetFloat,
+    jsvGetInteger,
+    jsvGetBool,
+    jspReplaceWith,
+    jspeFunctionCall,
+    jspGetNamedVariable,
+    jspGetNamedField,
+    jspGetVarNamedField,
+    0
 };
 const char *exportNames = 
-    "jsvLock\0jsvLockAgainSafe\0jsvUnLock\0jsvSkipName\0jsvMathsOp\0jsvMathsOpSkipNames\0"
-    "jsvNewFromFloat\0jsvNewFromInteger\0jsvNewFromString\0jsvNewFromBool\0"
+    "jsvLockAgainSafe\0jsvUnLock\0jsvSkipName\0jsvMathsOp\0"
+    "jsvNewWithFlags\0jsvNewFromFloat\0jsvNewFromInteger\0jsvNewFromString\0jsvNewFromBool\0"
     "jsvGetFloat\0jsvGetInteger\0jsvGetBool\0"
-    "jspeiFindInScopes\0jspReplaceWith\0jspeFunctionCall\0"
+    "jspReplaceWith\0jspeFunctionCall\0"
     "jspGetNamedVariable\0jspGetNamedField\0jspGetVarNamedField\0"
-    "jsvNewWithFlags\0\0";
+    "\0\0";
 #endif
 
 /*JSON{
@@ -80,20 +94,15 @@ Returns an Object containing various pre-defined variables. standard ones are BO
 JsVar *jswrap_process_env() {
   JsVar *obj = jsvNewObject();
   jsvObjectSetChildAndUnLock(obj, "VERSION", jsvNewFromString(JS_VERSION));
-#if !defined(SAVE_ON_FLASH)
-  jsvObjectSetChildAndUnLock(obj, "BUILD_DATE", jsvNewFromString(__DATE__));
-  jsvObjectSetChildAndUnLock(obj, "BUILD_TIME", jsvNewFromString(__TIME__));
-#endif
 #ifdef GIT_COMMIT
   jsvObjectSetChildAndUnLock(obj, "GIT_COMMIT", jsvNewFromString(STRINGIFY(GIT_COMMIT)));
 #endif
   jsvObjectSetChildAndUnLock(obj, "BOARD", jsvNewFromString(PC_BOARD_ID));
-#if !defined(SAVE_ON_FLASH)
-  jsvObjectSetChildAndUnLock(obj, "CHIP", jsvNewFromString(PC_BOARD_CHIP));
-  jsvObjectSetChildAndUnLock(obj, "CHIP_FAMILY", jsvNewFromString(PC_BOARD_CHIP_FAMILY));
-#endif
   jsvObjectSetChildAndUnLock(obj, "FLASH", jsvNewFromInteger(FLASH_TOTAL));
   jsvObjectSetChildAndUnLock(obj, "RAM", jsvNewFromInteger(RAM_TOTAL));
+  jsvObjectSetChildAndUnLock(obj, "SERIAL", jswrap_interface_getSerial());
+  jsvObjectSetChildAndUnLock(obj, "CONSOLE", jsvNewFromString(jshGetDeviceString(jsiGetConsoleDevice())));
+  jsvObjectSetChildAndUnLock(obj, "MODULES", jsvNewFromString(jswGetBuiltInLibraryNames()));
 #if !defined(SAVE_ON_FLASH) && !defined(BLUETOOTH)
   // It takes too long to send this information over BLE...
   JsVar *arr = jsvNewObject();
@@ -109,7 +118,10 @@ JsVar *jswrap_process_env() {
     jsvObjectSetChildAndUnLock(obj, "EXPORTS", arr);
   }  
 #endif
-
+#ifndef SAVE_ON_FLASH
+  // Pointer to a list of predefined exports - eventually we'll get rid of the array above
+  jsvObjectSetChildAndUnLock(obj, "EXPTR", jsvNewFromInteger((JsVarInt)(size_t)exportPtrs));
+#endif
   return obj;
 }
 
@@ -140,9 +152,9 @@ Memory units are specified in 'blocks', which are around 16 bytes each (dependin
 **Note:** To find free areas of flash memory, see `require('Flash').getFree()`
  */
 JsVar *jswrap_process_memory() {
-  //JsSysTime time1 = jshGetSystemTime();
+  JsSysTime time1 = jshGetSystemTime();
   int gc = jsvGarbageCollect();
-  //JsSysTime time2 = jshGetSystemTime();
+  JsSysTime time2 = jshGetSystemTime();
   JsVar *obj = jsvNewObject();
   if (obj) {
     unsigned int history = 0;
@@ -158,7 +170,7 @@ JsVar *jswrap_process_memory() {
     jsvObjectSetChildAndUnLock(obj, "total", jsvNewFromInteger((JsVarInt)total));
     jsvObjectSetChildAndUnLock(obj, "history", jsvNewFromInteger((JsVarInt)history));
     jsvObjectSetChildAndUnLock(obj, "gc", jsvNewFromInteger((JsVarInt)gc));
-    //jsvObjectSetChildAndUnLock(obj, "gctime", jsvNewFromFloat(jshGetMillisecondsFromTime(time2-time1)));
+    jsvObjectSetChildAndUnLock(obj, "gctime", jsvNewFromFloat(jshGetMillisecondsFromTime(time2-time1)));
 
 #ifdef ARM
     extern int LINKER_END_VAR; // end of ram used (variables) - should be 'void', but 'int' avoids warnings

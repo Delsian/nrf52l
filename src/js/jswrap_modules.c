@@ -50,10 +50,22 @@ JsVar *jswrap_require(JsVar *moduleName) {
     jsExceptionHere(JSET_TYPEERROR, "Expecting a module name as a string, but got %t", moduleName);
     return 0;
   }
+  char moduleNameBuf[128];
+  if (jsvGetString(moduleName, moduleNameBuf, sizeof(moduleNameBuf))>=sizeof(moduleNameBuf)) {
+    jsExceptionHere(JSET_TYPEERROR, "Module name too long (max 128 chars)");
+    return 0;
+  }
+#ifdef ESPRUINOWIFI
+  // Big hack to work around module renaming
+  if (!strcmp(moduleNameBuf,"EspruinoWiFi"))
+    strcpy(moduleNameBuf,"Wifi");
+#endif
+
+
   // Search to see if we have already loaded this module
   JsVar *moduleList = jswrap_modules_getModuleList();
   if (!moduleList) return 0; // out of memory
-  JsVar *moduleExport = jsvSkipNameAndUnLock(jsvFindChildFromVar(moduleList, moduleName, false));
+  JsVar *moduleExport = jsvSkipNameAndUnLock(jsvFindChildFromString(moduleList, moduleNameBuf, false));
   jsvUnLock(moduleList);
   if (moduleExport) {
     // Found the module!
@@ -61,33 +73,43 @@ JsVar *jswrap_require(JsVar *moduleName) {
   }
 
   // Now check if it is built-in (as an actual native function)
-  char moduleNameBuf[32];
-  void *builtInLib = 0;
-  if (jsvGetString(moduleName, moduleNameBuf, sizeof(moduleNameBuf))<sizeof(moduleNameBuf))
-    builtInLib = jswGetBuiltInLibrary(moduleNameBuf);
+  void *builtInLib = jswGetBuiltInLibrary(moduleNameBuf);
   if (builtInLib) {
     // create a 'fake' module that Espruino can use to map its built-in functions against
     moduleExport = jsvNewNativeFunction(builtInLib, 0);
   } 
+  // Ok - it's not built-in as native. We want to get the actual text and execute it
+  // Look and see if it's built-in as JS
+  if (!moduleExport) {
+    const char *builtInJS = jswGetBuiltInJSLibrary(moduleNameBuf);
+    if (builtInJS) {
+      JsVar *fileContents = jsvNewNativeString((char*)builtInJS, strlen(builtInJS));       
+      if (fileContents) {
+        moduleExport = jspEvaluateModule(fileContents);
+        jsvUnLock(fileContents);
+      }
+    }
+  }
   // If we have filesystem support, look on the filesystem
 #ifdef USE_FILESYSTEM
   if (!moduleExport) {
     JsVar *fileContents = 0;        
     JsVar *modulePath = jsvNewFromString("node_modules/");
-    if (!modulePath) return 0; // out of memory
-    jsvAppendStringVarComplete(modulePath, moduleName);
-    jsvAppendString(modulePath,".js");
-    fileContents = jswrap_fs_readFile(modulePath);
-    jsvUnLock(modulePath);
-    JsVar *exception = jspGetException();
-    if (exception) {  // throw away exception & file if we had one
-      execInfo.execute = execInfo.execute & (JsExecFlags)~EXEC_EXCEPTION;
-      jsvUnLock2(fileContents, exception);
-      fileContents = 0;
+    if (modulePath) { // out of memory
+      jsvAppendString(modulePath, moduleNameBuf);
+      jsvAppendString(modulePath,".js");
+      fileContents = jswrap_fs_readFile(modulePath);
+      jsvUnLock(modulePath);
+      JsVar *exception = jspGetException();
+      if (exception) {  // throw away exception & file if we had one
+        execInfo.execute = execInfo.execute & (JsExecFlags)~EXEC_EXCEPTION;
+        jsvUnLock2(fileContents, exception);
+        fileContents = 0;
+      }
+      if (fileContents && jsvGetStringLength(fileContents)>0)
+        moduleExport = jspEvaluateModule(fileContents);
+      jsvUnLock(fileContents);
     }
-    if (fileContents && jsvGetStringLength(fileContents)>0)
-      moduleExport = jspEvaluateModule(fileContents);
-    jsvUnLock(fileContents);
   }
 #endif    
    
@@ -95,11 +117,11 @@ JsVar *jswrap_require(JsVar *moduleName) {
   if (moduleExport) { // could have been out of memory
     JsVar *moduleList = jswrap_modules_getModuleList();
     if (moduleList)
-      jsvObjectSetChildVar(moduleList, moduleName, moduleExport);
+      jsvObjectSetChild(moduleList, moduleNameBuf, moduleExport);
     jsvUnLock(moduleList);
   } else {
     // nope. no module
-    jsExceptionHere(JSET_ERROR, "Module %q not found", moduleName);
+    jsExceptionHere(JSET_ERROR, "Module %s not found", moduleNameBuf);
   }
 
   return moduleExport;

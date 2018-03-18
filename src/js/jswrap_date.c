@@ -179,7 +179,7 @@ Get the number of milliseconds elapsed since 1970 (or on embedded platforms, sin
  */
 JsVarFloat jswrap_date_now() {
   // Not quite sure why we need this, but (JsVarFloat)jshGetSystemTime() / (JsVarFloat)jshGetTimeFromMilliseconds(1) in inaccurate on STM32
-  return 0; //((JsVarFloat)jshGetSystemTime() / (JsVarFloat)jshGetTimeFromMilliseconds(1000)) * 1000;
+  return ((JsVarFloat)jshGetSystemTime() / (JsVarFloat)jshGetTimeFromMilliseconds(1000)) * 1000;
 }
 
 

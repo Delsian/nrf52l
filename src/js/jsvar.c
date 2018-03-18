@@ -476,9 +476,9 @@ JsVar *jsvNewWithFlags(JsVarFlags flags) {
   jsErrorFlags |= JSERR_LOW_MEMORY;
   /* If we're calling from an IRQ, do NOT try and do fancy
    * stuff to free memory */
-//  if (jshIsInInterrupt()) {
-//    return 0;
-//  }
+  if (jshIsInInterrupt()) {
+    return 0;
+  }
   /* we don't have memory - second last hope - run garbage collector */
   if (jsvGarbageCollect()) {
     return jsvNewWithFlags(flags); // if it freed something, continue
@@ -689,6 +689,13 @@ void jsvUnLock3(JsVar *var1, JsVar *var2, JsVar *var3) {
   jsvUnLock(var2);
   jsvUnLock(var3);
 }
+/// Unlock 4 variables in one go
+void jsvUnLock4(JsVar *var1, JsVar *var2, JsVar *var3, JsVar *var4) {
+  jsvUnLock(var1);
+  jsvUnLock(var2);
+  jsvUnLock(var3);
+  jsvUnLock(var4);
+}
 
 /// Unlock an array of variables
 NO_INLINE void jsvUnLockMany(unsigned int count, JsVar **vars) {
@@ -757,7 +764,7 @@ JsVar *jsvNewFlatStringOfLength(unsigned int byteLength) {
       JsVar *currVar = jsvGetAddressOf(curr);
       JsVarRef next = jsvGetNextSibling(currVar);
 #ifdef RESIZABLE_JSVARS
-      if (jsvGetAddressOf(next)==currVar+1) {
+      if (next && jsvGetAddressOf(next)==currVar+1) {
 #else
       if (next == curr+1) {
 #endif
@@ -1046,7 +1053,7 @@ JsVar *jsvNewNativeFunction(void (*ptr)(void), unsigned short argTypes) {
 }
 
 JsVar *jsvNewNativeString(char *ptr, size_t len) {
-  if (len<65535) len=65535; // crop string to 65535 characters because that's all be can store in nativeStr.len
+  if (len>65535) len=65535; // crop string to 65535 characters because that's all be can store in nativeStr.len
   JsVar *str = jsvNewWithFlags(JSV_NATIVE_STRING);
   if (!str) return 0;
   str->varData.nativeStr.ptr = ptr;
@@ -1281,6 +1288,9 @@ JsVar *jsvAsString(JsVar *v, bool unlockVar) {
     if (constChar) {
       // if we could get this as a simple const char, do that..
       str = jsvNewFromString(constChar);
+    } else if (jsvIsPin(v)) {
+      jshGetPinString(buf, (Pin)v->varData.integer);
+      str = jsvNewFromString(buf);
     } else if (jsvIsInt(v)) {
       itostr(v->varData.integer, buf, 10);
       str = jsvNewFromString(buf);
@@ -3630,6 +3640,7 @@ bool jsvReadConfigObject(JsVar *object, jsvConfigObject *configs, int nConfigs) 
           case JSV_ARRAY:
           case JSV_FUNCTION:
             *((JsVar**)configs[i].ptr) = jsvLockAgain(val); break;
+          case JSV_PIN: *((Pin*)configs[i].ptr) = jshGetPinFromVar(val); break;
           case JSV_BOOLEAN: *((bool*)configs[i].ptr) = jsvGetBool(val); break;
           case JSV_INTEGER: *((JsVarInt*)configs[i].ptr) = jsvGetInteger(val); break;
           case JSV_FLOAT: *((JsVarFloat*)configs[i].ptr) = jsvGetFloat(val); break;

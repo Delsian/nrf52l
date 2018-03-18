@@ -29,7 +29,7 @@
 #define IOBUFFER_XON ((TXBUFFERMASK)*3/8)
 
 
-
+#define EXTI_COUNT 7
 #define RAM_TOTAL (16*1024)
 #define FLASH_TOTAL (128*1024)
 
