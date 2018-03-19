@@ -14,32 +14,9 @@
 #include "rj_port.h"
 #include "custom_service.h"
 #include "r0b1c_cmd.h"
+#include "rdev_proto.h"
 
 #define RDEV_TICK_TIMEOUT 50
-
-// Prototypes
-RDevErrCode RDevDummyInit(uint8_t port);
-RDevErrCode RDevMotorSInit(uint8_t port);
-RDevErrCode RDevMotorMInit(uint8_t port);
-RDevErrCode RDevMotorLInit(uint8_t port);
-RDevErrCode RDevMotorDeInit(uint8_t port);
-RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode RDevMotorTick(uint8_t port, uint32_t time);
-RDevErrCode RDevButtonInit(uint8_t port);
-RDevErrCode RDevButtonTick(uint8_t port, uint32_t time);
-RDevErrCode RDevButtonCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode RDevRangeInit(uint8_t port);
-RDevErrCode RDevRangeUnInit(uint8_t port);
-RDevErrCode RDevRangeTick(uint8_t port, uint32_t time);
-RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode RDevLedInit(uint8_t port);
-RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
-RDevErrCode RDevGyroInit(uint8_t port);
-RDevErrCode RDevGyroCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode BatteryTick(uint8_t port, uint32_t time);
-RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len);
-RDevErrCode BatteryInit(uint8_t port);
 
 const RDevDescriptor ptRDevices[] = {
 		// Dummy - always on first position as zero device. Other records can vary

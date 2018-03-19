@@ -140,6 +140,11 @@
 			<locationURI>$%7BSDK%7D/components/ble/ble_services/ble_nus/ble_nus.c</locationURI>
 		</link>
 		<link>
+			<name>SDK/BLE/ble_ots.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/SDK/components/ble/ble_services/experimental_ble_ots/ble_ots.c</locationURI>
+		</link>
+		<link>
 			<name>SDK/BLE/ble_srv_common.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/ble/common/ble_srv_common.c</locationURI>

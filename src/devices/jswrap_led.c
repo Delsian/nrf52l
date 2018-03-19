@@ -6,7 +6,7 @@
  * ----------------------------------------------------------------------------
  * This file is designed to be parsed during the build process
  *
- * JavaScript OneWire Functions
+ * JavaScript LED Functions
  * ----------------------------------------------------------------------------
  */
 #include "jswrap_led.h"

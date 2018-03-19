@@ -25,10 +25,11 @@ bool interruptedDuringEvent; ///< Were we interrupted while executing an event? 
 #define TIME_GRANULARITY (50)
 
 const char script[] =
-//		"function test() {\n"
+		"var m = Motor(3);\n"
+		"setInterval('m.write(99,10);', 3000);";
 //		"LED.off();\n"
 //		"LED.set(0x55);\n"
-		"setTimeout(function () { LED.set(0x55);}, 2000);";
+		//"setTimeout(function () { LED.set(0x55);}, 2000);";
 
 // Call this function every TIME_GRANULARITY ms
 // do the stuff from jsinteractive.c idle loop as we have no idle here

@@ -100,10 +100,10 @@ int main(void)
     ControlInit();
     FsInit();
 
+    RDeviceInit();
+
     JsInit();
     while (1);
-
-    RDeviceInit();
 
     BuzzerInit();
 
