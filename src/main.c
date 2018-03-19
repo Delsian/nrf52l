@@ -89,7 +89,7 @@ static void HwInit(void)
     ButtonInit();
 }
 
-void js_run(void);
+void JsInit(void);
 int main(void)
 {
     (void) NRF_LOG_INIT(NULL);
@@ -100,7 +100,7 @@ int main(void)
     ControlInit();
     FsInit();
 
-    js_run();
+    JsInit();
     while (1);
 
     RDeviceInit();

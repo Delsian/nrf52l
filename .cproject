@@ -66,15 +66,12 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
 									<listOptionValue builtIn="false" value=".././config"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\GCC\nrf52&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\CMSIS\nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
@@ -111,7 +108,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
@@ -152,7 +148,6 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.653441933" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
@@ -198,7 +193,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
@@ -270,7 +264,7 @@
 					<sourceEntries>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="Espruino|wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="wedo2.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -368,15 +362,12 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
 									<listOptionValue builtIn="false" value=".././config"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\GCC\nrf52&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\portable\CMSIS\nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
@@ -413,7 +404,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
@@ -454,7 +444,6 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.580876500" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\freertos\source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
@@ -500,7 +489,6 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
@@ -572,7 +560,7 @@
 					<sourceEntries>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
-						<entry excluding="Espruino|wedo2.c|rtt_cli.c|leds.c|tft_btn.c|ble_lserv.c|swo_log.c|RTT/Examples|RTT_Syscalls_GCC.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="wedo2.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

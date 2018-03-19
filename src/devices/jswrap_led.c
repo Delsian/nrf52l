@@ -12,6 +12,7 @@
 #include "jswrap_led.h"
 #include "jsdevices.h"
 #include "rdev_led.h"
+#include "nrf_log.h"
 
 /*JSON{
   "type" : "class",
@@ -21,18 +22,7 @@ This class provides RGB LED control
  */
 
 /*JSON{
-  "type" : "constructor",
-  "class" : "LED",
-  "name" : "LED",
-  "generate" : "jswrap_led_constructor"
-}
- */
-JsVar *jswrap_led_constructor() {
-  return jsvNewObject();
-}
-
-/*JSON{
-  "type" : "method",
+  "type" : "staticmethod",
   "class" : "LED",
   "name" : "set",
   "generate" : "jswrap_led_set",
@@ -42,8 +32,20 @@ JsVar *jswrap_led_constructor() {
 }
 Set LED color to 'data' value
  */
-void jswrap_led_set(JsVar *parent, int data) {
-  NOT_USED(parent);
+void jswrap_led_set(int data) {
+	NRF_LOG_DEBUG("LED set %x", data);
   RDevLedSetColor((LedColor)data);
   RDevLedSetIndication(LED_IND_EXTCOLOR);
+}
+
+/*JSON{
+  "type" : "staticmethod",
+  "class" : "LED",
+  "name" : "off",
+  "generate" : "jswrap_led_off"
+}
+Set LED color to 'data' value
+ */
+void jswrap_led_off(void) {
+  RDevLedClearIndication(LED_IND_EXTCOLOR);
 }

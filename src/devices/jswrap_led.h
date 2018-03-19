@@ -14,6 +14,7 @@
 #include "jspin.h"
 
 JsVar *jswrap_led_constructor();
-void jswrap_led_set(JsVar *parent, int data);
+void jswrap_led_set(int data);
+void jswrap_led_off();
 
 #endif /* DEVICES_JSWRAP_LED_H_ */
