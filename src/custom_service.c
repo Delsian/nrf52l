@@ -100,16 +100,22 @@ void CustGetDeviceName(uint8_t* opubBuf)
 
 static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
+	const ControlEvent tBtConnEvt = {
+			.type = CE_BT_CONN,
+			.ptr16 = &(ptCustVar->usConnHandle)
+	};
     if (p_ble_evt == NULL) return;
 
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
         	ptCustVar->usConnHandle = p_ble_evt->evt.gap_evt.conn_handle;
+        	ControlPost(&tBtConnEvt);
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
         	ptCustVar->usConnHandle = BLE_CONN_HANDLE_INVALID;
+        	ControlPost(&tBtConnEvt);
             break;
 
         case BLE_GATTS_EVT_WRITE:

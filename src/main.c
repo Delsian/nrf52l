@@ -102,12 +102,11 @@ int main(void)
 
     RDeviceInit();
 
-    JsInit();
-    while (1);
-
     BuzzerInit();
 
     ble_stack_init();
+
+    JsInit();
 
     BuzzerPlayTone(500);
     nrf_delay_ms(50);

@@ -46,8 +46,8 @@ To set the timezone for all new Dates, use `E.setTimeZone(hours)`.
  */
 void jswrap_interactive_setTime(JsVarFloat time) {
   JsSysTime stime = jshGetTimeFromMilliseconds(time*1000);
-  jsiLastIdleTime = stime;
   jshSetSystemTime(stime);
+  jsiTimersChanged();
 }
 
 /*JSON{
@@ -136,7 +136,7 @@ JsVar *_jswrap_interface_setTimeoutOrInterval(JsVar *func, JsVarFloat interval, 
     JsVar *timerPtr = jsvNewObject();
     if (isnan(interval) || interval<TIMER_MIN_INTERVAL) interval=TIMER_MIN_INTERVAL;
     JsSysTime intervalInt = jshGetTimeFromMilliseconds(interval);
-    jsvObjectSetChildAndUnLock(timerPtr, "time", jsvNewFromLongInteger((jshGetSystemTime() - jsiLastIdleTime) + intervalInt));
+    jsvObjectSetChildAndUnLock(timerPtr, "time", jsvNewFromLongInteger(jshGetSystemTime() + intervalInt));
     if (!isTimeout) {
       jsvObjectSetChildAndUnLock(timerPtr, "interval", jsvNewFromLongInteger(intervalInt));
     }
@@ -259,7 +259,7 @@ void jswrap_interface_changeInterval(JsVar *idVar, JsVarFloat interval) {
     JsVarInt intervalInt = (JsVarInt)jshGetTimeFromMilliseconds(interval);
     v = jsvNewFromInteger(intervalInt);
     jsvUnLock2(jsvSetNamedChild(timer, v, "interval"), v);
-    v = jsvNewFromInteger((JsVarInt)(jshGetSystemTime()-jsiLastIdleTime) + intervalInt);
+    v = jsvNewFromInteger(jshGetSystemTime() + intervalInt);
     jsvUnLock3(jsvSetNamedChild(timer, v, "time"), v, timer);
     // timerName already unlocked
     jsiTimersChanged(); // mark timers as changed

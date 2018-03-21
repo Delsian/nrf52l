@@ -11,6 +11,8 @@
 #include "boards.h"
 #include "nrf_drv_saadc.h"
 #include "nrf_error.h"
+#include "ble_types.h"
+#include "app_timer.h"
 #include "control.h"
 #include "r0b1c_device.h"
 #include "r0b1c_service.h"
@@ -20,11 +22,16 @@
 #define BATTERY_MEASURE_TICKS 5000
 #define BATTERY_GAIN NRF_SAADC_GAIN1_3
 
-typedef enum { BSNONE, BSCHRG, BSSTDBY, BSEMPTY } BatStates;
+#define BATTERY_IDLE_PWROFF_TIMEOUT 5000000
+#define BATTERY_EMPTY_PWROFF_TIMEOUT 3500000
+
+typedef enum { BSNONE, BSCHRG, BSSTDBY, BSBATT, BSEMPTY } BatStates;
 
 static uint16_t guBattValue;
 static nrf_saadc_value_t BattBuffer;
 static BatStates tBstate;
+static bool eDisablePwrOff;
+APP_TIMER_DEF(tPwrOffTmr);
 
 const ControlEvent BattEvt = {
 		.type = CE_BATT_IN,
@@ -34,7 +41,7 @@ const ControlEvent BattEvt = {
 static void BatteryStateChange (BatStates b) {
 
 	if (tBstate != b) {
-		NRF_LOG_DEBUG("Batt new state %d", b);
+		NRF_LOG_DEBUG("Batt new state %d, old %d", b, tBstate);
 
 		// Clean old indication
 		switch(tBstate) {
@@ -46,6 +53,12 @@ static void BatteryStateChange (BatStates b) {
 			break;
 		case BSEMPTY:
 			RDevLedClearIndication(LED_IND_LOWBATT);
+			// disable pwr-off timer
+			app_timer_stop(tPwrOffTmr);
+			break;
+		case BSBATT:
+			// disable pwr-off timer
+			app_timer_stop(tPwrOffTmr);
 			break;
 		default:
 			break;
@@ -60,14 +73,23 @@ static void BatteryStateChange (BatStates b) {
 		case BSSTDBY:
 			RDevLedSetIndication(LED_IND_CHARGED);
 			SendBatteryNotification(2);
+			// ToDo calibrate
 			break;
 		case BSEMPTY:
 			RDevLedSetIndication(LED_IND_LOWBATT);
 			SendBatteryNotification(1);
 			break;
+		case BSBATT:
+			if(!eDisablePwrOff) {
+				// Charger disconnected, set timer to power off
+				NRF_LOG_DEBUG("Power off in %ld ticks", BATTERY_IDLE_PWROFF_TIMEOUT);
+				app_timer_start(tPwrOffTmr, BATTERY_IDLE_PWROFF_TIMEOUT, NULL);
+			}
+			break;
 		default:
 			break;
 		}
+		tBstate = b;
 	}
 }
 
@@ -76,8 +98,9 @@ void BatteryMeasureCb(nrf_drv_saadc_evt_t const * p_event)
 	if (p_event->type == NRF_DRV_SAADC_EVT_DONE)
 	{
 		guBattValue = BattBuffer;
-		ret_code_t err_code = nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
-		//if(err_code) printf("%d Err %x\n", __LINE__, err_code);
+		nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
+		// Calculate current level and set BSEMPTY if necessary
+
 		ControlPost(&BattEvt);
 	}
 }
@@ -94,7 +117,8 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 	} else {
 		// no signals from charger
 		if (tBstate == BSCHRG || tBstate == BSSTDBY ) {
-			BatteryStateChange(BSNONE);
+			if (tBstate != BSEMPTY)
+				BatteryStateChange(BSBATT);
 		}
 	}
 	if (BATTERY_MEASURE_TICKS < ++ticks) {
@@ -103,6 +127,28 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 	}
 
 	return RDERR_OK;
+}
+
+static void BatteryPwrOffTmrCb()
+{
+	const ControlEvent tPwr = {
+			.type = CE_PWR_OFF
+	};
+	if(!eDisablePwrOff) {
+		ControlPost(&tPwr);
+	}
+}
+static void BatteryConnCb(const ControlEvent* pEvt)
+{
+	eDisablePwrOff = (*(pEvt->ptr16) != BLE_CONN_HANDLE_INVALID);
+	if (!eDisablePwrOff && (tBstate==BSBATT || tBstate==BSEMPTY)) {
+		uint32_t timeout = (tBstate==BSBATT)?BATTERY_IDLE_PWROFF_TIMEOUT:BATTERY_EMPTY_PWROFF_TIMEOUT;
+		NRF_LOG_DEBUG("Power off in %ld ticks", timeout);
+		app_timer_start(tPwrOffTmr, timeout, NULL);
+	}
+	if(eDisablePwrOff) {
+		app_timer_stop(tPwrOffTmr);
+	}
 }
 
 RDevErrCode BatteryInit(uint8_t port)
@@ -124,6 +170,10 @@ RDevErrCode BatteryInit(uint8_t port)
 	APP_ERROR_CHECK(err_code);
     err_code = nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
     APP_ERROR_CHECK(err_code);
+
+    // Subscribe to connect event for inactivity timer enable/disable
+    ControlRegisterCb(CE_BT_CONN, &BatteryConnCb);
+    app_timer_create(&tPwrOffTmr, APP_TIMER_MODE_SINGLE_SHOT, BatteryPwrOffTmrCb);
 
     return RDERR_OK;
 }

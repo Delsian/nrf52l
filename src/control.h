@@ -13,6 +13,7 @@ typedef enum {
 	CE_BUTTON,
 	CE_BATT_IN, // Battery measurement complete
 	CE_BUZZER,
+	CE_BT_CONN,
 	CE_PWR_OFF
 } ControlEventType;
 

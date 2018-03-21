@@ -22,11 +22,10 @@ static uint16_t usIndication;
 const LedPatternSeq tPatterns[] = {
 		{
 				.type = LED_IND_IDLE,
-				.length = 3,
+				.length = 2,
 				.pt = {
-						{20, COLOR_GREEN},
-						{10, COLOR_TEAL},
-						{100, COLOR_BLACK}
+						{20, COLOR_OLIVE},
+						{50, COLOR_BLACK}
 				}
 		},
 
@@ -34,8 +33,8 @@ const LedPatternSeq tPatterns[] = {
 				.type = LED_IND_BTCONN,
 				.length = 2,
 				.pt = {
-						{5, COLOR_BLUE},
-						{40, COLOR_BLACK}
+						{20, COLOR_BLUE},
+						{50, COLOR_BLACK}
 				}
 		},
 
@@ -43,19 +42,27 @@ const LedPatternSeq tPatterns[] = {
 				.type = LED_IND_CHARGED,
 				.length = 2,
 				.pt = {
-						{210, COLOR_GREEN},
+						{100, COLOR_GREEN},
 						{30, COLOR_LIME}
 				}
 		},
 
 		{
-				.type = LED_IND_CHARGING,
-				.length = 4,
+				.type = LED_IND_CHARGED|LED_IND_BTCONN,
+				.length = 2,
 				.pt = {
-						{10, COLOR_OLIVE},
-						{5, COLOR_SILVER},
-						{10, COLOR_YELLOW},
-						{15, COLOR_BLACK}
+						{100, COLOR_GREEN},
+						{30, COLOR_BLUE}
+				}
+		},
+
+		{
+				.type = LED_IND_CHARGING,
+				.length = 3,
+				.pt = {
+						{10, COLOR_RED},
+						{10, COLOR_SILVER},
+						{10, COLOR_YELLOW}
 				}
 		},
 
@@ -70,12 +77,11 @@ const LedPatternSeq tPatterns[] = {
 
 		{
 				.type = LED_IND_LOWBATT|LED_IND_BTCONN,
-				.length = 4,
+				.length = 0,
 				.pt = {
-						{5, COLOR_RED},
-						{30, COLOR_BLACK},
-						{5, COLOR_BLUE},
-						{100, COLOR_BLACK}
+						{10, COLOR_RED},
+						{10, COLOR_BLUE},
+						{50, COLOR_BLACK}
 				}
 		},
 

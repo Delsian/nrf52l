@@ -18,73 +18,82 @@
 JsiStatus jsiStatus = 0;
 JsVar *events = 0; // Array of events to execute
 JsVarRef timerArray = 0; // Linked List of timers to check and run
-JsSysTime jsiLastIdleTime;  ///< The last time we went around the idle loop - use this for timers
 static JsSysTime jsTimeVal; // Clock in TIME_GRANULARITY*ms steps
+static JsSysTime jsTimeLeft; // Clocks left to next event
 bool interruptedDuringEvent; ///< Were we interrupted while executing an event? If so may want to clear timers
 
 #define TIME_GRANULARITY (50)
 
 const char script[] =
-		"var m = Motor(3);\n"
-		"setInterval('m.write(99,10);', 3000);";
+		"var m = Motor(1);\n";
+		//"setInterval('m.write(99,10);', 3000);";
 //		"LED.off();\n"
 //		"LED.set(0x55);\n"
-		//"setTimeout(function () { LED.set(0x55);}, 2000);";
+		//"setTimeout(function () { LED.set(0x55);}, 800);";
 
 // Call this function every TIME_GRANULARITY ms
 // do the stuff from jsinteractive.c idle loop as we have no idle here
 static void JsTickHandler()
 {
 	jsTimeVal++;
-	JsSysTime minTimeUntilNext = JSSYSTIME_MAX;
-	JsSysTime timePassed = jsTimeVal - jsiLastIdleTime;
-	jsiLastIdleTime = jsTimeVal;
-	jsiStatus = jsiStatus & ~JSIS_TIMERS_CHANGED;
-	JsVar *timerArrayPtr = jsvLock(timerArray);
-	JsvObjectIterator it;
-	jsvObjectIteratorNew(&it, timerArrayPtr);
-	while (jsvObjectIteratorHasValue(&it) && !(jsiStatus & JSIS_TIMERS_CHANGED)) {
-		bool hasDeletedTimer = false;
-		JsVar *timerPtr = jsvObjectIteratorGetValue(&it);
-		JsSysTime timerTime = (JsSysTime)jsvGetLongIntegerAndUnLock(jsvObjectGetChild(timerPtr, "time", 0));
-		JsSysTime timeUntilNext = timerTime - timePassed;
-	    if (timeUntilNext<=0) {
-	        // we're now doing work
-	        // jsiSetBusy(BUSY_INTERACTIVE, true); ToDo - indication
-	        JsVar *timerCallback = jsvObjectGetChild(timerPtr, "callback", 0);
-	        JsVar *interval = jsvObjectGetChild(timerPtr, "interval", 0);
-	        JsVar *argsArray = jsvObjectGetChild(timerPtr, "args", 0);
-	        bool execResult = jsiExecuteEventCallbackArgsArray(0, timerCallback, argsArray);
-	        if (!execResult && interval) {
-				jsErrorFlags |= JSERR_CALLBACK;
-				// by setting interval to 0, we now think we've for a Timeout,
-				// which will get removed.
-				jsvUnLock(interval);
-				interval = 0;
-	        }
-			if (interval) {
-				timeUntilNext = timeUntilNext + jsvGetLongIntegerAndUnLock(interval);
+	jsTimeLeft--;
+
+	if (jsTimeLeft <= 0 || (jsiStatus & JSIS_TIMERS_CHANGED)) {
+		JsSysTime minTimeNext = JSSYSTIME_MAX;
+		JsVar *timerArrayPtr = jsvLock(timerArray);
+		JsvObjectIterator it;
+		jsvObjectIteratorNew(&it, timerArrayPtr);
+
+		while (jsvObjectIteratorHasValue(&it)) {
+			JsSysTime timeNext = jsTimeVal;
+			bool hasDeletedTimer = false;
+			JsVar *timerPtr = jsvObjectIteratorGetValue(&it);
+			JsSysTime timerTime = (JsSysTime)jsvGetLongIntegerAndUnLock(jsvObjectGetChild(timerPtr, "time", 0));
+			if (timerTime<=jsTimeVal) {
+				// we're now doing work
+				// jsiSetBusy(BUSY_INTERACTIVE, true); ToDo - indication
+				JsVar *timerCallback = jsvObjectGetChild(timerPtr, "callback", 0);
+				JsVar *interval = jsvObjectGetChild(timerPtr, "interval", 0);
+				JsVar *argsArray = jsvObjectGetChild(timerPtr, "args", 0);
+				bool execResult = jsiExecuteEventCallbackArgsArray(0, timerCallback, argsArray);
+				if (!execResult && interval) {
+					jsErrorFlags |= JSERR_CALLBACK;
+					// by setting interval to 0, we now think we've for a Timeout,
+					// which will get removed.
+					jsvUnLock(interval);
+					interval = 0;
+				}
+				if (interval) {
+					timeNext += jsvGetLongIntegerAndUnLock(interval);
+				} else {
+					// free
+					// Beware... may have already been removed!
+					jsvObjectIteratorRemoveAndGotoNext(&it, timerArrayPtr);
+					hasDeletedTimer = true;
+					timeNext = -1;
+				}
+				jsvUnLock(timerCallback);
 			} else {
-				// free
-				// Beware... may have already been removed!
-				jsvObjectIteratorRemoveAndGotoNext(&it, timerArrayPtr);
-				hasDeletedTimer = true;
-				timeUntilNext = -1;
+				timeNext = timerTime;
 			}
-			jsvUnLock(timerCallback);
+
+			// update the time of the next event
+			if (timeNext>=0 && timeNext < minTimeNext)
+			  minTimeNext = timeNext;
+			// update the timer's time
+			if (!hasDeletedTimer) {
+			  jsvObjectSetChildAndUnLock(timerPtr, "time", jsvNewFromLongInteger(timeNext));
+			  jsvObjectIteratorNext(&it);
+			}
+			jsvUnLock(timerPtr);
 		}
-	    // update the time until the next timer
-	    if (timeUntilNext>=0 && timeUntilNext < minTimeUntilNext)
-	      minTimeUntilNext = timeUntilNext;
-	    // update the timer's time
-	    if (!hasDeletedTimer) {
-	      jsvObjectSetChildAndUnLock(timerPtr, "time", jsvNewFromLongInteger(timeUntilNext));
-	      jsvObjectIteratorNext(&it);
-	    }
-	    jsvUnLock(timerPtr);
+		// Prepare next event
+		jsiStatus &= ~JSIS_TIMERS_CHANGED;
+		jsTimeLeft = minTimeNext - jsTimeVal;
+
+		jsvObjectIteratorFree(&it);
+		jsvUnLock(timerArrayPtr);
 	}
-	jsvObjectIteratorFree(&it);
-	jsvUnLock(timerArrayPtr);
 }
 
 static JsVarRef _jsiInitNamedArray(const char *name) {
@@ -104,11 +113,11 @@ void JsInit()
     jspSoftInit();
 
     // Init clock
+    jsTimeLeft = JSSYSTIME_MAX;
     APP_TIMER_DEF(tJsTimer);
     app_timer_create(&tJsTimer, APP_TIMER_MODE_REPEATED, JsTickHandler);
     app_timer_start(tJsTimer, APP_TIMER_TICKS(TIME_GRANULARITY), NULL);
     timerArray = _jsiInitNamedArray(JSI_TIMERS_NAME);
-    jsiLastIdleTime = jshGetSystemTime();
 
 	jsvUnLock(jspEvaluate(script, true));
 }
