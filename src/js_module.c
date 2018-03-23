@@ -27,7 +27,7 @@ bool interruptedDuringEvent; ///< Were we interrupted while executing an event? 
 const char script[] =
 		"var m = Motor(1);\n"
 		"var r = Range(3);\n"
-		"setInterval('m.write(99,r.read());', 3000);";
+		"setInterval('m.write(99,r.read()/2);', 1500);";
 //		"LED.off();\n"
 //		"LED.set(0x55);\n"
 		//"setTimeout(function () { LED.set(0x55);}, 800);";

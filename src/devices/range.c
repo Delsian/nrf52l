@@ -118,6 +118,15 @@ RDevErrCode RDevRangeTick(uint8_t port, uint32_t time)
 	return RDERR_DONE;
 }
 
+void RDevRangeScanEnable(bool enable)
+{
+	if (enable) {
+		nrf_drv_gpiote_in_event_enable(RjPortGetPinNum(ubPortPlus1-1, PinBlue), true);
+	} else {
+		nrf_drv_gpiote_in_event_disable(RjPortGetPinNum(ubPortPlus1-1, PinBlue));
+	}
+}
+
 RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len)
 {
 	uint8_t port = pData[0];
@@ -128,9 +137,9 @@ RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len)
 		return RDERR_OK;
 	} else if (ubCommand == RDCMD_SET && len > 2) {
 		if (pData[2] > 0) {
-			nrf_drv_gpiote_in_event_enable(RjPortGetPinNum(port, PinBlue), true);
+			RDevRangeScanEnable( true);
 		} else {
-			nrf_drv_gpiote_in_event_disable(RjPortGetPinNum(port, PinBlue));
+			RDevRangeScanEnable(false);
 		}
 		return RDERR_DONE;
 	}

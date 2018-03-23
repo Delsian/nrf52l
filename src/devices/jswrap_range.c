@@ -40,6 +40,7 @@ JsVar *jswrap_range_constructor(int port) {
   JsVar *ro = jspNewObject(0, "Range");
   if (ro && RDeviceChange(port, RDEV_ULTRASONIC) == RDERR_OK) { // ToDo motor size
 	  jsvObjectSetChildAndUnLock(ro, "port", jsvNewFromInteger(port));
+	  RDevRangeScanEnable(true);
 	  return ro;
   }
   return 0;

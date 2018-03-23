@@ -23,6 +23,7 @@ RDevErrCode RDevRangeInit(uint8_t port);
 RDevErrCode RDevRangeUnInit(uint8_t port);
 RDevErrCode RDevRangeTick(uint8_t port, uint32_t time);
 RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len);
+void RDevRangeScanEnable(bool enable);
 int RDevRangeGet(uint8_t port);
 RDevErrCode RDevLedInit(uint8_t port);
 RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);

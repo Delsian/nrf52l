@@ -3,24 +3,25 @@
 
 #include "jswrapper.h"
 #include "jsnative.h"
-#include "jswrap_array.h"
-#include "jswrap_arraybuffer.h"
-#include "jswrap_dataview.h"
-#include "jswrap_date.h"
-#include "jswrap_error.h"
-#include "jswrap_functions.h"
-#include "jswrap_json.h"
+#include "../../Espruino/src/jswrap_array.h"
+#include "../../Espruino/src/jswrap_arraybuffer.h"
+#include "../../Espruino/src/jswrap_dataview.h"
+#include "../../Espruino/src/jswrap_date.h"
+#include "../../Espruino/src/jswrap_error.h"
+#include "../../Espruino/src/jswrap_functions.h"
+#include "../../Espruino/src/jswrap_json.h"
 #include "jswrap_math.h"
-#include "jswrap_modules.h"
-#include "jswrap_number.h"
-#include "jswrap_object.h"
-#include "jswrap_process.h"
-#include "jswrap_promise.h"
-#include "jswrap_regexp.h"
-#include "jswrap_string.h"
+#include "../../Espruino/src/jswrap_modules.h"
+#include "../../Espruino/src/jswrap_number.h"
+#include "../../Espruino/src/jswrap_object.h"
+#include "../../Espruino/src/jswrap_process.h"
+#include "../../Espruino/src/jswrap_promise.h"
+#include "../../Espruino/src/jswrap_regexp.h"
+#include "../../Espruino/src/jswrap_string.h"
 #include "jswrap_board.h"
 #include "../devices/jswrap_motor.h"
 #include "../devices/jswrap_led.h"
+#include "../devices/jswrap_range.h"
 
 
 // -----------------------------------------------------------------------------------------
@@ -372,33 +373,34 @@ static const JswSymPtr jswSymbols_global[] FLASH_SECT = {
   {193, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_number_constructor},
   {200, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_object_constructor},
   {207, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_constructor},
-  {215, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_referenceerror_constructor},
-  {230, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_regexp_constructor},
-  {237, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_constructor},
-  {244, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_syntaxerror_constructor},
-  {256, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_typeerror_constructor},
-  {266, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint16Array_Uint16Array},
-  {278, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint32Array_Uint32Array},
-  {290, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint8Array_Uint8Array},
-  {301, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint8ClampedArray_Uint8ClampedArray},
-  {319, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))jswrap_arguments},
-  {329, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_atob},
-  {334, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_btoa},
-  {339, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)), (void (*)(void))jswrap_interface_changeInterval},
-  {354, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_interface_clearInterval},
-  {368, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_interface_clearTimeout},
-  {381, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_decodeURIComponent},
-  {400, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_encodeURIComponent},
-  {419, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_eval},
-  {424, JSWAT_JSVARFLOAT, (void (*)(void))gen_jswrap_getTime},
-  {432, JSWAT_BOOL | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_isNaN},
-  {438, JSWAT_JSVARFLOAT | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_parseFloat},
-  {449, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_parseInt},
-  {458, JSWAT_JSVAR, (void (*)(void))gen_jswrap_process_process},
-  {466, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_require},
-  {474, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*3)), (void (*)(void))jswrap_interface_setInterval},
-  {486, JSWAT_VOID | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)), (void (*)(void))jswrap_interactive_setTime},
-  {494, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*3)), (void (*)(void))jswrap_interface_setTimeout}
+  {215, JSWAT_JSVAR | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_range_constructor},
+  {221, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_referenceerror_constructor},
+  {236, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_regexp_constructor},
+  {243, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_constructor},
+  {250, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_syntaxerror_constructor},
+  {262, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_typeerror_constructor},
+  {272, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint16Array_Uint16Array},
+  {284, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint32Array_Uint32Array},
+  {296, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint8Array_Uint8Array},
+  {307, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)) | (JSWAT_INT32 << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_Uint8ClampedArray_Uint8ClampedArray},
+  {325, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))jswrap_arguments},
+  {335, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_atob},
+  {340, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_btoa},
+  {345, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)), (void (*)(void))jswrap_interface_changeInterval},
+  {360, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_interface_clearInterval},
+  {374, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_interface_clearTimeout},
+  {387, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_decodeURIComponent},
+  {406, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_encodeURIComponent},
+  {425, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_eval},
+  {430, JSWAT_JSVARFLOAT, (void (*)(void))gen_jswrap_getTime},
+  {438, JSWAT_BOOL | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_isNaN},
+  {444, JSWAT_JSVARFLOAT | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_parseFloat},
+  {455, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_parseInt},
+  {464, JSWAT_JSVAR, (void (*)(void))gen_jswrap_process_process},
+  {472, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_require},
+  {480, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*3)), (void (*)(void))jswrap_interface_setInterval},
+  {492, JSWAT_VOID | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)), (void (*)(void))jswrap_interactive_setTime},
+  {500, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*3)), (void (*)(void))jswrap_interface_setTimeout}
 };
 static const unsigned char jswSymbolIndex_global = 0;
 static const JswSymPtr jswSymbols_Array_proto[] FLASH_SECT = {
@@ -650,9 +652,17 @@ static const JswSymPtr jswSymbols_LED[] FLASH_SECT = {
   {4, JSWAT_VOID | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_led_set}
 };
 static const unsigned char jswSymbolIndex_LED = 27;
+static const JswSymPtr jswSymbols_Range[] FLASH_SECT = {
+  
+};
+static const unsigned char jswSymbolIndex_Range = 28;
+static const JswSymPtr jswSymbols_Range_proto[] FLASH_SECT = {
+  {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_range_read}
+};
+static const unsigned char jswSymbolIndex_Range_proto = 29;
 
 
-FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0Boolean\0DataView\0Date\0Error\0Float32Array\0Float64Array\0Function\0HIGH\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LED\0LOW\0Math\0Modules\0Motor\0NaN\0Number\0Object\0Promise\0ReferenceError\0RegExp\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0decodeURIComponent\0encodeURIComponent\0eval\0getTime\0isNaN\0parseFloat\0parseInt\0process\0require\0setInterval\0setTime\0setTimeout\0");
+FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0Boolean\0DataView\0Date\0Error\0Float32Array\0Float64Array\0Function\0HIGH\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LED\0LOW\0Math\0Modules\0Motor\0NaN\0Number\0Object\0Promise\0Range\0ReferenceError\0RegExp\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0decodeURIComponent\0encodeURIComponent\0eval\0getTime\0isNaN\0parseFloat\0parseInt\0process\0require\0setInterval\0setTime\0setTimeout\0");
 FLASH_STR(jswSymbols_Array_proto_str, "concat\0every\0fill\0filter\0forEach\0indexOf\0join\0length\0map\0pop\0push\0reduce\0reverse\0shift\0slice\0some\0sort\0splice\0toString\0unshift\0");
 FLASH_STR(jswSymbols_Array_str, "isArray\0");
 FLASH_STR(jswSymbols_ArrayBufferView_proto_str, "buffer\0byteLength\0byteOffset\0fill\0forEach\0indexOf\0join\0map\0reduce\0reverse\0set\0slice\0sort\0");
@@ -680,9 +690,11 @@ FLASH_STR(jswSymbols_String_proto_str, "charAt\0charCodeAt\0indexOf\0lastIndexOf
 FLASH_STR(jswSymbols_String_str, "fromCharCode\0");
 FLASH_STR(jswSymbols_Motor_proto_str, "write\0");
 FLASH_STR(jswSymbols_LED_str, "off\0set\0");
+FLASH_STR(jswSymbols_Range_str, "");
+FLASH_STR(jswSymbols_Range_proto_str, "read\0");
 
 const JswSymList jswSymbolTables[] FLASH_SECT = {
-  {jswSymbols_global, jswSymbols_global_str, 53},
+  {jswSymbols_global, jswSymbols_global_str, 54},
   {jswSymbols_Array_proto, jswSymbols_Array_proto_str, 20},
   {jswSymbols_Array, jswSymbols_Array_str, 1},
   {jswSymbols_ArrayBufferView_proto, jswSymbols_ArrayBufferView_proto_str, 13},
@@ -710,6 +722,8 @@ const JswSymList jswSymbolTables[] FLASH_SECT = {
   {jswSymbols_String, jswSymbols_String_str, 1},
   {jswSymbols_Motor_proto, jswSymbols_Motor_proto_str, 1},
   {jswSymbols_LED, jswSymbols_LED_str, 2},
+  {jswSymbols_Range, jswSymbols_Range_str, 0},
+  {jswSymbols_Range_proto, jswSymbols_Range_proto_str, 1},
 };
 
 
@@ -725,6 +739,7 @@ const JswSymList *jswGetSymbolListForConstructorProto(JsVar *constructor) {
   if (constructorPtr==(void*)jswrap_promise_constructor) return &jswSymbolTables[jswSymbolIndex_Promise_proto];
   if (constructorPtr==(void*)jswrap_regexp_constructor) return &jswSymbolTables[jswSymbolIndex_RegExp_proto];
   if (constructorPtr==(void*)jswrap_motor_constructor) return &jswSymbolTables[jswSymbolIndex_Motor_proto];
+  if (constructorPtr==(void*)jswrap_range_constructor) return &jswSymbolTables[jswSymbolIndex_Range_proto];
   return 0;
 }
 
@@ -803,6 +818,7 @@ const JswSymList *jswGetSymbolListForObject(JsVar *parent) {
     if ((void*)parent->varData.native.ptr==(void*)jswrap_promise_constructor) return &jswSymbolTables[jswSymbolIndex_Promise];
     if ((void*)parent->varData.native.ptr==(void*)jswrap_string_constructor) return &jswSymbolTables[jswSymbolIndex_String];
     if ((void*)parent->varData.native.ptr==(void*)gen_jswrap_LED_LED) return &jswSymbolTables[jswSymbolIndex_LED];
+    if ((void*)parent->varData.native.ptr==(void*)jswrap_range_constructor) return &jswSymbolTables[jswSymbolIndex_Range];
   }
   if (parent==execInfo.root) return &jswSymbolTables[jswSymbolIndex_global];
   return 0;
@@ -865,7 +881,8 @@ strcmp(name, "Array")==0 ||
     strcmp(name, "RegExp")==0 ||
     strcmp(name, "String")==0 ||
     strcmp(name, "Motor")==0 ||
-    strcmp(name, "LED")==0;
+    strcmp(name, "LED")==0 ||
+    strcmp(name, "Range")==0;
 }
 
 

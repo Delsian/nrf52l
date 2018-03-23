@@ -262,6 +262,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding="src/jswrap_stream.c|src/jswrap_storage.c|src/jswrap_spi_i2c.c|src/jswrap_serial.c|src/jswrap_pipe.c|src/jswrap_pin.c|src/jswrap_onewire.c|src/jswrap_io.c|src/jswrap_interactive.c|src/jswrap_flash.c|src/jswrap_espruino.c|src/jstimer.c|src/jsspi.c|src/jspin.c|src/jsdevices.c|src/jsinteractive.c|src/jsi2c.c|src/jshardware_common.c|src/jsflash.c|src/jswrap_waveform.c|tests|targets|targetlibs|scripts|make|boards|benchmark|misc|libs|gen|doxygen" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Espruino"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
 						<entry excluding="wedo2.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
@@ -558,6 +559,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry excluding="src/jswrap_stream.c|src/jswrap_storage.c|src/jswrap_spi_i2c.c|src/jswrap_serial.c|src/jswrap_pipe.c|src/jswrap_pin.c|src/jswrap_onewire.c|src/jswrap_io.c|src/jswrap_interactive.c|src/jswrap_flash.c|src/jswrap_espruino.c|src/jstimer.c|src/jsspi.c|src/jspin.c|src/jsdevices.c|src/jsinteractive.c|src/jsi2c.c|src/jshardware_common.c|src/jsflash.c|src/jswrap_waveform.c|tests|targets|targetlibs|scripts|make|boards|benchmark|misc|libs|gen|doxygen" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Espruino"/>
 						<entry excluding="Libraries/app_timer_freertos.c|Libraries/bsp_btn_ble.c|BLE/nrf_sdh_freertos.c|SoftDevice/nrf_sdh_freertos.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Toolchain"/>
 						<entry excluding="wedo2.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
