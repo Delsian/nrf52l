@@ -25,8 +25,9 @@ bool interruptedDuringEvent; ///< Were we interrupted while executing an event? 
 #define TIME_GRANULARITY (50)
 
 const char script[] =
-		"var m = Motor(1);\n";
-		//"setInterval('m.write(99,10);', 3000);";
+		"var m = Motor(1);\n"
+		"var r = Range(3);\n"
+		"setInterval('m.write(99,r.read());', 3000);";
 //		"LED.off();\n"
 //		"LED.set(0x55);\n"
 		//"setTimeout(function () { LED.set(0x55);}, 800);";
@@ -208,6 +209,11 @@ void jsiQueueObjectCallbacks(JsVar *object, const char *callbackName, JsVar **ar
 	  if (!callback) return;
 	  jsiQueueEvents(object, callback, args, argCount);
 	  jsvUnLock(callback);
+}
+
+
+int jswrap_getport(JsVar *parent) {
+  return jsvGetIntegerAndUnLock(jsvObjectGetChild(parent, "port", 0));
 }
 
 // === Stubs ===

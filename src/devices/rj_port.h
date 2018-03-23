@@ -15,7 +15,6 @@ typedef struct {
 	uint8_t pwm; // pin number in PCA9685
 	uint8_t in1;
 	uint8_t in2;
-	bool	pwmdir;  // indicates inverted PWM connection
 
 	uint8_t logic1; // CPU pin to CON1, blue
 	uint8_t logic2; // CPU pin to CON2, yellow

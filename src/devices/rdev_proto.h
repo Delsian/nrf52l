@@ -23,6 +23,7 @@ RDevErrCode RDevRangeInit(uint8_t port);
 RDevErrCode RDevRangeUnInit(uint8_t port);
 RDevErrCode RDevRangeTick(uint8_t port, uint32_t time);
 RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len);
+int RDevRangeGet(uint8_t port);
 RDevErrCode RDevLedInit(uint8_t port);
 RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
@@ -31,5 +32,6 @@ RDevErrCode RDevGyroCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryTick(uint8_t port, uint32_t time);
 RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryInit(uint8_t port);
+bool BatteryIfPwrOffEnabled(void);
 
 #endif /* DEVICES_RDEV_PROTO_H_ */

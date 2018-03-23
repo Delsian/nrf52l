@@ -64,6 +64,7 @@ typedef struct _RDevDescriptor {
 
 RDevErrCode RDeviceChange(uint8_t port, RDevType id);
 RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len);
+RDevType GetDevId(uint8_t port);
 void RDeviceInit(void);
 
 #endif /* DEVICES_R0B1C_DEVICE_H_ */

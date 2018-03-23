@@ -46,9 +46,19 @@ RDevErrCode RDevMotorDeInit(uint8_t port)
 	return RDERR_OK;
 }
 
-void RDevMotorWrite(uint8_t port, uint8_t speed, uint8_t time) {
-	RjPortSetPwmOut( port, speed);
-	usPortTimer[port] = time*16;
+// speed = [-127..127]
+void RDevMotorWrite(uint8_t port, int8_t speed, uint8_t time) {
+
+	// ToDo: convert speed to PWM value depending of motor size
+	uint16_t pv = speed*8;
+
+	if (speed==0) {
+		RjPortResetPwm(port);
+	} else {
+		RjPortSetPwmOut( port, pv);
+		if (time)
+			usPortTimer[port] = time*16;
+	}
 }
 
 RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len)
@@ -59,7 +69,7 @@ RDevErrCode RDevMotorCmd(const uint8_t* pData, uint8_t len)
 		case RDCMD_SET:
 			if (len>3) {
 				// 1st byte (pData[2]) - power, 2nd (pData[3]) - ticks x16
-				RDevMotorWrite(port, pData[2], pData[3]);
+				RDevMotorWrite(port, (int8_t) pData[2], pData[3]);
 				return RDERR_DONE;
 			} else {
 				return RDERR_INCOMPLETE;

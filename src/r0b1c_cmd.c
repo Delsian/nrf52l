@@ -9,12 +9,11 @@
 #include "custom_service.h"
 #include "nrf_log.h"
 #include "r0b1c_cmd.h"
+#include "r0b1c_device.h"
 #include "rj_port.h"
 
 tCharVars tCharCmdHandle;
 tCharVars tCharPortHandle;
-
-static RDevType ptConnectedDevs[TOTAL_RJ_PORTS];
 
 void OnPortWriteEvt(ble_evt_t const * p_ble_evt)
 {
@@ -33,15 +32,13 @@ void OnCmdWriteEvt(ble_evt_t const * p_ble_evt)
 		NRF_LOG_DEBUG("Cmd %x to %x", tCmd, port);
 		if (tCmd == RDCMD_CONFIG && p_evt_write->len == 3) {
 			if (port < TOTAL_RJ_PORTS) {
-				if ((tErr = RDeviceChange(port, ubData[2])) == RDERR_OK) {
-					ptConnectedDevs[port] = ubData[2];
-				}
+				tErr = RDeviceChange(port, ubData[2]);
 			} else {
 				tErr = RDERR_NOT_SUPPORTED;
 			}
 		} else if (tCmd == RDCMD_ID) {
 			if (port < TOTAL_RJ_PORTS) {
-				uint8_t pubResp[3] = {port, tCmd, ptConnectedDevs[port]};
+				uint8_t pubResp[3] = {port, tCmd, GetDevId(port)};
 				SendCmdResp(pubResp, 3);
 				tErr = RDERR_OK;
 			} else {
@@ -79,7 +76,4 @@ void CmdInitComplete()
 {
 	// ToDo: move it here from main()
     //RDeviceInit();
-
-	memset(ptConnectedDevs, 0, sizeof(ptConnectedDevs));
-	CustomServiceValueSet(tCharPortHandle.hval, ptConnectedDevs, 4);
 }

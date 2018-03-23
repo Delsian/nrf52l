@@ -10,11 +10,11 @@
 #include <stdbool.h>
 
 typedef enum {
-	CE_BUTTON,
-	CE_BATT_IN, // Battery measurement complete
-	CE_BUZZER,
-	CE_BT_CONN,
-	CE_PWR_OFF
+	CE_BUTTON = 0x0001,
+	CE_BATT_IN = 0x0002, // Battery measurement complete
+	CE_BUZZER = 0x0004,
+	CE_BT_CONN = 0x0008,
+	CE_PWR_OFF = 0x0010
 } ControlEventType;
 
 typedef struct {

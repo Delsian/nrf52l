@@ -98,6 +98,11 @@ const RDevDescriptor ptRDevices[] = {
 
 static RDevDescriptor gpDevInPort[TOTAL_RJ_PORTS];
 
+RDevType GetDevId(uint8_t port)
+{
+	return gpDevInPort[port].id;
+}
+
 const int FindDevById(RDevType id)
 {
 	int i = 0;

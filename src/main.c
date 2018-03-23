@@ -22,6 +22,7 @@
 #include "custom_service.h"
 #include "buzzer.h"
 #include "r0b1c_device.h"
+#include "rdev_proto.h"
 
 
 #define BUTTON_SHORT_PRESS 4
@@ -42,10 +43,15 @@ static void ButtonTickHandler()
 			ControlPost(&BtnEvt);
 		}
 		if (usBtnPressed > BUTTON_LONG_PRESS) {
-			// Shut down, no more checking
-			app_timer_stop(tBtnTimer);
-			BtnEvt.type = CE_PWR_OFF;
-			ControlPost(&BtnEvt);
+			if (BatteryIfPwrOffEnabled()) {
+				// Shut down, no more checking
+				app_timer_stop(tBtnTimer);
+				BtnEvt.type = CE_PWR_OFF;
+				ControlPost(&BtnEvt);
+			} else {
+				// waiting to unplug charger
+				usBtnPressed--;
+			}
 		}
 	} else {
 		if (usBtnPressed > BUTTON_SHORT_PRESS) {

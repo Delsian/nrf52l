@@ -151,6 +151,10 @@ static void BatteryConnCb(const ControlEvent* pEvt)
 	}
 }
 
+bool BatteryIfPwrOffEnabled() {
+	return (tBstate != BSCHRG && tBstate != BSSTDBY );
+}
+
 RDevErrCode BatteryInit(uint8_t port)
 {
     ret_code_t err_code;

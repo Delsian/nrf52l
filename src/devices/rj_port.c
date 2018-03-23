@@ -17,9 +17,8 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 // Port0 J4
 		{
 				.pwm = PCA9685_PWMB,
-				.in1 = PCA9685_IN1A,
-				.in2 = PCA9685_IN2A,
-				.pwmdir = true,
+				.in1 = PCA9685_IN1B,
+				.in2 = PCA9685_IN2B,
 
 				.logic1 = PIN_EXT7,
 				.logic2 = PIN_EXT1
@@ -27,29 +26,26 @@ static const RjPortPins ExtPorts[TOTAL_RJ_PORTS] = {
 // Port1 J5
 		{
 				.pwm = PCA9685_PWMA,
-				.in1 = PCA9685_IN1B,
-				.in2 = PCA9685_IN2B,
-				.pwmdir = false,
+				.in1 = PCA9685_IN2A,
+				.in2 = PCA9685_IN1A,
 
 				.logic1 = PIN_EXT2,
 				.logic2 = PIN_EXT3
 		},
 // Port2 J6
 		{
-				.pwm = PCA9685_PWMD,
+				.pwm = PCA9685_PWMC,
 				.in1 = PCA9685_IN1C,
 				.in2 = PCA9685_IN2C,
-				.pwmdir = true,
 
 				.logic1 = PIN_EXT0,
 				.logic2 = PIN_EXT6
 		},
 // Port3 J7
 		{
-				.pwm = PCA9685_PWMC,
+				.pwm = PCA9685_PWMD,
 				.in1 = PCA9685_IN1D,
 				.in2 = PCA9685_IN2D,
-				.pwmdir = false,
 
 				.logic1 = PIN_EXT5,
 				.logic2 = PIN_EXT4

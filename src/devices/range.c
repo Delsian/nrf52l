@@ -4,6 +4,13 @@
  *
  *  Created on: 12-03-18
  *      Author: ekrashtan
+ *
+ *      Connect:
+ *      rj12       HC05
+ *      1 (blue)    2
+ *      2 (yellow)  3
+ *      3           4
+ *      4           1
  */
 
 #include <stdint.h>
@@ -35,6 +42,10 @@ static void RDevRengeNotify(void* ipData, uint16_t size)
 
 static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
+#define OFF_COUNT_TIMEOUT 4 // Time until reporting off state
+
+	static uint8_t ubOffCount;
+
 	if(action==NRF_GPIOTE_POLARITY_TOGGLE && ubPortPlus1 && isWaiting) {
 		if (nrf_gpio_pin_read(pin) == 0) {
 			uint32_t diff = app_timer_cnt_diff_compute(app_timer_cnt_get(), ulRtcCnt);
@@ -47,6 +58,14 @@ static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t acti
 			if (diff < DIFF_MAX_VALUE) {
 				ubRange =  (uint8_t)(diff - DIFF_MIN_VALUE);
 				app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
+				ubOffCount = 0;
+			} else {
+				if (++ubOffCount==OFF_COUNT_TIMEOUT) {
+					NRF_LOG_DEBUG("Off range", diff);
+					ubRange = 0xFF;
+					app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
+				}
+				// do not reset ubOffCount - we'll report Off every 256th scan
 			}
 		}
 	}
@@ -116,4 +135,8 @@ RDevErrCode RDevRangeCmd(const uint8_t* pData, uint8_t len)
 		return RDERR_DONE;
 	}
 	return RDERR_NOT_SUPPORTED;
+}
+
+int RDevRangeGet(uint8_t port) {
+	return (port==ubPortPlus1-1)?ubRange:0;
 }
