@@ -12,7 +12,7 @@
 #include "r0b1c_cmd.h"
 
 extern tCharVars tCharCmdHandle;
-extern tCharVars tCharPortHandle;
+extern tCharVars tCharProgHandle;
 
 static tCustomServiceVars tR0b1cDevice;
 static tCharVars tCharBattHandle;
@@ -29,7 +29,7 @@ static void OnPwrWriteEvt(ble_evt_t const * p_ble_evt)
 	const uint32_t* ulData = (uint32_t*)p_evt_write->data;
 	if (p_evt_write->len == 4 && *ulData == 0xBADF00D)
 	{
-		NRF_LOG_DEBUG("Pwr %x\n", p_evt_write->handle);
+		NRF_LOG_DEBUG("Pwr %x", p_evt_write->handle);
 		ControlPost(&PwrOffEvt);
 	}
 }
@@ -52,7 +52,7 @@ const tCustomService tServDev = {
 		.ubServiceType = BLE_GATTS_SRVC_TYPE_PRIMARY,
 		.ptVars = &tR0b1cDevice,
 		.ptChars = {
-				{ 0x973Bu, "Port", 			CCM_READWRITE, 		&tCharPortHandle	, OnPortWriteEvt, NULL },
+				{ 0x973Bu, "Prog", 			CCM_WRITENOTIFY, 	&tCharProgHandle	, OnProgWriteEvt, NULL },
 				{ 0x973Cu, "Cmd", 			CCM_READWRITENOTIFY,&tCharCmdHandle		, OnCmdWriteEvt	, NULL },
 				{ 0x973Du, "BattLow", 		CCM_NOTIFY, 		&tCharBattHandle	, NULL			, NULL },
 				{ 0x973Eu, "Btn",			CCM_READNOTIFY,		&tCharBtnHandle		, NULL			, NULL },

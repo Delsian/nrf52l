@@ -43,15 +43,10 @@ static void ButtonTickHandler()
 			ControlPost(&BtnEvt);
 		}
 		if (usBtnPressed > BUTTON_LONG_PRESS) {
-			if (BatteryIfPwrOffEnabled()) {
-				// Shut down, no more checking
-				app_timer_stop(tBtnTimer);
-				BtnEvt.type = CE_PWR_OFF;
-				ControlPost(&BtnEvt);
-			} else {
-				// waiting to unplug charger
-				usBtnPressed--;
-			}
+			// Shut down request
+			BtnEvt.type = CE_PWR_OFF_REQ;
+			ControlPost(&BtnEvt);
+			usBtnPressed = BUTTON_SHORT_PRESS; // Re-arm for next request (if not powered off)
 		}
 	} else {
 		if (usBtnPressed > BUTTON_SHORT_PRESS) {

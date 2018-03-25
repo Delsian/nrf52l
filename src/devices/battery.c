@@ -80,6 +80,7 @@ static void BatteryStateChange (BatStates b) {
 			SendBatteryNotification(1);
 			break;
 		case BSBATT:
+			SendBatteryNotification(0);
 			if(!eDisablePwrOff) {
 				// Charger disconnected, set timer to power off
 				NRF_LOG_DEBUG("Power off in %ld ticks", BATTERY_IDLE_PWROFF_TIMEOUT);
@@ -129,25 +130,37 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 	return RDERR_OK;
 }
 
-static void BatteryPwrOffTmrCb()
+static void BatteryPwrOffCb()
 {
 	const ControlEvent tPwr = {
-			.type = CE_PWR_OFF
+			.type = CE_PWR_OFF_REQ
 	};
 	if(!eDisablePwrOff) {
 		ControlPost(&tPwr);
 	}
 }
-static void BatteryConnCb(const ControlEvent* pEvt)
+static void BatteryReqCb(const ControlEvent* pEvt)
 {
-	eDisablePwrOff = (*(pEvt->ptr16) != BLE_CONN_HANDLE_INVALID);
-	if (!eDisablePwrOff && (tBstate==BSBATT || tBstate==BSEMPTY)) {
-		uint32_t timeout = (tBstate==BSBATT)?BATTERY_IDLE_PWROFF_TIMEOUT:BATTERY_EMPTY_PWROFF_TIMEOUT;
-		NRF_LOG_DEBUG("Power off in %ld ticks", timeout);
-		app_timer_start(tPwrOffTmr, timeout, NULL);
-	}
-	if(eDisablePwrOff) {
-		app_timer_stop(tPwrOffTmr);
+	const ControlEvent tPwr = {
+			.type = CE_PWR_OFF
+	};
+
+	if (pEvt->type == CE_BT_CONN) {
+		eDisablePwrOff = (*(pEvt->ptr16) != BLE_CONN_HANDLE_INVALID);
+		if (!eDisablePwrOff && (tBstate==BSBATT || tBstate==BSEMPTY)) {
+			uint32_t timeout = (tBstate==BSBATT)?BATTERY_IDLE_PWROFF_TIMEOUT:BATTERY_EMPTY_PWROFF_TIMEOUT;
+			NRF_LOG_DEBUG("Power off in %ld ticks", timeout);
+			app_timer_start(tPwrOffTmr, timeout, NULL);
+		}
+		if(eDisablePwrOff) {
+			app_timer_stop(tPwrOffTmr);
+		}
+	} else if (pEvt->type == CE_PWR_OFF_REQ) { // If not in charging mode
+		if (tBstate != BSCHRG && tBstate != BSSTDBY ) {
+			ControlPost(&tPwr);
+		} else {
+			// ToDo: negative buzz
+		}
 	}
 }
 
@@ -176,8 +189,8 @@ RDevErrCode BatteryInit(uint8_t port)
     APP_ERROR_CHECK(err_code);
 
     // Subscribe to connect event for inactivity timer enable/disable
-    ControlRegisterCb(CE_BT_CONN, &BatteryConnCb);
-    app_timer_create(&tPwrOffTmr, APP_TIMER_MODE_SINGLE_SHOT, BatteryPwrOffTmrCb);
+    ControlRegisterCb(CE_BT_CONN|CE_PWR_OFF_REQ, &BatteryReqCb);
+    app_timer_create(&tPwrOffTmr, APP_TIMER_MODE_SINGLE_SHOT, BatteryPwrOffCb);
 
     return RDERR_OK;
 }

@@ -411,5 +411,10 @@ void ble_stack_init()
 
     advertising_start();
 
+    // Call after service initialization (set callbacks etc)
+    if (gtServices.initCompl) {
+    	(*gtServices.initCompl)();
+    }
+
     battery_level_update(50);
 }

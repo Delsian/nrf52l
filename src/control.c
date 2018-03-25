@@ -25,7 +25,7 @@
 extern void battery_level_update(uint8_t battery_level);
 
 typedef struct {
-	ControlEventType type;
+	ControlEventType type; // Event type mask - may handle more than one event
 	ControlEvtCb cb;
 } ControlCbList;
 
@@ -50,7 +50,7 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 	NRF_LOG_DEBUG("Evt type %d", iEvt->type);
 
 	for (int i = 0; i < CB_LIST_LEN; i++) {
-		if (ptCbList[i].type == iEvt->type && ptCbList[i].cb) {
+		if ((ptCbList[i].type & iEvt->type) && ptCbList[i].cb) {
 			(ptCbList[i].cb)(iEvt);
 		}
 	}

@@ -8,16 +8,48 @@
 #include <string.h>
 #include "custom_service.h"
 #include "nrf_log.h"
+#include "control.h"
 #include "r0b1c_cmd.h"
 #include "r0b1c_device.h"
 #include "rj_port.h"
 
 tCharVars tCharCmdHandle;
-tCharVars tCharPortHandle;
+tCharVars tCharProgHandle;
 
-void OnPortWriteEvt(ble_evt_t const * p_ble_evt)
+static bool eProgWriteInProgress;
+
+void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 {
+	static uint16_t usProgLen;
 
+	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+	const uint8_t* ubData =  p_evt_write->data;
+	if (!eProgWriteInProgress && p_evt_write->len > 0) {
+		switch (ubData[0]) {
+		case 0: // Reset
+			break;
+		case 1: // write
+			usProgLen = ubData[1] + ubData[2]*256;
+			eProgWriteInProgress = true;
+			NRF_LOG_DEBUG("WrProg %d bytes", usProgLen);
+			break;
+		default:
+			break;
+		}
+	} else {
+		// Next block
+		NRF_LOG_DEBUG("c%d: %c", p_evt_write->len, ubData[0]);
+
+		usProgLen -= p_evt_write->len;
+		if (usProgLen == 0) eProgWriteInProgress = false;
+	}
+}
+
+static void OnProgWriteCb(const ControlEvent* pEvt)
+{
+	if (pEvt->type == CE_BT_CONN && *(pEvt->ptr16) == BLE_CONN_HANDLE_INVALID ) {
+		eProgWriteInProgress = false;
+	}
 }
 
 void OnCmdWriteEvt(ble_evt_t const * p_ble_evt)
@@ -76,4 +108,6 @@ void CmdInitComplete()
 {
 	// ToDo: move it here from main()
     //RDeviceInit();
+
+	ControlRegisterCb(CE_BT_CONN, OnProgWriteCb);
 }

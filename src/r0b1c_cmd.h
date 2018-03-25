@@ -10,7 +10,7 @@
 #include "ble.h"
 #include "r0b1c_device.h"
 
-void OnPortWriteEvt(ble_evt_t const * p_ble_evt);
+void OnProgWriteEvt(ble_evt_t const * p_ble_evt);
 void OnCmdWriteEvt(ble_evt_t const * p_ble_evt);
 void CmdInitComplete(void);
 void CmdErrWrite(RDevErrCode itErrCode);
