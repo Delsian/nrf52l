@@ -27,12 +27,13 @@
 
 // These values measured individually. ToDo: calibration procedure
 #define DIFF_MIN_VALUE 12
-#define DIFF_MAX_VALUE 120
+#define DIFF_MAX_VALUE 140
 
 static uint8_t ubPortPlus1; // 0 (default value after startup) means "module not initialized"
 static uint8_t ubRange; // keeping range value
 volatile static bool isWaiting; // Indicates active cycle
 volatile static uint32_t ulRtcCnt;
+static uint8_t ubOffCount;
 
 static void RDevRengeNotify(void* ipData, uint16_t size)
 {
@@ -44,28 +45,15 @@ static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t acti
 {
 #define OFF_COUNT_TIMEOUT 4 // Time until reporting off state
 
-	static uint8_t ubOffCount;
-
 	if(action==NRF_GPIOTE_POLARITY_TOGGLE && ubPortPlus1 && isWaiting) {
 		if (nrf_gpio_pin_read(pin) == 0) {
 			uint32_t diff = app_timer_cnt_diff_compute(app_timer_cnt_get(), ulRtcCnt);
-			if (diff <= DIFF_MIN_VALUE) {
-				// pulse from previous scan
-				return;
-			}
-			isWaiting = false;
-			NRF_LOG_DEBUG("L=%d", diff);
-			if (diff < DIFF_MAX_VALUE) {
+			if (diff < DIFF_MAX_VALUE && diff > DIFF_MIN_VALUE) {
+				NRF_LOG_DEBUG("L=%d", diff);
 				ubRange =  (uint8_t)(diff - DIFF_MIN_VALUE);
 				app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
 				ubOffCount = 0;
-			} else {
-				if (++ubOffCount==OFF_COUNT_TIMEOUT) {
-					NRF_LOG_DEBUG("Off range", diff);
-					ubRange = 0xFF;
-					app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
-				}
-				// do not reset ubOffCount - we'll report Off every 256th scan
+				isWaiting = false;
 			}
 		}
 	}
@@ -107,6 +95,11 @@ RDevErrCode RDevRangeTick(uint8_t port, uint32_t time)
 		if (isWaiting) {
 			// no response from previous ping
 			ubRange = 0xFF;
+			if (++ubOffCount==OFF_COUNT_TIMEOUT) {
+				NRF_LOG_DEBUG("Off range");
+				app_sched_event_put(&ubRange, sizeof(uint8_t*), RDevRengeNotify);
+			}
+			// do not reset ubOffCount - we'll report Off every 256th scan
 		}
 
 		RjPortPinSet(port, PinYellow, 1);

@@ -19,8 +19,16 @@
 #include "r0b1c_cmd.h"
 #include "rdev_led.h"
 
-#define BATTERY_MEASURE_TICKS 5000
-#define BATTERY_GAIN NRF_SAADC_GAIN1_3
+#define BATTERY_MEASURE_TICKS 12000
+#define BATTERY_GAIN NRF_SAADC_GAIN1_4
+
+/* Max voltage 8.4v = 970
+ * Min voltage 6.4v
+ * Critical 6.2v
+ * One volt value 115
+ */
+#define ONE_VOLT_VALUE 115
+#define ONE_PERCENT_BATTERY 22
 
 #define BATTERY_IDLE_PWROFF_TIMEOUT 5000000
 #define BATTERY_EMPTY_PWROFF_TIMEOUT 3500000
@@ -94,13 +102,34 @@ static void BatteryStateChange (BatStates b) {
 	}
 }
 
+static void BatteryPwrOffCb()
+{
+	const ControlEvent tPwr = {
+			.type = CE_PWR_OFF_REQ
+	};
+	if(!eDisablePwrOff) {
+		ControlPost(&tPwr);
+	}
+}
+
 void BatteryMeasureCb(nrf_drv_saadc_evt_t const * p_event)
 {
 	if (p_event->type == NRF_DRV_SAADC_EVT_DONE)
 	{
-		guBattValue = BattBuffer;
 		nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
 		// Calculate current level and set BSEMPTY if necessary
+		uint32_t ulVolt = BattBuffer*1000/ONE_VOLT_VALUE;
+		guBattValue = (ulVolt-6250)/ONE_PERCENT_BATTERY;
+		if (guBattValue>100) {
+			// ToDo update one volt divider
+			guBattValue = 100;
+		} else if (guBattValue<2) {
+			// Critical
+			BatteryPwrOffCb();
+		}  else if (guBattValue<10) {
+			BatteryStateChange(BSEMPTY);
+		}
+		//NRF_LOG_DEBUG("batt %d %d", BattBuffer, guBattValue);
 
 		ControlPost(&BattEvt);
 	}
@@ -130,15 +159,6 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 	return RDERR_OK;
 }
 
-static void BatteryPwrOffCb()
-{
-	const ControlEvent tPwr = {
-			.type = CE_PWR_OFF_REQ
-	};
-	if(!eDisablePwrOff) {
-		ControlPost(&tPwr);
-	}
-}
 static void BatteryReqCb(const ControlEvent* pEvt)
 {
 	const ControlEvent tPwr = {
@@ -191,6 +211,9 @@ RDevErrCode BatteryInit(uint8_t port)
     // Subscribe to connect event for inactivity timer enable/disable
     ControlRegisterCb(CE_BT_CONN|CE_PWR_OFF_REQ, &BatteryReqCb);
     app_timer_create(&tPwrOffTmr, APP_TIMER_MODE_SINGLE_SHOT, BatteryPwrOffCb);
+
+    // First measurement
+    nrf_drv_saadc_sample();
 
     return RDERR_OK;
 }

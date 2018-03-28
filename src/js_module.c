@@ -11,6 +11,7 @@
 #include "nrf_log.h"
 #include "app_timer.h"
 #include "app_scheduler.h"
+#include "control.h"
 #include "jsparse.h"
 #include "jsinteractive.h"
 #include "jswrapper.h"
@@ -38,6 +39,20 @@ static void JsTickHandler()
 {
 	jsTimeVal++;
 	jsTimeLeft--;
+
+	if (jsiStatus & JSIS_TODO_RESET) {
+		// Stop all timers and clear array (stop program execution)
+		JsVar *timerArrayPtr = jsvLock(timerArray);
+		JsvObjectIterator it;
+		jsvObjectIteratorNew(&it, timerArrayPtr);
+		while (jsvObjectIteratorHasValue(&it)) {
+			jsvObjectIteratorRemoveAndGotoNext(&it, timerArrayPtr);
+		}
+		jsvObjectIteratorFree(&it);
+		jsvUnLock(timerArrayPtr);
+		jsTimeLeft = JSSYSTIME_MAX;
+		jsiStatus &= ~JSIS_TODO_RESET;
+	}
 
 	if (jsTimeLeft <= 0 || (jsiStatus & JSIS_TIMERS_CHANGED)) {
 		JsSysTime minTimeNext = JSSYSTIME_MAX;
@@ -105,6 +120,13 @@ static JsVarRef _jsiInitNamedArray(const char *name) {
   return arrayRef;
 }
 
+static void JsButtonCb(const ControlEvent* pEvt)
+{
+	if (pEvt->b) {
+		jsiStatus |= JSIS_TODO_RESET; // Stop
+	}
+}
+
 void JsInit()
 {
 	jsvInit();
@@ -120,6 +142,7 @@ void JsInit()
     app_timer_start(tJsTimer, APP_TIMER_TICKS(TIME_GRANULARITY), NULL);
     timerArray = _jsiInitNamedArray(JSI_TIMERS_NAME);
 
+    ControlRegisterCb(CE_BUTTON, JsButtonCb);
 	jsvUnLock(jspEvaluate(script, true));
 }
 

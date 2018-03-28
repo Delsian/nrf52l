@@ -7,8 +7,12 @@ MEMORY
 {
   FLASH (rx) : ORIGIN = 0x23000, LENGTH = 0x55000
   RAM (rwx) :  ORIGIN = 0x20003000, LENGTH = 0xd000
+  BOOTLOADER (rx) : ORIGIN = 0x70000, LENGTH = 0xe000
   
+  script_page (r) : ORIGIN = 0x6F000, LENGTH = 0x1000
   bootloader_settings_page (r) : ORIGIN = 0x0007F000, LENGTH = 0x1000
+  mbr_params_page (r) : ORIGIN = 0x0007E000, LENGTH = 0x1000
+  uicr_mbr_params_page (r) : ORIGIN = 0x10001018, LENGTH = 0x4
 }
 
 SECTIONS
@@ -19,6 +23,13 @@ SECTIONS
     KEEP(*(SORT(.bootloader_settings_page*)))
     PROVIDE(__stop_bootloader_settings_page = .);
   } > bootloader_settings_page
+  .script_page(NOLOAD) :
+  {
+    PROVIDE(__start_script_page = .);
+    KEEP(*(SORT(.script_page*)))
+    PROVIDE(__stop_script_page = .);
+  } > script_page
+
 }
 
 SECTIONS

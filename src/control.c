@@ -17,7 +17,6 @@
 #include "nrf_delay.h"
 
 #include "boards.h"
-#include "pca9685.h"
 #include "custom_service.h"
 #include "buzzer.h"
 #include "r0b1c_service.h"
@@ -60,8 +59,6 @@ static void ControlEvtH(void * p_evt, uint16_t size)
 	{
 	case CE_BATT_IN:
 	    battery_level_update(*(iEvt->ptr8));
-	    // Check if battery low
-		//WedoBattery(iEvt->ptr8);
 		break;
 	case CE_PWR_OFF:
 		CntPwrOff();
