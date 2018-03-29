@@ -12,6 +12,9 @@
 #include "r0b1c_cmd.h"
 #include "r0b1c_device.h"
 #include "rj_port.h"
+#include "js_module.h"
+#include "fs.h"
+#include "crc32.h"
 
 tCharVars tCharCmdHandle;
 tCharVars tCharProgHandle;
@@ -21,17 +24,30 @@ static bool eProgWriteInProgress;
 void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 {
 	static uint16_t usProgLen;
+	static uint32_t ulWritePtr;
+	static uint32_t CRC;
 
 	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 	const uint8_t* ubData =  p_evt_write->data;
 	if (!eProgWriteInProgress && p_evt_write->len > 0) {
 		switch (ubData[0]) {
 		case 0: // Reset
+			JsStopScript();
+			FsErase((uint32_t)m_script_buffer, 1);
 			break;
 		case 1: // write
-			usProgLen = ubData[1] + ubData[2]*256;
-			eProgWriteInProgress = true;
-			NRF_LOG_DEBUG("WrProg %d bytes", usProgLen);
+			if (p_evt_write->len > 2) {
+				usProgLen = ubData[1] + ubData[2]*256;
+				if (usProgLen>0) {
+					JsStopScript();
+					FsErase((uint32_t)m_script_buffer, 1);
+					eProgWriteInProgress = true;
+					CRC = 0;
+					NRF_LOG_DEBUG("WrProg %d bytes", usProgLen);
+					FsWrite((uint32_t)m_script_buffer, (uint8_t *)&usProgLen, sizeof(uint16_t));
+					ulWritePtr = (uint32_t)m_script_buffer + sizeof(uint16_t) + sizeof(uint32_t);
+				}
+			}
 			break;
 		default:
 			break;
@@ -39,9 +55,14 @@ void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 	} else {
 		// Next block
 		NRF_LOG_DEBUG("c%d: %c", p_evt_write->len, ubData[0]);
-
+		FsWrite(ulWritePtr, (uint8_t *)ubData, p_evt_write->len);
+		crc32_compute(ubData, p_evt_write->len, &CRC);
 		usProgLen -= p_evt_write->len;
-		if (usProgLen == 0) eProgWriteInProgress = false;
+		ulWritePtr += p_evt_write->len;
+		if (usProgLen == 0) {
+			eProgWriteInProgress = false;
+			FsWrite((uint32_t)m_script_buffer+sizeof(uint16_t), (uint8_t *)&CRC, sizeof(uint32_t));
+		}
 	}
 }
 

@@ -11,6 +11,7 @@
 #include "nrf_log.h"
 #include "app_timer.h"
 #include "app_scheduler.h"
+#include "crc32.h"
 #include "control.h"
 #include "jsparse.h"
 #include "jsinteractive.h"
@@ -22,6 +23,11 @@ JsVarRef timerArray = 0; // Linked List of timers to check and run
 static JsSysTime jsTimeVal; // Clock in TIME_GRANULARITY*ms steps
 static JsSysTime jsTimeLeft; // Clocks left to next event
 bool interruptedDuringEvent; ///< Were we interrupted while executing an event? If so may want to clear timers
+static bool eIsAppValid; // Set indicator after CRC check
+
+uint8_t m_script_buffer[1024]
+    __attribute__((section(".script_page")))
+    __attribute__((used));
 
 #define TIME_GRANULARITY (50)
 
@@ -120,10 +126,29 @@ static JsVarRef _jsiInitNamedArray(const char *name) {
   return arrayRef;
 }
 
+void JsStopScript() {
+	jsiStatus |= JSIS_TODO_RESET; // Stop
+	jspSetInterrupted(true);
+}
+
 static void JsButtonCb(const ControlEvent* pEvt)
 {
 	if (pEvt->b) {
-		jsiStatus |= JSIS_TODO_RESET; // Stop
+		JsStopScript();
+	}
+}
+
+void JsCheckApp()
+{
+	eIsAppValid = false;
+	uint16_t* pusPtr = m_script_buffer;
+	if (*pusPtr != 0xFFFF) { // If size valid
+		uint32_t CRC = 0;
+		crc32_compute(m_script_buffer + sizeof(uint16_t) + sizeof(uint32_t), *pusPtr, &CRC);
+		uint32_t* pulCrc = m_script_buffer + sizeof(uint32_t);
+		if (CRC == *pulCrc) {
+			eIsAppValid = true;
+		}
 	}
 }
 
@@ -134,6 +159,7 @@ void JsInit()
 	jspInit();
     jsvSoftInit();
     jspSoftInit();
+    JsCheckApp();
 
     // Init clock
     jsTimeLeft = JSSYSTIME_MAX;

@@ -23,6 +23,7 @@
 #include "buzzer.h"
 #include "r0b1c_device.h"
 #include "rdev_proto.h"
+#include "js_module.h"
 
 
 #define BUTTON_SHORT_PRESS 4
@@ -90,7 +91,6 @@ static void HwInit(void)
     ButtonInit();
 }
 
-void JsInit(void);
 int main(void)
 {
     (void) NRF_LOG_INIT(NULL);

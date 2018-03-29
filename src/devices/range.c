@@ -35,10 +35,13 @@ volatile static bool isWaiting; // Indicates active cycle
 volatile static uint32_t ulRtcCnt;
 static uint8_t ubOffCount;
 
+void jswrap_range_emit(uint8_t range);
+
 static void RDevRengeNotify(void* ipData, uint16_t size)
 {
 	uint8_t notif[3] = {ubPortPlus1-1, RDCMD_GET, ubRange};
 	SendCmdNotif(notif, 3);
+	jswrap_range_emit(ubRange); // Notification to JS
 }
 
 static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
