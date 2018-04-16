@@ -125,7 +125,6 @@ static void advertising_init(void)
     ble_advdata_t srdata;
 
     ble_uuid_t adv_uuids[] = {
-    		// ToDo: причесать этот кусок циклом
 		    {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
 		    //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
 			{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
@@ -194,7 +193,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code;
 
-    NRF_LOG_DEBUG("Ble evt %x",p_ble_evt->header.evt_id);
+    //NRF_LOG_DEBUG("Ble evt %x",p_ble_evt->header.evt_id);
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:

@@ -23,7 +23,7 @@ static bool eProgWriteInProgress;
 
 void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 {
-	static uint16_t usProgLen;
+	static uint32_t ulProgLen;
 	static uint32_t ulWritePtr;
 	static uint32_t CRC;
 
@@ -37,15 +37,15 @@ void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 			break;
 		case 1: // write
 			if (p_evt_write->len > 2) {
-				usProgLen = ubData[1] + ubData[2]*256;
-				if (usProgLen>0) {
+				ulProgLen = ubData[1] + ubData[2]*256;
+				if (ulProgLen>0) {
 					JsStopScript();
 					FsErase((uint32_t)m_script_buffer, 1);
 					eProgWriteInProgress = true;
 					CRC = 0;
-					NRF_LOG_DEBUG("WrProg %d bytes", usProgLen);
-					FsWrite((uint32_t)m_script_buffer, (uint8_t *)&usProgLen, sizeof(uint16_t));
-					ulWritePtr = (uint32_t)m_script_buffer + sizeof(uint16_t) + sizeof(uint32_t);
+					NRF_LOG_DEBUG("WrProg %d bytes", ulProgLen);
+					FsWrite((uint32_t)m_script_buffer, (uint8_t *)&ulProgLen, sizeof(uint32_t));
+					ulWritePtr = (uint32_t)m_script_buffer + sizeof(uint32_t) + sizeof(uint32_t);
 				}
 			}
 			break;
@@ -54,14 +54,15 @@ void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 		}
 	} else {
 		// Next block
-		NRF_LOG_DEBUG("c%d: %c", p_evt_write->len, ubData[0]);
+		NRF_LOG_DEBUG("c%d: %10s", p_evt_write->len, &(ubData[0]));
 		FsWrite(ulWritePtr, (uint8_t *)ubData, p_evt_write->len);
-		crc32_compute(ubData, p_evt_write->len, &CRC);
-		usProgLen -= p_evt_write->len;
+		CRC = crc32_compute(ubData, p_evt_write->len, &CRC);
+		ulProgLen -= p_evt_write->len;
 		ulWritePtr += p_evt_write->len;
-		if (usProgLen == 0) {
+		if (ulProgLen == 0) {
 			eProgWriteInProgress = false;
-			FsWrite((uint32_t)m_script_buffer+sizeof(uint16_t), (uint8_t *)&CRC, sizeof(uint32_t));
+			NRF_LOG_DEBUG("CRC: %x", CRC);
+			FsWrite((uint32_t)m_script_buffer+sizeof(uint32_t), (uint8_t *)&CRC, sizeof(uint32_t));
 		}
 	}
 }

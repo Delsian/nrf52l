@@ -64,9 +64,19 @@ static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt)
 }
 
 // to write static data
+// data buffer will have extra space to fit full words
 ret_code_t FsWrite(uint32_t addr, uint8_t* data, uint32_t len)
 {
-	ret_code_t err = nrf_fstorage_write(&fstorage, addr, data, len, NULL);
+	uint8_t __attribute__ ((aligned(4))) buf[20];
+	memcpy(buf, data, len);
+	int i=0;
+	if (len%4) {
+		for(; (len+i)%4 > 0; i++) {
+			buf[len+i] = 0xFF;
+		}
+	}
+	NRF_LOG_DEBUG("Wr %d+%d at %x", len, i, addr);
+	ret_code_t err = nrf_fstorage_write(&fstorage, addr, buf, len+i, NULL);
 	if (err) NRF_LOG_ERROR("FsWrite Err %x", err);
 	return err;
 }
@@ -77,7 +87,7 @@ ret_code_t FsWriteFree(uint32_t addr, uint8_t* data, uint32_t len)
 	while (nrf_fstorage_is_busy(&fstorage));
 	pubWrPtr = data;
 	ret_code_t err = nrf_fstorage_write(&fstorage, addr, data, len, NULL);
-	if (err) NRF_LOG_ERROR("FsWrite Err %x", err);
+	if (err) NRF_LOG_ERROR("FsWriteFree Err %x", err);
 	return err;
 }
 

@@ -121,7 +121,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GATTS_EVT_WRITE:
         {
         	ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
-        	NRF_LOG_DEBUG("Evt Wr to 0x%x", p_evt_write->handle);
+        	//NRF_LOG_DEBUG("Evt Wr to 0x%x", p_evt_write->handle);
         	if (p_evt_write->uuid.uuid == BLE_UUID_GAP_CHARACTERISTIC_DEVICE_NAME) {
         		// Device name update
         		uint8_t* pName = (uint8_t*) malloc(DEVICE_NAME_LEN);
