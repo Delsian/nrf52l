@@ -31,7 +31,7 @@
 #define ONE_PERCENT_BATTERY 22
 
 #define BATTERY_IDLE_PWROFF_TIMEOUT 5000000
-#define BATTERY_EMPTY_PWROFF_TIMEOUT 3500000
+#define BATTERY_EMPTY_PWROFF_TIMEOUT 2500000
 
 typedef enum { BSNONE, BSCHRG, BSSTDBY, BSBATT, BSEMPTY } BatStates;
 
@@ -146,7 +146,7 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 		BatteryStateChange(BSSTDBY);
 	} else {
 		// no signals from charger
-		if (tBstate == BSCHRG || tBstate == BSSTDBY ) {
+		if (tBstate == BSCHRG || tBstate == BSSTDBY || tBstate == BSNONE) {
 			if (tBstate != BSEMPTY)
 				BatteryStateChange(BSBATT);
 		}
@@ -213,6 +213,7 @@ RDevErrCode BatteryInit(uint8_t port)
     app_timer_create(&tPwrOffTmr, APP_TIMER_MODE_SINGLE_SHOT, BatteryPwrOffCb);
 
     // First measurement
+    tBstate = BSNONE;
     nrf_drv_saadc_sample();
 
     return RDERR_OK;

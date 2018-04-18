@@ -54,7 +54,7 @@ void OnProgWriteEvt(ble_evt_t const * p_ble_evt)
 		}
 	} else {
 		// Next block
-		NRF_LOG_DEBUG("c%d: %10s", p_evt_write->len, &(ubData[0]));
+		NRF_LOG_DEBUG("c%d at %d: %10s", p_evt_write->len, ulWritePtr, &(ubData[0]));
 		FsWrite(ulWritePtr, (uint8_t *)ubData, p_evt_write->len);
 		CRC = crc32_compute(ubData, p_evt_write->len, &CRC);
 		ulProgLen -= p_evt_write->len;
