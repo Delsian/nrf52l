@@ -13,7 +13,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug" postannouncebuildStep="" postbuildStep="${cross_prefix}${cross_objcopy}${cross_suffix}  -O ihex -R .rtt nrf52l.elf nrf52l.hex" preannouncebuildStep="" prebuildStep="rm -f nrf52l.*">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug" postannouncebuildStep="" postbuildStep="${cross_prefix}${cross_objcopy}${cross_suffix}  -O ihex -R .rtt nrf52l.elf nrf52l.hex" preannouncebuildStep="" prebuildStep="">
 					<folderInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1633199537." name="/" resourcePath="">
 						<toolChain errorParsers="" id="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug.1964553099" name="Cross ARM GCC" nonInternalBuilderId="ilg.gnuarmeclipse.managedbuild.cross.builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.69960409" name="Optimization Level" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" useByScannerDiscovery="true" value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.none" valueType="enumerated"/>
@@ -63,70 +63,69 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.1465730393" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
-									<listOptionValue builtIn="false" value=".././config"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_section_vars&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log\src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/util&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/clock&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/hal&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/boards&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain/cmsis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/button&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/timer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_section_vars&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log/src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_memobj&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/balloc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/strerror&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_advertising&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/systick&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/pwr_mgmt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/nrf_ble_gatt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_db_discovery&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs_c&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/mutex&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_bas&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_nus&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fstorage&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\twi_mngr&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_task_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\low_power_pwm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\saadc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bootloader\dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_mpu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/twi_mngr&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_task_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/low_power_pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/saadc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bootloader/dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers/nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -148,68 +147,68 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.653441933" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\device&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_section_vars&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log\src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/util&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/clock&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/boards&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/hal&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain/cmsis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/button&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/timer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_section_vars&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log/src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_memobj&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/balloc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/strerror&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_advertising&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/systick&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/pwr_mgmt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/nrf_ble_gatt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_db_discovery&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs_c&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/mutex&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_bas&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_nus&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\twi_mngr&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_task_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\low_power_pwm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\saadc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bootloader\dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_mpu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/twi_mngr&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_task_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/low_power_pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/saadc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bootloader/dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/../config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers/nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
@@ -360,70 +359,70 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.840272079" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/util&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/clock&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/hal&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/boards&quot;"/>
 									<listOptionValue builtIn="false" value=".././config"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_section_vars&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log\src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain/cmsis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/button&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/timer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_section_vars&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log/src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_memobj&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/balloc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/strerror&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_advertising&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/systick&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/pwr_mgmt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/nrf_ble_gatt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_db_discovery&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs_c&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/mutex&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_bas&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_nus&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fstorage&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\twi_mngr&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_task_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\low_power_pwm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\saadc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bootloader\dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_mpu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/twi_mngr&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_task_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/low_power_pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/saadc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bootloader/dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers/nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.1021875076" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -445,68 +444,68 @@
 									<listOptionValue builtIn="false" value="NRF_DFU_SVCI_ENABLED"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.580876500" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\util&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bsp&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\clock&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\boards&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\hal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\device&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain\cmsis\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\toolchain&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\button&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\timer&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_section_vars&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_log\src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_memobj&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\balloc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\strerror&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\common&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_advertising&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\systick&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\pwr_mgmt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\nrf_ble_gatt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/util&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/clock&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/boards&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/hal&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain/cmsis/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/toolchain&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/button&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/timer&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_section_vars&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_log/src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_memobj&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/balloc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/strerror&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_advertising&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/systick&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/pwr_mgmt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/nrf_ble_gatt&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_db_discovery&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs_c&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\mutex&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\segger_rtt&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\cli&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\external\fprintf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\queue&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\delay&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_lbs&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_bas&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_nus&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fstorage&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\atomic_fifo&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\scheduler&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_ringbuf&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\peer_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\fds&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dis&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_db_discovery&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs_c&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/mutex&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/segger_rtt&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/cli&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/external/fprintf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/queue&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/delay&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_lbs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_bas&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_nus&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fstorage&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/atomic_fifo&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/scheduler&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_ringbuf&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/peer_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/fds&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/Espruino/libs/math}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\twi_master&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\gpiote&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_mpu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\twi_mngr&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\experimental_task_manager&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\low_power_pwm&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\saadc&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\ble\ble_services\ble_dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\bootloader\dfu&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\svc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/twi_master&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/gpiote&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_mpu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/twi_mngr&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/experimental_task_manager&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/low_power_pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/saadc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/ble/ble_services/ble_dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/bootloader/dfu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/svc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/../config&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\softdevice\s132\headers\nrf52&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/softdevice/s132/headers/nrf52&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/devices}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\libraries\crc32&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${SDK}\components\drivers_nrf\pwm&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.979899096" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
