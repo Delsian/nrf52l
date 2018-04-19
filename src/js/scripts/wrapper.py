@@ -1,8 +1,8 @@
-#!/bin/false
+#!/usr/bin/python
 
 SUBMODULE = "../../Espruino/src"
 
-wrapmodules = "build_jswrapper.py "+\
+wrapmodules = "./build_jswrapper.py "+\
     SUBMODULE+"/jswrap_array.c "+\
     SUBMODULE+"/jswrap_arraybuffer.c "+\
     SUBMODULE+"/jswrap_dataview.c "+\
