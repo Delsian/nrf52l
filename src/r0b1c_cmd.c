@@ -129,7 +129,7 @@ void CmdErrWrite(RDevErrCode itErrCode)
 void CmdInitComplete()
 {
 	// ToDo: move it here from main()
-    //RDeviceInit();
+    RDeviceInit();
 
 	ControlRegisterCb(CE_BT_CONN, OnProgWriteCb);
 }

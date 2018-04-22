@@ -101,7 +101,7 @@ int main(void)
     ControlInit();
     FsInit();
 
-    RDeviceInit();
+    //RDeviceInit();
 
     BuzzerInit();
 

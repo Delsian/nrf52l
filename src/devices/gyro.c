@@ -24,6 +24,7 @@
 #define MPU6050_WHO_AM_I		0x75   // R
 
 static uint8_t ubData[16];
+static bool eGyroPresent;
 
 uint16_t GyroGetVal(uint16_t valId)
 {
@@ -38,18 +39,28 @@ RDevErrCode RDevGyroInit(uint8_t port)
 {
 	ret_code_t err_code;
 	TwiMngrInit();
-	ubData[0] = MPU6050_WHO_AM_I;
-	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 1, true);
-	nrf_drv_twi_rx(TwiGetDrv(), MPU6050_ADDR, ubData, 1);
-	NRF_LOG_DEBUG("Gyro init %d", ubData[0]);
-
-	return RDERR_OK;
+	// check version
+	const uint8_t req = MPU6050_WHO_AM_I;
+	uint8_t ans;
+	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, &req, 1, true);
+	nrf_drv_twi_rx(TwiGetDrv(), MPU6050_ADDR, &ans, 1);
+	//NRF_LOG_DEBUG("Gyro init %d", ans);
+	if (ans == 0x68)
+	{
+		eGyroPresent = true;
+		// Turn MPU on
+		ubData[0] = MPU6050_PWR_MGMT_1;
+		ubData[1] = 0;
+		nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, false);
+		GyroGetVal(0);
+	}
+	return RDERR_DONE;
 }
 
 RDevErrCode RDevGyroTick(uint8_t port, uint32_t time)
 {
 	static uint8_t count;
-	if (count++ > 200) {
+	if (eGyroPresent && count++ > 200) {
 		count = 0;
 		NRF_LOG_DEBUG("Gyro %d %d %d", 1, 2, 3);
 	}
@@ -58,13 +69,15 @@ RDevErrCode RDevGyroTick(uint8_t port, uint32_t time)
 
 RDevErrCode RDevGyroCmd(uint8_t port, const uint8_t* pData, uint8_t len)
 {
-	RDevCmdCode ubCommand = (RDevCmdCode)pData[1];
-	switch (ubCommand) {
-		case RDCMD_GET:
-			SendCmdResp(ubData, 14);
-			return RDERR_OK;
-		default:
-			break;
+	if (eGyroPresent) {
+		RDevCmdCode ubCommand = (RDevCmdCode)pData[1];
+		switch (ubCommand) {
+			case RDCMD_GET:
+				SendCmdResp(ubData, 14);
+				return RDERR_OK;
+			default:
+				break;
+		}
 	}
 	return RDERR_NOT_SUPPORTED;
 }
