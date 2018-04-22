@@ -29,6 +29,7 @@ RDevErrCode RDevLedInit(uint8_t port);
 RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode RDevLedTick(uint8_t port, uint32_t time);
 RDevErrCode RDevGyroInit(uint8_t port);
+RDevErrCode RDevGyroTick(uint8_t port, uint32_t time);
 RDevErrCode RDevGyroCmd(const uint8_t* pData, uint8_t len);
 RDevErrCode BatteryTick(uint8_t port, uint32_t time);
 RDevErrCode RDevBattCmd(const uint8_t* pData, uint8_t len);

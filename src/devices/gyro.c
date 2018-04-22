@@ -11,12 +11,18 @@
 #include <stdlib.h>
 #include "boards.h"
 #include "nrf.h"
+#include "nrf_log.h"
 #include "rj_port.h"
 #include "twi_mngr.h"
 #include "r0b1c_device.h"
 #include "r0b1c_cmd.h"
 
-#define MPU6050_ADDR 0x68
+#define MPU6050_ADDR 			0x68
+
+#define MPU6050_PWR_MGMT_1		0x6B   // R/W
+#define MPU6050_PWR_MGMT_2		0x6C   // R/W
+#define MPU6050_WHO_AM_I		0x75   // R
+
 static uint8_t ubData[16];
 
 uint16_t GyroGetVal(uint16_t valId)
@@ -32,9 +38,21 @@ RDevErrCode RDevGyroInit(uint8_t port)
 {
 	ret_code_t err_code;
 	TwiMngrInit();
-	ubData[0] = 0x68;
-	ubData[1] = 7;
-	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, false);
+	ubData[0] = MPU6050_WHO_AM_I;
+	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 1, true);
+	nrf_drv_twi_rx(TwiGetDrv(), MPU6050_ADDR, ubData, 1);
+	NRF_LOG_DEBUG("Gyro init %d", ubData[0]);
+
+	return RDERR_OK;
+}
+
+RDevErrCode RDevGyroTick(uint8_t port, uint32_t time)
+{
+	static uint8_t count;
+	if (count++ > 200) {
+		count = 0;
+		NRF_LOG_DEBUG("Gyro %d %d %d", 1, 2, 3);
+	}
 	return RDERR_OK;
 }
 

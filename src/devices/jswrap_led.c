@@ -34,8 +34,8 @@ Set LED color to 'data' value
  */
 void jswrap_led_set(int data) {
 	NRF_LOG_DEBUG("LED set %x", data);
-  RDevLedSetColor((LedColor)data);
-  RDevLedSetIndication(LED_IND_EXTCOLOR);
+	RDevLedSetColor((LedColor)data);
+	RDevLedSetIndication(LED_IND_EXTCOLOR);
 }
 
 /*JSON{

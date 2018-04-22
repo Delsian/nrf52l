@@ -36,6 +36,10 @@ static bool gen_jswrap_Array_isArray(JsVar* var) {
   return jsvIsArray(var);
 }
 
+static JsVarInt gen_jswrap_ArrayBuffer_byteLength(JsVar *parent) {
+  return (JsVarInt)(parent->varData.arraybuffer.length);
+}
+
 static JsVar* gen_jswrap_Uint8Array_Uint8Array(JsVar* arr, JsVarInt byteOffset, JsVarInt length) {
   return jswrap_typedarray_constructor(ARRAYBUFFERVIEW_UINT8, arr, byteOffset, length);
 }
@@ -430,6 +434,10 @@ static const JswSymPtr jswSymbols_Array[] FLASH_SECT = {
   {0, JSWAT_BOOL | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_Array_isArray}
 };
 static const unsigned char jswSymbolIndex_Array = 2;
+static const JswSymPtr jswSymbols_ArrayBuffer_proto[] FLASH_SECT = {
+  {0, JSWAT_INT32 | JSWAT_THIS_ARG | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_ArrayBuffer_byteLength}
+};
+static const unsigned char jswSymbolIndex_ArrayBuffer_proto = 3;
 static const JswSymPtr jswSymbols_ArrayBufferView_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_ArrayBufferView_buffer},
   {7, JSWAT_INT32 | JSWAT_THIS_ARG | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_ArrayBufferView_byteLength},
@@ -445,7 +453,7 @@ static const JswSymPtr jswSymbols_ArrayBufferView_proto[] FLASH_SECT = {
   {78, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_array_slice},
   {84, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_array_sort}
 };
-static const unsigned char jswSymbolIndex_ArrayBufferView_proto = 3;
+static const unsigned char jswSymbolIndex_ArrayBufferView_proto = 4;
 static const JswSymPtr jswSymbols_DataView_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_BOOL << (JSWAT_BITS*2)), (void (*)(void))gen_jswrap_DataView_getFloat32},
   {11, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_BOOL << (JSWAT_BITS*2)), (void (*)(void))gen_jswrap_DataView_getFloat64},
@@ -464,12 +472,12 @@ static const JswSymPtr jswSymbols_DataView_proto[] FLASH_SECT = {
   {135, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_BOOL << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_DataView_setUint32},
   {145, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_BOOL << (JSWAT_BITS*3)), (void (*)(void))gen_jswrap_DataView_setUint8}
 };
-static const unsigned char jswSymbolIndex_DataView_proto = 4;
+static const unsigned char jswSymbolIndex_DataView_proto = 5;
 static const JswSymPtr jswSymbols_Date[] FLASH_SECT = {
   {0, JSWAT_JSVARFLOAT, (void (*)(void))jswrap_date_now},
   {4, JSWAT_JSVARFLOAT | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_parse}
 };
-static const unsigned char jswSymbolIndex_Date = 5;
+static const unsigned char jswSymbolIndex_Date = 6;
 static const JswSymPtr jswSymbols_Date_proto[] FLASH_SECT = {
   {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getDate},
   {8, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getDay},
@@ -480,46 +488,46 @@ static const JswSymPtr jswSymbols_Date_proto[] FLASH_SECT = {
   {63, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getMonth},
   {72, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getSeconds},
   {83, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getTime},
-  {91, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setTime},
-  {99, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getTimezoneOffset},
-  {117, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setDate},
-  {125, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_date_setFullYear},
-  {137, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)) | (JSWAT_JSVAR << (JSWAT_BITS*4)), (void (*)(void))jswrap_date_setHours},
-  {146, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setMilliseconds},
-  {162, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_date_setMinutes},
-  {173, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_date_setMonth},
-  {182, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_date_setSeconds},
+  {91, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getTimezoneOffset},
+  {109, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setDate},
+  {117, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_date_setFullYear},
+  {129, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)) | (JSWAT_JSVAR << (JSWAT_BITS*4)), (void (*)(void))jswrap_date_setHours},
+  {138, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setMilliseconds},
+  {154, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_date_setMinutes},
+  {165, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_date_setMonth},
+  {174, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_date_setSeconds},
+  {185, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)), (void (*)(void))jswrap_date_setTime},
   {193, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_toISOString},
   {205, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_toString},
   {214, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_toUTCString},
   {226, JSWAT_JSVARFLOAT | JSWAT_THIS_ARG, (void (*)(void))jswrap_date_getTime}
 };
-static const unsigned char jswSymbolIndex_Date_proto = 6;
+static const unsigned char jswSymbolIndex_Date_proto = 7;
 static const JswSymPtr jswSymbols_Error_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_error_toString}
 };
-static const unsigned char jswSymbolIndex_Error_proto = 7;
+static const unsigned char jswSymbolIndex_Error_proto = 8;
 static const JswSymPtr jswSymbols_SyntaxError_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_error_toString}
 };
-static const unsigned char jswSymbolIndex_SyntaxError_proto = 8;
+static const unsigned char jswSymbolIndex_SyntaxError_proto = 9;
 static const JswSymPtr jswSymbols_TypeError_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_error_toString}
 };
-static const unsigned char jswSymbolIndex_TypeError_proto = 9;
+static const unsigned char jswSymbolIndex_TypeError_proto = 10;
 static const JswSymPtr jswSymbols_InternalError_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_error_toString}
 };
-static const unsigned char jswSymbolIndex_InternalError_proto = 10;
+static const unsigned char jswSymbolIndex_InternalError_proto = 11;
 static const JswSymPtr jswSymbols_ReferenceError_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_error_toString}
 };
-static const unsigned char jswSymbolIndex_ReferenceError_proto = 11;
+static const unsigned char jswSymbolIndex_ReferenceError_proto = 12;
 static const JswSymPtr jswSymbols_JSON[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_json_parse},
   {6, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)) | (JSWAT_JSVAR << (JSWAT_BITS*3)), (void (*)(void))jswrap_json_stringify}
 };
-static const unsigned char jswSymbolIndex_JSON = 12;
+static const unsigned char jswSymbolIndex_JSON = 13;
 static const JswSymPtr jswSymbols_Math[] FLASH_SECT = {
   {0, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Math_E},
   {2, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Math_LN10},
@@ -550,14 +558,14 @@ static const JswSymPtr jswSymbols_Math[] FLASH_SECT = {
   {128, JSWAT_JSVARFLOAT | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_Math_tan},
   {132, JSWAT_JSVARFLOAT | (JSWAT_JSVARFLOAT << (JSWAT_BITS*1)) | (JSWAT_JSVARFLOAT << (JSWAT_BITS*2)), (void (*)(void))wrapAround}
 };
-static const unsigned char jswSymbolIndex_Math = 13;
+static const unsigned char jswSymbolIndex_Math = 14;
 static const JswSymPtr jswSymbols_Modules[] FLASH_SECT = {
   {0, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_modules_addCached},
   {10, JSWAT_JSVAR, (void (*)(void))jswrap_modules_getCached},
   {20, JSWAT_VOID, (void (*)(void))jswrap_modules_removeAllCached},
   {36, JSWAT_VOID | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_modules_removeCached}
 };
-static const unsigned char jswSymbolIndex_Modules = 14;
+static const unsigned char jswSymbolIndex_Modules = 15;
 static const JswSymPtr jswSymbols_Number[] FLASH_SECT = {
   {0, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Number_MAX_VALUE},
   {10, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Number_MIN_VALUE},
@@ -565,11 +573,11 @@ static const JswSymPtr jswSymbols_Number[] FLASH_SECT = {
   {38, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Number_NaN},
   {42, JSWAT_JSVARFLOAT | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_Number_POSITIVE_INFINITY}
 };
-static const unsigned char jswSymbolIndex_Number = 15;
+static const unsigned char jswSymbolIndex_Number = 16;
 static const JswSymPtr jswSymbols_Number_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_number_toFixed}
 };
-static const unsigned char jswSymbolIndex_Number_proto = 16;
+static const unsigned char jswSymbolIndex_Number_proto = 17;
 static const JswSymPtr jswSymbols_Object_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_object_clone},
   {6, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*2)), (void (*)(void))jswrap_object_emit},
@@ -581,7 +589,7 @@ static const JswSymPtr jswSymbols_Object_proto[] FLASH_SECT = {
   {70, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_object_toString},
   {79, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_object_valueOf}
 };
-static const unsigned char jswSymbolIndex_Object_proto = 17;
+static const unsigned char jswSymbolIndex_Object_proto = 18;
 static const JswSymPtr jswSymbols_Object[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_object_assign},
   {7, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_object_create},
@@ -593,36 +601,36 @@ static const JswSymPtr jswSymbols_Object[] FLASH_SECT = {
   {106, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))gen_jswrap_Object_keys},
   {111, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_object_setPrototypeOf}
 };
-static const unsigned char jswSymbolIndex_Object = 18;
+static const unsigned char jswSymbolIndex_Object = 19;
 static const JswSymPtr jswSymbols_Function_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_function_apply_or_call},
   {6, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*2)), (void (*)(void))jswrap_function_bind},
   {11, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*2)), (void (*)(void))jswrap_function_apply_or_call},
   {16, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_function_replaceWith}
 };
-static const unsigned char jswSymbolIndex_Function_proto = 19;
+static const unsigned char jswSymbolIndex_Function_proto = 20;
 static const JswSymPtr jswSymbols_process[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))jswrap_process_env},
   {4, JSWAT_JSVAR, (void (*)(void))jswrap_process_memory},
   {11, JSWAT_JSVAR | JSWAT_EXECUTE_IMMEDIATELY, (void (*)(void))gen_jswrap_process_version}
 };
-static const unsigned char jswSymbolIndex_process = 20;
+static const unsigned char jswSymbolIndex_process = 21;
 static const JswSymPtr jswSymbols_Promise[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_all},
   {4, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_reject},
   {11, JSWAT_JSVAR | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_resolve}
 };
-static const unsigned char jswSymbolIndex_Promise = 21;
+static const unsigned char jswSymbolIndex_Promise = 22;
 static const JswSymPtr jswSymbols_Promise_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_promise_catch},
   {6, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)) | (JSWAT_JSVAR << (JSWAT_BITS*2)), (void (*)(void))jswrap_promise_then}
 };
-static const unsigned char jswSymbolIndex_Promise_proto = 22;
+static const unsigned char jswSymbolIndex_Promise_proto = 23;
 static const JswSymPtr jswSymbols_RegExp_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_regexp_exec},
   {5, JSWAT_BOOL | JSWAT_THIS_ARG | (JSWAT_JSVAR << (JSWAT_BITS*1)), (void (*)(void))jswrap_regexp_test}
 };
-static const unsigned char jswSymbolIndex_RegExp_proto = 23;
+static const unsigned char jswSymbolIndex_RegExp_proto = 24;
 static const JswSymPtr jswSymbols_String_proto[] FLASH_SECT = {
   {0, JSWAT_JSVAR | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_charAt},
   {7, JSWAT_INT32 | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_charCodeAt},
@@ -638,37 +646,38 @@ static const JswSymPtr jswSymbols_String_proto[] FLASH_SECT = {
   {94, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))gen_jswrap_String_toUpperCase},
   {106, JSWAT_JSVAR | JSWAT_THIS_ARG, (void (*)(void))jswrap_string_trim}
 };
-static const unsigned char jswSymbolIndex_String_proto = 24;
+static const unsigned char jswSymbolIndex_String_proto = 25;
 static const JswSymPtr jswSymbols_String[] FLASH_SECT = {
   {0, JSWAT_JSVAR | (JSWAT_ARGUMENT_ARRAY << (JSWAT_BITS*1)), (void (*)(void))jswrap_string_fromCharCode}
 };
-static const unsigned char jswSymbolIndex_String = 25;
+static const unsigned char jswSymbolIndex_String = 26;
 static const JswSymPtr jswSymbols_Motor_proto[] FLASH_SECT = {
   {0, JSWAT_VOID | JSWAT_THIS_ARG | (JSWAT_INT32 << (JSWAT_BITS*1)) | (JSWAT_INT32 << (JSWAT_BITS*2)), (void (*)(void))jswrap_motor_write}
 };
-static const unsigned char jswSymbolIndex_Motor_proto = 26;
+static const unsigned char jswSymbolIndex_Motor_proto = 27;
 static const JswSymPtr jswSymbols_LED[] FLASH_SECT = {
   {0, JSWAT_VOID, (void (*)(void))jswrap_led_off},
   {4, JSWAT_VOID | (JSWAT_INT32 << (JSWAT_BITS*1)), (void (*)(void))jswrap_led_set}
 };
-static const unsigned char jswSymbolIndex_LED = 27;
+static const unsigned char jswSymbolIndex_LED = 28;
 static const JswSymPtr jswSymbols_Range[] FLASH_SECT = {
   
 };
-static const unsigned char jswSymbolIndex_Range = 28;
+static const unsigned char jswSymbolIndex_Range = 29;
 static const JswSymPtr jswSymbols_Range_proto[] FLASH_SECT = {
   {0, JSWAT_INT32 | JSWAT_THIS_ARG, (void (*)(void))jswrap_range_read}
 };
-static const unsigned char jswSymbolIndex_Range_proto = 29;
+static const unsigned char jswSymbolIndex_Range_proto = 30;
 
 
 FLASH_STR(jswSymbols_global_str, "Array\0ArrayBuffer\0ArrayBufferView\0Boolean\0DataView\0Date\0Error\0Float32Array\0Float64Array\0Function\0HIGH\0Infinity\0Int16Array\0Int32Array\0Int8Array\0InternalError\0JSON\0LED\0LOW\0Math\0Modules\0Motor\0NaN\0Number\0Object\0Promise\0Range\0ReferenceError\0RegExp\0String\0SyntaxError\0TypeError\0Uint16Array\0Uint32Array\0Uint8Array\0Uint8ClampedArray\0arguments\0atob\0btoa\0changeInterval\0clearInterval\0clearTimeout\0decodeURIComponent\0encodeURIComponent\0eval\0getTime\0isNaN\0parseFloat\0parseInt\0process\0require\0setInterval\0setTime\0setTimeout\0");
 FLASH_STR(jswSymbols_Array_proto_str, "concat\0every\0fill\0filter\0forEach\0indexOf\0join\0length\0map\0pop\0push\0reduce\0reverse\0shift\0slice\0some\0sort\0splice\0toString\0unshift\0");
 FLASH_STR(jswSymbols_Array_str, "isArray\0");
+FLASH_STR(jswSymbols_ArrayBuffer_proto_str, "byteLength\0");
 FLASH_STR(jswSymbols_ArrayBufferView_proto_str, "buffer\0byteLength\0byteOffset\0fill\0forEach\0indexOf\0join\0map\0reduce\0reverse\0set\0slice\0sort\0");
 FLASH_STR(jswSymbols_DataView_proto_str, "getFloat32\0getFloat64\0getInt16\0getInt32\0getInt8\0getUint16\0getUint32\0getUint8\0setFloat32\0setFloat64\0setInt16\0setInt32\0setInt8\0setUint16\0setUint32\0setUint8\0");
 FLASH_STR(jswSymbols_Date_str, "now\0parse\0");
-FLASH_STR(jswSymbols_Date_proto_str, "getDate\0getDay\0getFullYear\0getHours\0getMilliseconds\0getMinutes\0getMonth\0getSeconds\0getTime\0getTime\0getTimezoneOffset\0setDate\0setFullYear\0setHours\0setMilliseconds\0setMinutes\0setMonth\0setSeconds\0toISOString\0toString\0toUTCString\0valueOf\0");
+FLASH_STR(jswSymbols_Date_proto_str, "getDate\0getDay\0getFullYear\0getHours\0getMilliseconds\0getMinutes\0getMonth\0getSeconds\0getTime\0getTimezoneOffset\0setDate\0setFullYear\0setHours\0setMilliseconds\0setMinutes\0setMonth\0setSeconds\0setTime\0toISOString\0toString\0toUTCString\0valueOf\0");
 FLASH_STR(jswSymbols_Error_proto_str, "toString\0");
 FLASH_STR(jswSymbols_SyntaxError_proto_str, "toString\0");
 FLASH_STR(jswSymbols_TypeError_proto_str, "toString\0");
@@ -697,6 +706,7 @@ const JswSymList jswSymbolTables[] FLASH_SECT = {
   {jswSymbols_global, jswSymbols_global_str, 54},
   {jswSymbols_Array_proto, jswSymbols_Array_proto_str, 20},
   {jswSymbols_Array, jswSymbols_Array_str, 1},
+  {jswSymbols_ArrayBuffer_proto, jswSymbols_ArrayBuffer_proto_str, 1},
   {jswSymbols_ArrayBufferView_proto, jswSymbols_ArrayBufferView_proto_str, 13},
   {jswSymbols_DataView_proto, jswSymbols_DataView_proto_str, 16},
   {jswSymbols_Date, jswSymbols_Date_str, 2},
@@ -729,6 +739,7 @@ const JswSymList jswSymbolTables[] FLASH_SECT = {
 
 const JswSymList *jswGetSymbolListForConstructorProto(JsVar *constructor) {
   void *constructorPtr = constructor->varData.native.ptr;
+  if (constructorPtr==(void*)jswrap_arraybuffer_constructor) return &jswSymbolTables[jswSymbolIndex_ArrayBuffer_proto];
   if (constructorPtr==(void*)jswrap_dataview_constructor) return &jswSymbolTables[jswSymbolIndex_DataView_proto];
   if (constructorPtr==(void*)jswrap_date_constructor) return &jswSymbolTables[jswSymbolIndex_Date_proto];
   if (constructorPtr==(void*)jswrap_error_constructor) return &jswSymbolTables[jswSymbolIndex_Error_proto];
