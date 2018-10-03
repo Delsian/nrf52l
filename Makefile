@@ -157,6 +157,7 @@ $(ESP_DIR)/jsnative.c \
 $(ESP_DIR)/jsparse.c \
 $(ESP_DIR)/jsutils.c \
 $(ESP_DIR)/jsvar.c \
+$(ESP_DIR)/jsflash.c \
 $(ESP_DIR)/jsvariterator.c \
 $(ESP_DIR)/jswrap_array.c \
 $(ESP_DIR)/jswrap_arraybuffer.c \
@@ -274,6 +275,7 @@ $(SDK_DIR)/external/segger_rtt
 JS_INCS = $(SRC)/js \
 $(ESP_DIR) \
 $(ESP_DIR)/../libs/math \
+$(ESP_DIR)/../libs/compression \
 
 INCDIRS = $(SRC) $(JS_INCS) $(SRC)/devices $(SDKINCS) $(CONFIG_DIR) 
 
