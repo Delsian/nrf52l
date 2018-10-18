@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "nrf_log.h"
 #include "boards.h"
-#include "nrf_drv_saadc.h"
+#include "nrfx_saadc.h"
 #include "nrf_error.h"
 #include "ble_types.h"
 #include "app_timer.h"
@@ -112,11 +112,11 @@ static void BatteryPwrOffCb()
 	}
 }
 
-void BatteryMeasureCb(nrf_drv_saadc_evt_t const * p_event)
+void BatteryMeasureCb(nrfx_saadc_evt_t const * p_event)
 {
-	if (p_event->type == NRF_DRV_SAADC_EVT_DONE)
+	if (p_event->type == NRFX_SAADC_EVT_DONE)
 	{
-		nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
+		nrfx_saadc_buffer_convert(&BattBuffer, 1);
 		// Calculate current level and set BSEMPTY if necessary
 		uint32_t ulVolt = BattBuffer*1000/ONE_VOLT_VALUE;
 		guBattValue = (ulVolt-6250)/ONE_PERCENT_BATTERY;
@@ -152,7 +152,7 @@ RDevErrCode BatteryTick(uint8_t port, uint32_t time)
 		}
 	}
 	if (BATTERY_MEASURE_TICKS < ++ticks) {
-		nrf_drv_saadc_sample();
+		nrfx_saadc_sample();
 		ticks = 0;
 	}
 
@@ -192,7 +192,7 @@ RDevErrCode BatteryInit(uint8_t port)
 {
     ret_code_t err_code;
     nrf_saadc_channel_config_t channel_config =
-        NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(VBAT_AIN);
+        NRFX_SAADC_DEFAULT_CHANNEL_CONFIG_SE(VBAT_AIN);
     channel_config.gain = BATTERY_GAIN;
     channel_config.acq_time = NRF_SAADC_ACQTIME_20US;
 
@@ -200,12 +200,12 @@ RDevErrCode BatteryInit(uint8_t port)
     nrf_gpio_cfg_input(PIN_CHRG, NRF_GPIO_PIN_PULLUP);
     nrf_gpio_cfg_input(PIN_STDBY, NRF_GPIO_PIN_PULLUP);
 
-	err_code = nrf_drv_saadc_init(NULL, BatteryMeasureCb);
+	err_code = nrfx_saadc_init(NULL, BatteryMeasureCb);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = nrf_drv_saadc_channel_init(0, &channel_config);
+	err_code = nrfx_saadc_channel_init(0, &channel_config);
 	APP_ERROR_CHECK(err_code);
-    err_code = nrf_drv_saadc_buffer_convert(&BattBuffer, 1);
+    err_code = nrfx_saadc_buffer_convert(&BattBuffer, 1);
     APP_ERROR_CHECK(err_code);
 
     // Subscribe to connect event for inactivity timer enable/disable
@@ -214,7 +214,7 @@ RDevErrCode BatteryInit(uint8_t port)
 
     // First measurement
     tBstate = BSNONE;
-    nrf_drv_saadc_sample();
+    nrfx_saadc_sample();
 
     return RDERR_OK;
 }

@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "app_timer.h"
-#include "nrf_drv_gpiote.h"
+#include "nrfx_gpiote.h"
 #include "nrf_log.h"
 #include "r0b1c_device.h"
 #include "pca9685.h"
@@ -139,7 +139,7 @@ RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len)
 {
 	RDevErrCode tErr = RDERR_NOTIMPLEMENTED;
 	uint8_t port = pData[0];
-	RDevCmdCode tCmd = (RDevCmdCode)pData[1];
+	//RDevCmdCode tCmd = (RDevCmdCode)pData[1];
 	if (port >= TOTAL_RJ_PORTS) {
 		// Internal devices - port number equals to device Id
 		int id = FindDevById(port);
@@ -202,5 +202,5 @@ void RDeviceInit(void)
 	app_timer_start(tRDevTimer, RDEV_TICK_TIMEOUT, NULL);
 
 	// Init GPIOTE (ultrasonic)
-	nrf_drv_gpiote_init();
+	nrfx_gpiote_init();
 }

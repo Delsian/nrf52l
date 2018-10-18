@@ -38,7 +38,7 @@ RDevErrCode RDevButtonTick(uint8_t port, uint32_t time)
 {
 	assert(port<4);
 
-	if (time&TICK_MASK != TICK_MASK) { // Skip some ticks
+	if ( (time&TICK_MASK) != TICK_MASK) { // Skip some ticks
 		return RDERR_DONE;
 	}
 

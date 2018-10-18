@@ -25,6 +25,7 @@
 #define APP_BLE_CONN_CFG_TAG            1
 
 #define APP_ADV_INTERVAL                64                                      /**< The advertising interval (in units of 0.625 ms; this value corresponds to 40 ms). */
+#define APP_ADV_DURATION                18000                                   /**< The advertising duration (180 seconds) in units of 10 milliseconds. */
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
@@ -37,7 +38,7 @@ void battery_level_update(uint8_t battery_level)
 {
     ret_code_t err_code;
 
-    err_code = ble_bas_battery_level_update(&m_bas, battery_level);
+    err_code = ble_bas_battery_level_update(&m_bas, battery_level, BLE_CONN_HANDLE_ALL);
     if ((err_code != NRF_SUCCESS) &&
         (err_code != NRF_ERROR_INVALID_STATE) &&
         (err_code != NRF_ERROR_RESOURCES) &&
@@ -118,17 +119,46 @@ static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
     }
 }
 
+BLE_ADVERTISING_DEF(m_advertising);                                 /**< Advertising module instance. */
+
+/**@brief Function for handling advertising events.
+ *
+ * @details This function will be called for advertising events which are passed to the application.
+ *
+ * @param[in] ble_adv_evt  Advertising event.
+ */
+static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
+{
+    //ret_code_t err_code;
+
+    switch (ble_adv_evt)
+    {
+        case BLE_ADV_EVT_FAST:
+            NRF_LOG_INFO("Fast advertising.");
+            //err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+            //APP_ERROR_CHECK(err_code);
+            break;
+
+        case BLE_ADV_EVT_IDLE:
+            //sleep_mode_enter();
+            break;
+
+        default:
+            break;
+    }
+}
+
 static void advertising_init(void)
 {
+    ble_uuid_t adv_uuids[] = {
+        {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
+        //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
+        {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+    };
+    #if 0
     ret_code_t    err_code;
     ble_advdata_t advdata;
     ble_advdata_t srdata;
-
-    ble_uuid_t adv_uuids[] = {
-		    {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
-		    //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
-			{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
-    };
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -143,12 +173,37 @@ static void advertising_init(void)
 
     err_code = ble_advdata_set(&advdata, &srdata);
     APP_ERROR_CHECK(err_code);
+    #else
+    ret_code_t             err_code;
+    ble_advertising_init_t init;
+
+    memset(&init, 0, sizeof(init));
+
+    init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
+    init.advdata.include_appearance      = true;
+    init.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
+    init.advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
+    init.advdata.uuids_complete.p_uuids  = adv_uuids;
+
+    init.config.ble_adv_fast_enabled  = true;
+    init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
+    init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
+
+    init.evt_handler = on_adv_evt;
+
+    err_code = ble_advertising_init(&m_advertising, &init);
+    APP_ERROR_CHECK(err_code);
+
+    ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
+
+    #endif
 }
 
 /**@brief Function for starting advertising.
  */
-static void advertising_start(void)
+static void advertising_start(bool erase_bonds)
 {
+    #if 0
     ret_code_t           err_code;
     ble_gap_adv_params_t adv_params;
 
@@ -163,6 +218,20 @@ static void advertising_start(void)
 
     err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
     APP_ERROR_CHECK(err_code);
+    #else
+    if (erase_bonds == true)
+    {
+        //delete_bonds();
+        // Advertising is started by PM_EVT_PEERS_DELETE_SUCCEEDED event.
+    }
+    else
+    {
+        ret_code_t err_code;
+
+        err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
+        APP_ERROR_CHECK(err_code);
+    }
+    #endif
 }
 
 static void gap_params_init(void)
@@ -207,7 +276,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         	NRF_LOG_INFO("Disconnected");
         	RDevLedClearIndication(LED_IND_BTCONN);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
-            advertising_start();
+            advertising_start(false);
             break;
 
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
@@ -301,12 +370,13 @@ static void services_init(void)
     ble_bas_init_t bas_init;
     ble_dis_init_t dis_init;
 
-    // Here the sec level for the Battery Service can be changed/increased.
-    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.cccd_write_perm);
-    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_char_attr_md.read_perm);
-    BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&bas_init.battery_level_char_attr_md.write_perm);
+// Initialize Battery Service.
+    memset(&bas_init, 0, sizeof(bas_init));
 
-    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&bas_init.battery_level_report_read_perm);
+    // Here the sec level for the Battery Service can be changed/increased.
+    bas_init.bl_rd_sec        = SEC_OPEN;
+    bas_init.bl_cccd_wr_sec   = SEC_OPEN;
+    bas_init.bl_report_rd_sec = SEC_OPEN;
 
     bas_init.evt_handler          = NULL;
     bas_init.support_notification = true;
@@ -346,9 +416,7 @@ static void services_init(void)
     static uint8_t ubVerStr[12];
     dis_init.fw_rev_str.p_str = ubVerStr;
     dis_init.fw_rev_str.length = sprintf(ubVerStr, "%d.%d.%d", v1, v2, v3);
-
-    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&dis_init.dis_attr_md.read_perm);
-    BLE_GAP_CONN_SEC_MODE_SET_NO_ACCESS(&dis_init.dis_attr_md.write_perm);
+    dis_init.dis_char_rd_sec = SEC_OPEN;
 
     err_code = ble_dis_init(&dis_init);
     APP_ERROR_CHECK(err_code);
@@ -408,7 +476,7 @@ void ble_stack_init()
     err_code = ble_conn_params_init(&cp_init);
     APP_ERROR_CHECK(err_code);
 
-    advertising_start();
+    advertising_start(false);
 
     // Call after service initialization (set callbacks etc)
     if (gtServices.initCompl) {

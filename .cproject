@@ -45,7 +45,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.noinlinefunctions.1117730137" name="Do not inline functions (-fno-inline-functions)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.noinlinefunctions" useByScannerDiscovery="true" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting.1633088612" name="Create extended listing" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting" useByScannerDiscovery="false"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.810943965" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/nrf52l}/" command="make" id="ilg.gnuarmeclipse.managedbuild.cross.builder.1590837309" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
+							<builder autoBuildTarget="all" buildPath="${workspace_loc:/nrf52l}/" cleanBuildTarget="clean" command="make" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="ilg.gnuarmeclipse.managedbuild.cross.builder.1590837309" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} -c ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.243902329" name="Cross ARM GNU Assembler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor.1343566037" name="Use preprocessor" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs.649698599" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
@@ -128,6 +128,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/hal&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.2021107919" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -212,6 +215,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/hal&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.374115708" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.671262137" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
@@ -343,7 +349,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting.1367874746" name="Create extended listing" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting" useByScannerDiscovery="false"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.lto.5199282" name="Link-time optimizer (-flto)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.lto" value="true" valueType="boolean"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.1007905390" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
-							<builder id="ilg.gnuarmeclipse.managedbuild.cross.builder.529190182" incrementalBuildTarget="flash" managedBuildOn="false" name="Gnu Make Builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
+							<builder id="ilg.gnuarmeclipse.managedbuild.cross.builder.529190182" incrementalBuildTarget="flash" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} -c ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.465391773" name="Cross ARM GNU Assembler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor.1629716596" name="Use preprocessor" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs.1952944033" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
@@ -427,6 +433,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/device&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/hal&quot;"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.1021875076" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -511,6 +520,9 @@
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/libraries/crc32&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${SDK}/components/drivers_nrf/pwm&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/nrf52l/src/js}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/drivers/&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${SDK}/modules/nrfx/hal&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other.979899096" name="Other compiler flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.other" useByScannerDiscovery="true" value="" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1928155634" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>

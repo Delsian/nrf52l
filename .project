@@ -246,46 +246,6 @@
 			<locationURI>$%7BSDK%7D/components/libraries/bsp/bsp.c</locationURI>
 		</link>
 		<link>
-			<name>SDK/Drivers/nrf_drv_clock.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/clock/nrf_drv_clock.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_common.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/common/nrf_drv_common.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_gpiote.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/gpiote/nrf_drv_gpiote.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_pwm.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/pwm/nrf_drv_pwm.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_saadc.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/saadc/nrf_drv_saadc.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_spi.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/spi_master/nrf_drv_spi.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_systick.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/systick/nrf_drv_systick.c</locationURI>
-		</link>
-		<link>
-			<name>SDK/Drivers/nrf_drv_twi.c</name>
-			<type>1</type>
-			<locationURI>$%7BSDK%7D/components/drivers_nrf/twi_master/nrf_drv_twi.c</locationURI>
-		</link>
-		<link>
 			<name>SDK/Drivers/nrf_saadc.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/drivers_nrf/hal/nrf_saadc.c</locationURI>
@@ -294,6 +254,11 @@
 			<name>SDK/Drivers/nrf_twi_mngr.c</name>
 			<type>1</type>
 			<locationURI>$%7BSDK%7D/components/libraries/twi_mngr/nrf_twi_mngr.c</locationURI>
+		</link>
+		<link>
+			<name>SDK/Drivers/nrfx_twi.c</name>
+			<type>1</type>
+			<locationURI>$%7BSDK%7Dmodules/nrfx/drivers/src/nrfx_twi.c</locationURI>
 		</link>
 		<link>
 			<name>SDK/Libraries/Log</name>
@@ -494,7 +459,7 @@
 	<variableList>
 		<variable>
 			<name>SDK</name>
-			<value>$%7BPARENT-1-PROJECT_LOC%7D/SDK</value>
+			<value>$%7BPARENT-1-PROJECT_LOC%7D/SDK15.2</value>
 		</variable>
 	</variableList>
 </projectDescription>

@@ -3,7 +3,7 @@ PROJECT?=r0b1c
 BUILD_DIR=./out
 TOOLS_DIR=../tools
 CONFIG_DIR=../config
-SDK_DIR=../SDK
+SDK_DIR=../SDK15.2
 ESP_DIR=./Espruino/src
 SRC ?= ./src
 
@@ -74,81 +74,88 @@ endif
 
 #########################################################################
 # List of sources to be compiled/assembled
+PROJ_SRCS = \
+$(SRC)/main.c \
+$(SRC)/bluetooth.c \
+$(SRC)/buzzer.c \
+$(SRC)/control.c \
+$(SRC)/custom_service.c \
+$(SRC)/fs.c \
+$(SRC)/js_module.c \
+$(SRC)/pca9685.c \
+$(SRC)/r0b1c_cmd.c \
+$(SRC)/r0b1c_service.c \
+$(SRC)/devices/battery.c \
+$(SRC)/devices/dummy.c \
+$(SRC)/devices/gyro.c \
+$(SRC)/devices/jswrap_led.c \
+$(SRC)/devices/jswrap_motor.c \
+$(SRC)/devices/jswrap_range.c \
+$(SRC)/devices/motor.c \
+$(SRC)/devices/r0b1c_device.c \
+$(SRC)/devices/range.c \
+$(SRC)/devices/rdev_btn.c \
+$(SRC)/devices/rdev_led.c \
+$(SRC)/devices/rj_port.c \
+$(SRC)/js/jshardware.c \
+$(SRC)/js/jswrap_board.c \
+$(SRC)/js/jswrap_math.c \
+$(SRC)/js/jswrapper.c
+
 BLE_SRCS = \
-$(SDK_DIR)/components/ble/common/ble_advdata.c \
 $(SDK_DIR)/components/ble/ble_advertising/ble_advertising.c \
+$(SDK_DIR)/components/ble/nrf_ble_gatt/nrf_ble_gatt.c \
 $(SDK_DIR)/components/ble/ble_services/ble_bas/ble_bas.c \
-$(SDK_DIR)/components/ble/common/ble_conn_params.c \
-$(SDK_DIR)/components/ble/common/ble_conn_state.c \
-$(SDK_DIR)/components/ble/ble_db_discovery/ble_db_discovery.c \
+$(SDK_DIR)/components/ble/ble_services/ble_dis/ble_dis.c \
 $(SDK_DIR)/components/ble/ble_services/ble_dfu/ble_dfu.c \
 $(SDK_DIR)/components/ble/ble_services/ble_dfu/ble_dfu_unbonded.c \
-$(SDK_DIR)/components/ble/ble_services/ble_dis/ble_dis.c \
-$(SDK_DIR)/components/ble/ble_services/ble_lbs/ble_lbs.c \
-$(SDK_DIR)/components/ble/ble_services/ble_lbs_c/ble_lbs_c.c \
-$(SDK_DIR)/components/ble/ble_services/ble_nus/ble_nus.c \
-$(SDK_DIR)/components/ble/ble_services/experimental_ble_ots/ble_ots.c \
+$(SDK_DIR)/components/ble/common/ble_advdata.c \
+$(SDK_DIR)/components/ble/common/ble_conn_params.c \
+$(SDK_DIR)/components/ble/common/ble_conn_state.c \
 $(SDK_DIR)/components/ble/common/ble_srv_common.c \
-$(SDK_DIR)/components/ble/peer_manager/gatt_cache_manager.c \
-$(SDK_DIR)/components/ble/peer_manager/gatts_cache_manager.c \
-$(SDK_DIR)/components/ble/peer_manager/id_manager.c \
-$(SDK_DIR)/components/ble/nrf_ble_gatt/nrf_ble_gatt.c \
-$(SDK_DIR)/components/libraries/bootloader/dfu/nrf_dfu_svci.c \
 $(SDK_DIR)/components/softdevice/common/nrf_sdh.c \
-$(SDK_DIR)/components/softdevice/common/nrf_sdh_ble.c \
-$(SDK_DIR)/components/softdevice/common/nrf_sdh_soc.c \
-$(SDK_DIR)/components/ble/peer_manager/peer_data_storage.c \
-$(SDK_DIR)/components/ble/peer_manager/peer_database.c \
-$(SDK_DIR)/components/ble/peer_manager/peer_id.c \
-$(SDK_DIR)/components/ble/peer_manager/peer_manager.c \
-$(SDK_DIR)/components/ble/peer_manager/pm_buffer.c \
-$(SDK_DIR)/components/ble/peer_manager/pm_mutex.c \
-$(SDK_DIR)/components/ble/peer_manager/security_dispatcher.c \
-$(SDK_DIR)/components/ble/peer_manager/security_manager.c 
+$(SDK_DIR)/components/softdevice/common/nrf_sdh_ble.c
 
 SDK_SRCS = \
-$(SDK_DIR)/components/drivers_nrf/clock/nrf_drv_clock.c \
-$(SDK_DIR)/components/drivers_nrf/common/nrf_drv_common.c \
-$(SDK_DIR)/components/drivers_nrf/gpiote/nrf_drv_gpiote.c \
-$(SDK_DIR)/components/drivers_nrf/pwm/nrf_drv_pwm.c \
-$(SDK_DIR)/components/drivers_nrf/saadc/nrf_drv_saadc.c \
-$(SDK_DIR)/components/drivers_nrf/spi_master/nrf_drv_spi.c \
-$(SDK_DIR)/components/drivers_nrf/systick/nrf_drv_systick.c \
-$(SDK_DIR)/components/drivers_nrf/twi_master/nrf_drv_twi.c \
-$(SDK_DIR)/components/drivers_nrf/hal/nrf_saadc.c \
-$(SDK_DIR)/components/libraries/twi_mngr/nrf_twi_mngr.c 
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_adc.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_clock.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_gpiote.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_pwm.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_saadc.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_twi.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_twim.c \
+$(SDK_DIR)/modules/nrfx/drivers/src/nrfx_timer.c \
+$(SDK_DIR)/modules/nrfx/mdk/system_nrf52.c \
+
 
 LIB_SRCS = \
-$(SDK_DIR)/components/libraries/button/app_button.c \
-$(SDK_DIR)/components/libraries/util/app_error.c \
-$(SDK_DIR)/components/libraries/util/app_error_weak.c \
-$(SDK_DIR)/components/libraries/pwm/app_pwm.c \
-$(SDK_DIR)/components/libraries/scheduler/app_scheduler.c \
-$(SDK_DIR)/components/libraries/timer/app_timer.c \
-$(SDK_DIR)/components/libraries/uart/app_uart.c \
-$(SDK_DIR)/components/libraries/util/app_util_platform.c \
-$(SDK_DIR)/components/libraries/crc32/crc32.c \
-$(SDK_DIR)/components/libraries/fds/fds.c \
-$(SDK_DIR)/components/libraries/low_power_pwm/low_power_pwm.c \
+$(SDK_DIR)/components/libraries/atomic/nrf_atomic.c \
+$(SDK_DIR)/components/libraries/atomic_flags/nrf_atflags.c \
 $(SDK_DIR)/components/libraries/atomic_fifo/nrf_atfifo.c \
+$(SDK_DIR)/components/libraries/bootloader/dfu/nrf_dfu_svci.c \
 $(SDK_DIR)/components/libraries/balloc/nrf_balloc.c \
-$(SDK_DIR)/components/libraries/cli/nrf_cli.c \
-$(SDK_DIR)/components/libraries/cli/ble_uart/nrf_cli_ble_uart.c \
-$(SDK_DIR)/components/libraries/cli/rtt/nrf_cli_rtt.c \
-$(SDK_DIR)/external/fprintf/nrf_fprintf.c \
-$(SDK_DIR)/external/fprintf/nrf_fprintf_format.c \
+$(SDK_DIR)/components/libraries/crc32/crc32.c \
+$(SDK_DIR)/components/libraries/scheduler/app_scheduler.c \
 $(SDK_DIR)/components/libraries/fstorage/nrf_fstorage.c \
 $(SDK_DIR)/components/libraries/fstorage/nrf_fstorage_sd.c \
-$(SDK_DIR)/components/libraries/experimental_memobj/nrf_memobj.c \
-$(SDK_DIR)/components/libraries/experimental_mpu/nrf_mpu.c \
+$(SDK_DIR)/components/libraries/log/src/nrf_log_frontend.c \
+$(SDK_DIR)/components/libraries/log/src/nrf_log_default_backends.c \
+$(SDK_DIR)/components/libraries/log/src/nrf_log_backend_rtt.c \
+$(SDK_DIR)/components/libraries/log/src/nrf_log_backend_serial.c \
+$(SDK_DIR)/components/libraries/log/src/nrf_log_str_formatter.c \
+$(SDK_DIR)/components/libraries/memobj/nrf_memobj.c \
 $(SDK_DIR)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c \
 $(SDK_DIR)/components/libraries/queue/nrf_queue.c \
-$(SDK_DIR)/components/libraries/experimental_section_vars/nrf_section_iter.c \
+$(SDK_DIR)/components/libraries/ringbuf/nrf_ringbuf.c \
 $(SDK_DIR)/components/libraries/strerror/nrf_strerror.c \
-$(SDK_DIR)/components/libraries/util/sdk_mapped_flags.c \
-$(SDK_DIR)/components/libraries/experimental_task_manager/task_manager.c \
-$(SDK_DIR)/components/libraries/experimental_ringbuf/nrf_ringbuf.c \
-$(SDK_DIR)/components/toolchain/system_nrf52.c \
+$(SDK_DIR)/components/libraries/timer/app_timer.c \
+$(SDK_DIR)/components/libraries/twi_mngr/nrf_twi_mngr.c \
+$(SDK_DIR)/components/libraries/util/app_error_handler_gcc.c \
+$(SDK_DIR)/components/libraries/util/app_util_platform.c \
+$(SDK_DIR)/components/libraries/util/app_error.c \
+$(SDK_DIR)/components/libraries/util/app_error_weak.c \
+$(SDK_DIR)/components/libraries/experimental_section_vars/nrf_section_iter.c \
+$(SDK_DIR)/integration/nrfx/legacy/nrf_drv_twi.c
 
 ESP_SRCS = \
 $(ESP_DIR)/jsflags.c \
@@ -178,20 +185,17 @@ LOG_SRCS += \
 $(SDK_DIR)/external/segger_rtt/SEGGER_RTT.c \
 $(SDK_DIR)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
 $(SDK_DIR)/external/segger_rtt/SEGGER_RTT_printf.c \
-$(SDK_DIR)/components/libraries/experimental_log/src/nrf_log_backend_rtt.c \
-$(SDK_DIR)/components/libraries/experimental_log/src/nrf_log_backend_serial.c \
-$(SDK_DIR)/components/libraries/experimental_log/src/nrf_log_default_backends.c \
-$(SDK_DIR)/components/libraries/experimental_log/src/nrf_log_frontend.c \
-$(SDK_DIR)/components/libraries/experimental_log/src/nrf_log_str_formatter.c 
+$(SDK_DIR)/external/fprintf/nrf_fprintf.c \
+$(SDK_DIR)/external/fprintf/nrf_fprintf_format.c
 
-CSRCS = $(wildcard $(SRC)/*.c $(SRC)/*/*.c) \
+CSRCS = $(PROJ_SRCS) \
 $(BLE_SRCS) \
 $(SDK_SRCS) \
 $(LIB_SRCS) \
 $(ESP_SRCS) \
 $(LOG_SRCS)
 
-ASRCS = $(SDK_DIR)/components/toolchain/gcc/gcc_startup_nrf52.S
+ASRCS = $(SDK_DIR)/modules/nrfx/mdk/gcc_startup_nrf52.S
 
 #########################################################################
 # AS includes
@@ -199,85 +203,68 @@ AS_INCLUDES =  \
 
 # C includes
 BLE_INCS = \
-$(SDK_DIR)/components/ble/common \
 $(SDK_DIR)/components/ble/ble_advertising \
-$(SDK_DIR)/components/ble/ble_services/ble_bas \
 $(SDK_DIR)/components/ble/ble_db_discovery \
+$(SDK_DIR)/components/ble/ble_services/ble_bas \
 $(SDK_DIR)/components/ble/ble_services/ble_dfu \
 $(SDK_DIR)/components/ble/ble_services/ble_dis \
-$(SDK_DIR)/components/ble/ble_services/ble_lbs \
-$(SDK_DIR)/components/ble/ble_services/ble_lbs_c \
-$(SDK_DIR)/components/ble/ble_services/ble_nus \
-$(SDK_DIR)/components/ble/ble_services/experimental_ble_ots \
-$(SDK_DIR)/components/ble/peer_manager \
+$(SDK_DIR)/components/ble/common \
 $(SDK_DIR)/components/ble/nrf_ble_gatt \
-$(SDK_DIR)/components/libraries/bootloader/dfu \
-$(SDK_DIR)/components/softdevice/common
+$(SDK_DIR)/components/ble/peer_manager \
 
-DRIVER_INCS += \
-$(SDK_DIR)/components/drivers_nrf/clock \
-$(SDK_DIR)/components/drivers_nrf/common \
-$(SDK_DIR)/components/drivers_nrf/delay \
-$(SDK_DIR)/components/drivers_nrf/gpiote \
-$(SDK_DIR)/components/drivers_nrf/pwm \
-$(SDK_DIR)/components/drivers_nrf/saadc \
-$(SDK_DIR)/components/drivers_nrf/spi_master \
-$(SDK_DIR)/components/drivers_nrf/systick \
-$(SDK_DIR)/components/drivers_nrf/twi_master \
-$(SDK_DIR)/components/drivers_nrf/hal \
-$(SDK_DIR)/components/libraries/twi_mngr
-
-LIB_INCS += \
+LIB_INCS = \
+$(SDK_DIR)/components/boards \
 $(SDK_DIR)/components/libraries/atomic \
 $(SDK_DIR)/components/libraries/atomic_fifo \
-$(SDK_DIR)/components/libraries/button \
-$(SDK_DIR)/components/libraries/cli \
-$(SDK_DIR)/components/libraries/cli/ble_uart \
-$(SDK_DIR)/components/libraries/cli/rtt \
-$(SDK_DIR)/components/libraries/util \
-$(SDK_DIR)/components/libraries/mutex \
-$(SDK_DIR)/components/libraries/pwm \
-$(SDK_DIR)/components/libraries/scheduler \
-$(SDK_DIR)/components/libraries/svc \
-$(SDK_DIR)/components/libraries/timer \
-$(SDK_DIR)/components/libraries/uart \
-$(SDK_DIR)/components/libraries/util \
-$(SDK_DIR)/components/libraries/crc32 \
-$(SDK_DIR)/components/libraries/fds \
-$(SDK_DIR)/components/libraries/low_power_pwm \
+$(SDK_DIR)/components/libraries/atomic_flags \
 $(SDK_DIR)/components/libraries/balloc \
-$(SDK_DIR)/external/fprintf \
+$(SDK_DIR)/components/libraries/bootloader \
+$(SDK_DIR)/components/libraries/bootloader/dfu \
+$(SDK_DIR)/components/libraries/bootloader/ble_dfu \
+$(SDK_DIR)/components/libraries/crc32 \
+$(SDK_DIR)/components/libraries/delay \
 $(SDK_DIR)/components/libraries/fstorage \
-$(SDK_DIR)/components/libraries/experimental_log \
-$(SDK_DIR)/components/libraries/experimental_log/src \
-$(SDK_DIR)/components/libraries/experimental_memobj \
-$(SDK_DIR)/components/libraries/experimental_mpu \
+$(SDK_DIR)/components/libraries/experimental_section_vars \
+$(SDK_DIR)/components/libraries/log \
+$(SDK_DIR)/components/libraries/log/src \
+$(SDK_DIR)/components/libraries/memobj \
+$(SDK_DIR)/components/libraries/mutex \
 $(SDK_DIR)/components/libraries/pwr_mgmt \
 $(SDK_DIR)/components/libraries/queue \
-$(SDK_DIR)/components/libraries/experimental_section_vars \
+$(SDK_DIR)/components/libraries/ringbuf \
+$(SDK_DIR)/components/libraries/scheduler \
 $(SDK_DIR)/components/libraries/strerror \
-$(SDK_DIR)/components/libraries/experimental_task_manager \
-$(SDK_DIR)/components/libraries/experimental_ringbuf 
+$(SDK_DIR)/components/libraries/svc \
+$(SDK_DIR)/components/libraries/timer \
+$(SDK_DIR)/components/libraries/twi_mngr \
+$(SDK_DIR)/components/libraries/util \
+$(SDK_DIR)/integration/nrfx/legacy
+
+
+NRFX_INCS += \
+$(SDK_DIR)/modules/nrfx \
+$(SDK_DIR)/modules/nrfx/hal \
+$(SDK_DIR)/modules/nrfx/drivers \
+$(SDK_DIR)/modules/nrfx/drivers/include \
+$(SDK_DIR)/modules/nrfx/mdk \
 
 SDKINCS = \
 $(BLE_INCS) \
-$(DRIVER_INCS) \
+$(NRFX_INCS) \
 $(LIB_INCS) \
-$(SDK_DIR)/BSP \
-$(SDK_DIR)/components/boards \
-$(SDK_DIR)/components/device \
-$(SDK_DIR)/components/softdevice/s132/headers \
-$(SDK_DIR)/components/softdevice/s132/headers/nrf52 \
-$(SDK_DIR)/components/toolchain \
+$(SDK_DIR)/external/segger_rtt \
+$(SDK_DIR)/external/fprintf \
 $(SDK_DIR)/components/toolchain/cmsis/include \
-$(SDK_DIR)/external/segger_rtt 
+$(SDK_DIR)/components/softdevice/common \
+$(SDK_DIR)/components/softdevice/s132/headers \
+$(SDK_DIR)/components/softdevice/s132/headers/nrf52
 
 JS_INCS = $(SRC)/js \
 $(ESP_DIR) \
 $(ESP_DIR)/../libs/math \
 $(ESP_DIR)/../libs/compression \
 
-INCDIRS = $(SRC) $(JS_INCS) $(SRC)/devices $(SDKINCS) $(CONFIG_DIR) 
+INCDIRS = $(SRC) $(JS_INCS) $(SRC)/devices $(SDKINCS) $(CONFIG_DIR)
 
 #########################################################################
 # list of objects
@@ -294,8 +281,8 @@ DEVICE_FLAGS=-mcpu=cortex-m4 -mthumb
 DEVICE_CFLAGS=$(DEVICE_FLAGS) -mthumb-interwork
 
 # DEFINEs to be used when building C/C++ code
-DEFINES += -DNRF52 -DNRF52832 -DBOARD_CUSTOM -DSWI_DISABLE0 -DNRF52_PAN_74 -DNRF52832_XXAA
-DEFINES += -DSOFTDEVICE_PRESENT -DS132 -DBLE_STACK_SUPPORT_REQD -DNRF_SD_BLE_API_VERSION=5
+DEFINES += -DNRF52 -DNRF52832 -DBOARD_CUSTOM -DNRF52832_XXAA -DNRF52_PAN_74 -DSWI_DISABLE0
+DEFINES += -DSOFTDEVICE_PRESENT -DS132 -DBLE_STACK_SUPPORT_REQD -DNRF_SD_BLE_API_VERSION=6
 DEFINES += -DNRF_DFU_SVCI_ENABLED -DCONFIG_GPIO_AS_PINRESET -DFLOAT_ABI_HARD
 
 ifeq "$(OPTIMIZATION)" "0"
@@ -304,11 +291,13 @@ endif
 
 # Compiler Options
 GCFLAGS += -O$(OPTIMIZATION) -g3 $(DEVICE_CFLAGS)
-GCFLAGS += -ffunction-sections -fdata-sections  -fno-exceptions -fno-delete-null-pointer-checks
+GCFLAGS += -ffunction-sections -fdata-sections  -fno-exceptions -fno-strict-aliasing
+GCFLAGS += -fno-delete-null-pointer-checks -fno-builtin -fshort-enums
 GCFLAGS += $(patsubst %,-I%,$(INCDIRS))
 GCFLAGS += $(DEFINES)
 GCFLAGS += $(DEPFLAGS)
 GCFLAGS += -Wall -Wno-unused-parameter
+GCFLAGS += -Wno-pointer-sign
 
 GPFLAGS += $(GCFLAGS) -std=gnu++11
 
@@ -322,7 +311,7 @@ LSCRIPT=gcc_nrf52.ld
 # Linker Options.
 LDFLAGS = $(DEVICE_FLAGS) --specs=nano.specs -mabi=aapcs
 LDFLAGS += -Wl,-Map=$(BUILD_DIR)/$(PROJECT).map,--cref,--gc-sections
-LDFLAGS += -T$(LSCRIPT) -L$(SDK_DIR)/components/toolchain/gcc
+LDFLAGS += -T$(LSCRIPT) -L$(SDK_DIR)/modules/nrfx/mdk
 
 # Libraries to be linked into final binary
 LIBS = -lc -lnosys -lm

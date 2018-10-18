@@ -30,20 +30,18 @@ uint16_t GyroGetVal(uint16_t valId)
 {
 	ubData[0] = 0x38;
 	ubData[1] = 14;
-	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, true);
-	nrf_drv_twi_rx(TwiGetDrv(), MPU6050_ADDR, ubData, 14);
+	//nrfx_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, true);
+	//nrfx_twi_rx(TwiGetDrv(), MPU6050_ADDR, ubData, 14);
 	return 0;
 }
 
 RDevErrCode RDevGyroInit(uint8_t port)
 {
-	ret_code_t err_code;
-	TwiMngrInit();
 	// check version
 	const uint8_t req = MPU6050_WHO_AM_I;
 	uint8_t ans;
-	nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, &req, 1, true);
-	nrf_drv_twi_rx(TwiGetDrv(), MPU6050_ADDR, &ans, 1);
+	//nrfx_twi_tx(TwiGetDrv(), MPU6050_ADDR, &req, 1, true);
+	//nrfx_twi_rx(TwiGetDrv(), MPU6050_ADDR, &ans, 1);
 	//NRF_LOG_DEBUG("Gyro init %d", ans);
 	if (ans == 0x68)
 	{
@@ -51,7 +49,7 @@ RDevErrCode RDevGyroInit(uint8_t port)
 		// Turn MPU on
 		ubData[0] = MPU6050_PWR_MGMT_1;
 		ubData[1] = 0;
-		nrf_drv_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, false);
+		//nrfx_twi_tx(TwiGetDrv(), MPU6050_ADDR, ubData, 2, false);
 		GyroGetVal(0);
 	}
 	return RDERR_DONE;
