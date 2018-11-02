@@ -16,4 +16,7 @@ void PcaLedColor(LedColor color);
 void PcaPinOn(uint8_t ch);
 void PcaPinOff(uint8_t ch);
 
+void bsp_board_led_on(uint32_t led_idx);
+void bsp_board_led_off(uint32_t led_idx);
+
 #endif /* PCA9685_H_ */

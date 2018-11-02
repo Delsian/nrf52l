@@ -13,16 +13,19 @@
 #include "nrf.h"
 #include "app_error.h"
 #include "nrf_twi_mngr.h"
+#include "nrf_drv_twi.h"
 #include "sdk_errors.h"
 #include "rdev_led.h"
 
 #define TWI_INSTANCE_ID             0
 #define MAX_PENDING_TRANSACTIONS    5
+#define PCA9685_ADDR 0x60
 
+#ifdef USE_TWI_MNGR
 NRF_TWI_MNGR_DEF(m_nrf_twi_mngr, MAX_PENDING_TRANSACTIONS, TWI_INSTANCE_ID);
 static bool IsTwiInitialized;
 
-void TwiMngrInit() {
+static void TwiMngrInit() {
 	nrf_drv_twi_config_t const config = {
 		.scl                = TWI0_SCL,
 		.sda                = TWI0_SDA,
@@ -41,8 +44,31 @@ nrf_twi_mngr_t const * TwiGetMngr() {
 	}
 	return &m_nrf_twi_mngr;
 }
+#else
+static const nrf_drv_twi_t m_twi_master = NRF_DRV_TWI_INSTANCE(TWI_INSTANCE_ID);
+static void TwiMasterInit(void)
+{
+    const nrf_drv_twi_config_t config =
+    {
+       .scl                = TWI0_SCL,
+       .sda                = TWI0_SDA,
+       .frequency          = NRF_DRV_TWI_FREQ_400K,
+       .interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
+       .clear_bus_init     = false
+    };
 
-#define PCA9685_ADDR 0x60
+    nrf_drv_twi_init(&m_twi_master, &config, NULL, NULL);
+    nrf_drv_twi_enable(&m_twi_master);
+}
+
+void PcaTransfer(const nrf_twi_mngr_transfer_t* trnsf, int count)
+{
+	for(int i = 0; i < count; i++) {
+		nrf_drv_twi_tx(&m_twi_master, PCA9685_ADDR, trnsf[i].p_data, trnsf[0].length, false);
+	}
+}
+#endif
+
 #define PCA9685_MAX_CHANNEL         15
 
 // Register addresses from data sheet
@@ -70,39 +96,41 @@ nrf_twi_mngr_t const * TwiGetMngr() {
 #define PCA9685_PWM_FULL            0x01000 // Special value for full on/full off LEDx modes
 
 void pca_wr_cb(ret_code_t result, void * p_user_data) {}
+#define PINCTL_LEN 5
+static uint8_t pinctl[PINCTL_LEN];
+static nrf_twi_mngr_transfer_t transfers[] = { NRF_TWI_MNGR_WRITE(PCA9685_ADDR, pinctl, PINCTL_LEN, 0) };
+static nrf_twi_mngr_transaction_t NRF_TWI_MNGR_BUFFER_LOC_IND transaction =
+{
+    .callback            = pca_wr_cb,
+    .p_user_data         = NULL,
+    .p_transfers         = transfers,
+    .number_of_transfers = 1
+};
 
 // Set pin to 1
 void PcaPinOn(uint8_t ch)
 {
-	static uint8_t pinon[] = { 0, 0, 0x10, 0, 0 };
-	static nrf_twi_mngr_transfer_t transfers[] = { NRF_TWI_MNGR_WRITE(PCA9685_ADDR, pinon, 5, 0) };
-    static nrf_twi_mngr_transaction_t NRF_TWI_MNGR_BUFFER_LOC_IND transaction =
-    {
-        .callback            = pca_wr_cb,
-        .p_user_data         = NULL,
-        .p_transfers         = transfers,
-        .number_of_transfers = 1
-    };
-
-    pinon[0] = (ch<<2) + PCA9685_LED0_REG;
+	memset(pinctl, 0, PINCTL_LEN);
+    pinctl[0] = (ch<<2) + PCA9685_LED0_REG;
+    pinctl[2] = 0x10;
+#ifdef USE_TWI_MNGR
 	APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &transaction));
+#else
+	PcaTransfer(transfers, 1);
+#endif
 }
 
 // Reset pin to 0
 void PcaPinOff(uint8_t ch)
 {
-	static uint8_t pinoff[] = { 0, 0, 0, 0, 0x10 };
-	static nrf_twi_mngr_transfer_t transfers[] = { NRF_TWI_MNGR_WRITE(PCA9685_ADDR, pinoff, 5, 0) };
-    static nrf_twi_mngr_transaction_t NRF_TWI_MNGR_BUFFER_LOC_IND transaction =
-    {
-        .callback            = pca_wr_cb,
-        .p_user_data         = NULL,
-        .p_transfers         = transfers,
-        .number_of_transfers = 1
-    };
-
-    pinoff[0] = (ch<<2) + PCA9685_LED0_REG;
+	memset(pinctl, 0, PINCTL_LEN);
+    pinctl[0] = (ch<<2) + PCA9685_LED0_REG;
+    pinctl[4] = 0x10;
+#ifdef USE_TWI_MNGR
 	APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &transaction));
+#else
+	PcaTransfer(transfers, 1);
+#endif
 }
 
 // write byte value using auto-increment
@@ -115,20 +143,16 @@ void PcaWriteChannel(uint8_t ch, uint8_t val)
 			PcaPinOn (ch);
 		} else {
 			uint16_t val_on = val << 4;
-			static uint8_t pinval[] = { 0, 0xFF, 0xF, 0, 0 };
-			static nrf_twi_mngr_transfer_t transfers[] = { NRF_TWI_MNGR_WRITE(PCA9685_ADDR, pinval, 5, 0) };
-		    static nrf_twi_mngr_transaction_t NRF_TWI_MNGR_BUFFER_LOC_IND transaction =
-		    {
-		        .callback            = pca_wr_cb,
-		        .p_user_data         = NULL,
-		        .p_transfers         = transfers,
-		        .number_of_transfers = 1
-		    };
-
-		    pinval[0] = (ch == PCA9685_ALLLED_REG)? ch : (ch<<2) + PCA9685_LED0_REG;
-		    pinval[3] = val_on&0xFF;
-		    pinval[4] = val_on>>8;
+		    pinctl[0] = (ch == PCA9685_ALLLED_REG)? ch : (ch<<2) + PCA9685_LED0_REG;
+		    pinctl[1] = 0xFF;
+		    pinctl[2] = 0xF;
+		    pinctl[3] = val_on&0xFF;
+		    pinctl[4] = val_on>>8;
+#ifdef USE_TWI_MNGR
 			APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &transaction));
+#else
+			PcaTransfer(transfers, 1);
+#endif
 		}
 	}
 }
@@ -163,6 +187,10 @@ void PcaLedColor(LedColor color)
 
 void PcaInit(void)
 {
+#ifndef USE_TWI_MNGR
+	TwiMasterInit();
+#endif
+
 	const uint8_t NRF_TWI_MNGR_BUFFER_LOC_IND config0[] = { PCA9685_MODE1_REG, PCA9685_MODE_SLEEP };
 	const uint8_t NRF_TWI_MNGR_BUFFER_LOC_IND config1[] = { PCA9685_PRESCALE_REG, 3 }; // max pwm freq
 	const uint8_t NRF_TWI_MNGR_BUFFER_LOC_IND config2[] = { PCA9685_MODE1_REG, PCA9685_MODE_RESTART };
@@ -178,7 +206,28 @@ void PcaInit(void)
 	    NRF_TWI_MNGR_WRITE(PCA9685_ADDR, config3, sizeof(config3), 0),
 	    NRF_TWI_MNGR_WRITE(PCA9685_ADDR, config4, sizeof(config4), 0),
 	};
-
+#ifdef USE_TWI_MNGR
 	APP_ERROR_CHECK(nrf_twi_mngr_perform(TwiGetMngr(), NULL, pca9685_init_transfers,
         PCA9685_INIT_TRANSFER_COUNT, NULL));
+#else
+	PcaTransfer(pca9685_init_transfers, 5);
+#endif
+}
+
+//=== For BSP compatibility ==
+
+const LedColor ColTable[3] = {
+		COLOR_RED,
+		COLOR_BLUE,
+		COLOR_GREEN
+};
+// !! ToDo !!
+__WEAK void bsp_board_led_on(uint32_t led_idx)
+{
+	PcaLedColor(ColTable[led_idx]);
+}
+
+__WEAK void bsp_board_led_off(uint32_t led_idx)
+{
+	PcaLedColor(COLOR_BLACK);
 }
