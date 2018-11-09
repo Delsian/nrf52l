@@ -21,7 +21,7 @@
 #include "nrf_log.h"
 #include "app_timer.h"
 #include "app_scheduler.h"
-#include "nrf_drv_gpiote.h"
+#include "nrfx_gpiote.h"
 #include "r0b1c_device.h"
 #include "r0b1c_cmd.h"
 
@@ -44,7 +44,7 @@ static void RDevRengeNotify(void* ipData, uint16_t size)
 	jswrap_range_emit(ubRange); // Notification to JS
 }
 
-static void RDevRangeToggle(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
+static void RDevRangeToggle(nrfx_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
 #define OFF_COUNT_TIMEOUT 4 // Time until reporting off state
 
@@ -72,22 +72,22 @@ RDevErrCode RDevRangeInit(uint8_t port)
 	RjPortSetOutput(port, PinYellow);
 	RjPortPinSet(port, PinYellow, 0);
 
-	nrf_drv_gpiote_in_config_t conf = {
+	nrfx_gpiote_in_config_t conf = {
 			.is_watcher = false,                     \
 			.hi_accuracy = true,                  \
 			.pull = NRF_GPIO_PIN_PULLUP,             \
 			.sense = NRF_GPIOTE_POLARITY_TOGGLE
 	};
 	uint32_t pin = RjPortGetPinNum(port, PinBlue);
-	nrf_drv_gpiote_in_init( pin, &conf, &RDevRangeToggle);
+	nrfx_gpiote_in_init( pin, &conf, &RDevRangeToggle);
 	isWaiting = false;
 	return RDERR_OK;
 }
 
 RDevErrCode RDevRangeUnInit(uint8_t port)
 {
-	nrf_drv_gpiote_in_event_disable(RjPortGetPinNum(port, PinBlue));
-	nrf_drv_gpiote_in_uninit(RjPortGetPinNum(port, PinBlue));
+	nrfx_gpiote_in_event_disable(RjPortGetPinNum(port, PinBlue));
+	nrfx_gpiote_in_uninit(RjPortGetPinNum(port, PinBlue));
 	ubPortPlus1 = 0; // Set to 0 as marker for empty module
 	return RDERR_OK;
 }
@@ -117,9 +117,9 @@ RDevErrCode RDevRangeTick(uint8_t port, uint32_t time)
 void RDevRangeScanEnable(bool enable)
 {
 	if (enable) {
-		nrf_drv_gpiote_in_event_enable(RjPortGetPinNum(ubPortPlus1-1, PinBlue), true);
+		nrfx_gpiote_in_event_enable(RjPortGetPinNum(ubPortPlus1-1, PinBlue), true);
 	} else {
-		nrf_drv_gpiote_in_event_disable(RjPortGetPinNum(ubPortPlus1-1, PinBlue));
+		nrfx_gpiote_in_event_disable(RjPortGetPinNum(ubPortPlus1-1, PinBlue));
 	}
 }
 

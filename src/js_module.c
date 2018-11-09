@@ -154,7 +154,7 @@ void JsCheckApp()
 
 void JsInit()
 {
-	jsvInit();
+	jsvInit(0);
 	jswInit();
 	jspInit();
     jsvSoftInit();

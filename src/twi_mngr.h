@@ -7,10 +7,9 @@
 
 #ifndef TWI_MNGR_H_
 #define TWI_MNGR_H_
-#include "nrf_drv_twi.h"
+#include "nrf_twi_mngr.h"
 
-void TwiMngrInit(void);
-nrf_drv_twi_t const * TwiGetDrv(void);
+nrf_twi_mngr_t const * TwiGetMngr(void);
 
 
 #endif /* TWI_MNGR_H_ */

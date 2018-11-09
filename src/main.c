@@ -8,6 +8,7 @@
 #include "app_timer.h"
 #include "app_scheduler.h"
 #include "nrf_soc.h"
+#include "nrf_clock.h"
 #include "nrf_drv_clock.h"
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
@@ -67,6 +68,40 @@ static void ButtonInit()
 	app_timer_start(tBtnTimer, APP_TIMER_TICKS(BUTTON_TICK_MS), NULL);
 }
 
+static void clock_irq_handler(nrfx_clock_evt_type_t evt)
+{
+#if 0
+    if (evt == NRFX_CLOCK_EVT_HFCLK_STARTED)
+    {
+        m_clock_cb.hfclk_on = true;
+        clock_clk_started_notify(NRF_DRV_CLOCK_EVT_HFCLK_STARTED);
+    }
+    if (evt == NRFX_CLOCK_EVT_LFCLK_STARTED)
+    {
+        m_clock_cb.lfclk_on = true;
+        clock_clk_started_notify(NRF_DRV_CLOCK_EVT_LFCLK_STARTED);
+    }
+#if CALIBRATION_SUPPORT
+    if (evt == NRFX_CLOCK_EVT_CTTO)
+    {
+        nrf_drv_clock_hfclk_request(&m_clock_cb.cal_hfclk_started_handler_item);
+    }
+
+    if (evt == NRFX_CLOCK_EVT_CAL_DONE)
+    {
+        nrf_drv_clock_hfclk_release();
+        bool aborted = (m_clock_cb.cal_state == CAL_STATE_ABORT);
+        m_clock_cb.cal_state = CAL_STATE_IDLE;
+        if (m_clock_cb.cal_done_handler)
+        {
+            m_clock_cb.cal_done_handler(aborted ?
+                NRF_DRV_CLOCK_EVT_CAL_ABORTED : NRF_DRV_CLOCK_EVT_CAL_DONE);
+        }
+    }
+#endif // CALIBRATION_SUPPORT
+#endif
+}
+
 static void HwInit(void)
 {
 	ret_code_t err_code;
@@ -79,10 +114,10 @@ static void HwInit(void)
     err_code = nrf_pwr_mgmt_init();
     APP_ERROR_CHECK(err_code);
 
-    err_code = nrf_drv_clock_init();
+    err_code = nrfx_clock_init(clock_irq_handler);
     APP_ERROR_CHECK(err_code);
 
-    nrf_drv_clock_lfclk_request(NULL);
+    //nrf_drv_clock_lfclk_request(NULL);
 
     // Initialize timer module, making it use the scheduler
     err_code = app_timer_init();

@@ -51,7 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 /Debug/
-
+/out
 /_build
 /.settings/language.settings.xml
 /Release/
@@ -60,3 +60,4 @@ dkms.conf
 *.pyc
 
 version\.txt
+/Default/

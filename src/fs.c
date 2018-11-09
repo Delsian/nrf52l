@@ -9,6 +9,7 @@
 #include "nrf.h"
 #include "nrf_log.h"
 #include "nrf_soc.h"
+#include "app_error.h"
 #include "nordic_common.h"
 #include "nrf_sdh.h"
 #include "nrf_fstorage.h"

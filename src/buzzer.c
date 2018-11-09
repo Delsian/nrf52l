@@ -14,10 +14,10 @@
 #include "sdk_errors.h"
 #include "app_timer.h"
 #include "app_util_platform.h"
-#include "nrf_drv_clock.h"
-#include "nrf_drv_pwm.h"
+#include "nrfx_clock.h"
+#include "nrfx_pwm.h"
 
-static nrf_drv_pwm_t tBuzzerPwm = NRF_DRV_PWM_INSTANCE(0);
+static nrfx_pwm_t tBuzzerPwm = NRFX_PWM_INSTANCE(0);
 static uint8_t usLoud = 2;
 
 static nrf_pwm_values_common_t seq_values[1];
@@ -43,10 +43,10 @@ void BuzzerPlayTone(uint16_t tone)
 		seq_values[0] = tone-(tone/usLoud+1);
 		nrf_pwm_configure(tBuzzerPwm.p_registers,
 				NRF_PWM_CLK_1MHz, NRF_PWM_MODE_UP, tone);
-		nrf_drv_pwm_simple_playback(&tBuzzerPwm, &seq, 3, NRF_DRV_PWM_FLAG_LOOP);
+		nrfx_pwm_simple_playback(&tBuzzerPwm, &seq, 3, NRFX_PWM_FLAG_LOOP);
 	} else {
 		seq_values[0] = 0;
-		nrf_drv_pwm_stop(&tBuzzerPwm, false);
+		nrfx_pwm_stop(&tBuzzerPwm, false);
 	}
 }
 
@@ -57,15 +57,14 @@ void BuzzerLoudness(uint8_t loud)
 
 void BuzzerInit(void)
 {
-	uint32_t err_code;
-	nrf_drv_pwm_config_t config =
+	nrfx_pwm_config_t config =
 	    {
 			.output_pins =
 				{
 					BUZZER_PWM, // channel 0
-					NRF_DRV_PWM_PIN_NOT_USED,             // channel 1
-					NRF_DRV_PWM_PIN_NOT_USED,             // channel 2
-					NRF_DRV_PWM_PIN_NOT_USED,             // channel 3
+					NRFX_PWM_PIN_NOT_USED,             // channel 1
+					NRFX_PWM_PIN_NOT_USED,             // channel 2
+					NRFX_PWM_PIN_NOT_USED,             // channel 3
 				},
 	        // These are the common configuration options we use for all PWM
 	        // instances.
@@ -77,5 +76,5 @@ void BuzzerInit(void)
 	        .step_mode    = NRF_PWM_STEP_AUTO,
 	    };
 
-	APP_ERROR_CHECK(nrf_drv_pwm_init(&tBuzzerPwm, &config, NULL));
+	APP_ERROR_CHECK(nrfx_pwm_init(&tBuzzerPwm, &config, NULL));
 }

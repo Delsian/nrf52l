@@ -5,9 +5,9 @@ GROUP(-lgcc -lc -lnosys)
 
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x23000, LENGTH = 0x55000
+  FLASH (rx) : ORIGIN = 0x26000, LENGTH = 0x3a000
   RAM (rwx) :  ORIGIN = 0x20003000, LENGTH = 0xd000
-  BOOTLOADER (rx) : ORIGIN = 0x70000, LENGTH = 0xe000
+  BOOTLOADER (rx) : ORIGIN = 0x70000, LENGTH = 0xE000
   
   script_page (r) : ORIGIN = 0x0006F000, LENGTH = 0x1000
   bootloader_settings_page (r) : ORIGIN = 0x0007F000, LENGTH = 0x1000
@@ -44,6 +44,12 @@ SECTIONS
     KEEP(*(SORT(.log_dynamic_data*)))
     PROVIDE(__stop_log_dynamic_data = .);
   } > RAM
+  .log_filter_data :
+  {
+    PROVIDE(__start_log_filter_data = .);
+    KEEP(*(SORT(.log_filter_data*)))
+    PROVIDE(__stop_log_filter_data = .);
+  } > RAM
   .cli_sorted_cmd_ptrs :
   {
     PROVIDE(__start_cli_sorted_cmd_ptrs = .);
@@ -56,7 +62,6 @@ SECTIONS
     KEEP(*(.fs_data))
     PROVIDE(__stop_fs_data = .);
   } > RAM
-
 } INSERT AFTER .data;
 
 SECTIONS
@@ -112,7 +117,25 @@ SECTIONS
     KEEP(*(SORT(.sdh_stack_observers*)))
     PROVIDE(__stop_sdh_stack_observers = .);
   } > FLASH
-    .cli_command :
+  .nrf_queue :
+  {
+    PROVIDE(__start_nrf_queue = .);
+    KEEP(*(.nrf_queue))
+    PROVIDE(__stop_nrf_queue = .);
+  } > FLASH
+  .nrf_balloc :
+  {
+    PROVIDE(__start_nrf_balloc = .);
+    KEEP(*(.nrf_balloc))
+    PROVIDE(__stop_nrf_balloc = .);
+  } > FLASH
+  .svc_data :
+  {
+    PROVIDE(__start_svc_data = .);
+    KEEP(*(.svc_data))
+    PROVIDE(__stop_svc_data = .);
+  } > FLASH
+  .cli_command :
   {
     PROVIDE(__start_cli_command = .);
     KEEP(*(.cli_command))
@@ -126,4 +149,4 @@ SECTIONS
   }
 } INSERT AFTER .text
 
-INCLUDE "nrf5x_common.ld"
+INCLUDE "nrf_common.ld"

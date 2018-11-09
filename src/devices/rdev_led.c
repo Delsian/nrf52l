@@ -164,8 +164,6 @@ RDevErrCode RDevLedCmd(const uint8_t* pData, uint8_t len)
 
 RDevErrCode RDevLedTick(uint8_t port, uint32_t time)
 {
-	int i;
-
 	if (ptPatternSeq) {
 		usTickCounter++;
 		if  ((usTickCounter>>4) > (ptPatternSeq->pt[ubPatternPtr].ticks)) {
