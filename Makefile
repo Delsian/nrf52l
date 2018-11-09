@@ -223,6 +223,7 @@ $(SDK_DIR)/components/libraries/bootloader/dfu \
 $(SDK_DIR)/components/libraries/bootloader/ble_dfu \
 $(SDK_DIR)/components/libraries/crc32 \
 $(SDK_DIR)/components/libraries/delay \
+$(SDK_DIR)/components/libraries/fds \
 $(SDK_DIR)/components/libraries/fstorage \
 $(SDK_DIR)/components/libraries/experimental_section_vars \
 $(SDK_DIR)/components/libraries/log \
@@ -283,7 +284,7 @@ DEVICE_CFLAGS=$(DEVICE_FLAGS) -mthumb-interwork
 # DEFINEs to be used when building C/C++ code
 DEFINES += -DNRF52 -DNRF52832 -DBOARD_CUSTOM -DNRF52832_XXAA -DNRF52_PAN_74 -DSWI_DISABLE0
 DEFINES += -DSOFTDEVICE_PRESENT -DS132 -DBLE_STACK_SUPPORT_REQD -DNRF_SD_BLE_API_VERSION=6
-DEFINES += -DNRF_DFU_SVCI_ENABLED -DCONFIG_GPIO_AS_PINRESET -DFLOAT_ABI_HARD
+DEFINES += -DNRF_DFU_SVCI_ENABLED -DCONFIG_GPIO_AS_PINRESET -DFLOAT_ABI_HARD -DUSE_TWI_MNGR
 
 ifeq "$(OPTIMIZATION)" "0"
 DEFINES += -DDEBUG

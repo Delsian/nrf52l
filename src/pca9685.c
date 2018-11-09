@@ -95,7 +95,8 @@ void PcaTransfer(const nrf_twi_mngr_transfer_t* trnsf, int count)
 #define PCA9685_SW_RESET            0x06 // Sent to address 0x00 to reset all devices on Wire line
 #define PCA9685_PWM_FULL            0x01000 // Special value for full on/full off LEDx modes
 
-void pca_wr_cb(ret_code_t result, void * p_user_data) {}
+static void pca_wr_cb(ret_code_t result, void * p_user_data) {}
+
 #define PINCTL_LEN 5
 static uint8_t pinctl[PINCTL_LEN];
 static nrf_twi_mngr_transfer_t transfers[] = { NRF_TWI_MNGR_WRITE(PCA9685_ADDR, pinctl, PINCTL_LEN, 0) };
@@ -221,7 +222,7 @@ const LedColor ColTable[3] = {
 		COLOR_BLUE,
 		COLOR_GREEN
 };
-// !! ToDo !!
+
 __WEAK void bsp_board_led_on(uint32_t led_idx)
 {
 	PcaLedColor(ColTable[led_idx]);

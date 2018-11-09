@@ -5,11 +5,11 @@ GROUP(-lgcc -lc -lnosys)
 
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x23000, LENGTH = 0x55000
+  FLASH (rx) : ORIGIN = 0x26000, LENGTH = 0x3a000
   RAM (rwx) :  ORIGIN = 0x20003000, LENGTH = 0xd000
-  BOOTLOADER (rx) : ORIGIN = 0x6D000, LENGTH = 0x11000
+  BOOTLOADER (rx) : ORIGIN = 0x70000, LENGTH = 0xE000
   
-  script_page (r) : ORIGIN = 0x0006C000, LENGTH = 0x1000
+  script_page (r) : ORIGIN = 0x0006F000, LENGTH = 0x1000
   bootloader_settings_page (r) : ORIGIN = 0x0007F000, LENGTH = 0x1000
   mbr_params_page (r) : ORIGIN = 0x0007E000, LENGTH = 0x1000
   uicr_mbr_params_page (r) : ORIGIN = 0x10001018, LENGTH = 0x4
@@ -128,6 +128,12 @@ SECTIONS
     PROVIDE(__start_nrf_balloc = .);
     KEEP(*(.nrf_balloc))
     PROVIDE(__stop_nrf_balloc = .);
+  } > FLASH
+  .svc_data :
+  {
+    PROVIDE(__start_svc_data = .);
+    KEEP(*(.svc_data))
+    PROVIDE(__stop_svc_data = .);
   } > FLASH
   .cli_command :
   {
