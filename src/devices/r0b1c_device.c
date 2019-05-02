@@ -72,12 +72,12 @@ const RDevDescriptor ptRDevices[] = {
 				.hTick = &RDevLedTick
 		},
 		// Gyro
-		{
-				.id = RDEV_GYRO,
-				.hInit = &RDevGyroInit,
-				.hCmd = &RDevGyroCmd,
-				.hTick = &RDevGyroTick
-		},
+//		{
+//				.id = RDEV_GYRO,
+//				.hInit = &RDevGyroInit,
+//				.hCmd = &RDevGyroCmd,
+//				.hTick = &RDevGyroTick
+//		},
 		// Buzzer
 		{
 				.id = RDEV_BUZZ
@@ -163,19 +163,18 @@ RDevErrCode RDeviceCmd(const uint8_t* pData, uint8_t len)
 static void RDevTickHandler()
 {
 	static uint32_t clock;
-	RDevErrCode tErr;
 
 	int i = 0;
 	for (;i<TOTAL_RJ_PORTS;i++) {
 		if (gpDevInPort[i].hTick)
-			tErr = (gpDevInPort[i].hTick)(i, clock);
+			(gpDevInPort[i].hTick)(i, clock);
 	}
 	i = 1;
 	while(1) {
 		if (ptRDevices[++i].id <= RDEV_INTERNAL) continue;
 		if (ptRDevices[i].id == RDEV_LAST) break;
 		if (ptRDevices[i].hTick)
-			tErr = (ptRDevices[i].hTick)(0, clock);
+			(ptRDevices[i].hTick)(0, clock);
 	}
 	clock ++;
 }

@@ -29,7 +29,7 @@ ADD_DEFINITIONS(
 	-D__HEAP_SIZE=8192
 	-D__STACK_SIZE=8192
 	-DNRFX_RNG_ENABLED=1
-	-DUSE_TWI_MNGR
+#	-DUSE_TWI_MNGR
 	)
 
 INCLUDE("../config/SDK.cmake")
@@ -71,7 +71,7 @@ SET(SOURCE_FILES
 	src/r0b1c_service.c
 	src/devices/battery.c
 	src/devices/dummy.c
-	src/devices/gyro.c
+#	src/devices/gyro.c
 	src/devices/jswrap_led.c
 	src/devices/jswrap_motor.c
 	src/devices/jswrap_range.c
@@ -107,26 +107,22 @@ INCLUDE_DIRECTORIES(
 	)
 
 ADD_EXECUTABLE(${CMAKE_PROJECT_NAME}.elf
+	${NRF52_STARTUP}
 	${SOURCE_FILES}
 	${SDK_LIB_SOURCES}
 	${SDK_BLE_SOURCES}
 	${SDK_MOD_DRV_SOURCES}
-	${NRF52_STARTUP}
 	${NRF52_SYSTEM}
 	${SDK_LOG_SOURCES}
-	${SDK_CRYPTO_SOURCES}
 	${ESPRUINO_FILES}
 	${SDK_EXT_FPRINTF_SOURCES}
 	)
 
-#ADD_LIBRARY(oberon STATIC IMPORTED)
-#set_target_properties( oberon PROPERTIES IMPORTED_LOCATION ${SDK_DIR}/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_2.0.7.a )
-#ADD_LIBRARY(micro_ecc STATIC IMPORTED)
-#set_target_properties(micro_ecc PROPERTIES IMPORTED_LOCATION ${SDK_DIR}/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a )
-#target_link_libraries(${CMAKE_PROJECT_NAME}.elf 
-#	oberon
-#	micro_ecc
-#	)
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME}.elf 
+	m
+	c
+	nosys
+	)
 
 # Convert elf to hex & bin
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf 
@@ -142,16 +138,30 @@ ADD_CUSTOM_TARGET(flashsd
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${SOFTDEVICE_PATH}
     COMMENT "Flashing Softdevice"
     )
+
 SET(S_PARAM --application-version 1 --bootloader-version 1 --bl-settings-version 1)
 ADD_CUSTOM_TARGET(settings
-    COMMAND ${NRFUTIL_PATH} settings generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex ${S_PARAM} ${SETTINGS_HEX}  	 
+    COMMAND ${NRFUTIL} settings generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex ${S_PARAM} ${SETTINGS_HEX}  	 
     COMMENT "Generate bootloader settings"
     )
+
+# Create DFU package with version from tag    
+SET(KEY_FILE ../config/private.pem)
+ADD_CUSTOM_TARGET(dfu
+	COMMAND git describe --tags
+	EXECUTE_PROCESS(COMMAND git describe --tags
+		OUTPUT_VARIABLE SW_VER)
+#    COMMAND ${NRFUTIL} pkg generate --hw-version 52 --application ${CMAKE_PROJECT_NAME}.hex --key-file ${KEY_FILE} --sd-req 0x9D --application-version-string ${SW_VER} dfu.zip  	 
+    COMMENT "Generate DFU package"
+    )
+
+# Derict FW flashing
 ADD_CUSTOM_TARGET(flash
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${CMAKE_PROJECT_NAME}.hex --sectorerase
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} -r
     COMMENT "Flashing program"
     )
+
 ADD_CUSTOM_TARGET(configure
     COMMAND java -jar ${SDK_CONFIG_TOOL} ${SDK_CONFIG_FILE}
     COMMENT "Configure SDK"

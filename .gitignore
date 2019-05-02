@@ -65,3 +65,5 @@ version\.txt
 /CMakeCache.txt
 /CMakeFiles
 /cmake_install.cmake
+/src/js/jswrapper.c
+*.bin

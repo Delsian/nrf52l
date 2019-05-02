@@ -75,7 +75,7 @@ void ControlPost(const ControlEvent* evt)
 
 void ControlInit()
 {
-    APP_SCHED_INIT(sizeof(ControlEvent), 8);
+    APP_SCHED_INIT(sizeof(ControlEvent), 16);
 
 }
 

@@ -16,7 +16,7 @@
 #include "crc32.h"
 #include "control.h"
 
-uint8_t m_dfu_settings_buffer[1024]
+uint8_t m_dfu_settings_buffer[CODE_PAGE_SIZE]
     __attribute__((section(".bootloader_settings_page")))
     __attribute__((used));
 

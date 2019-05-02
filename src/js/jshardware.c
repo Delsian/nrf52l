@@ -22,14 +22,14 @@ bool jshFlashGetPage(uint32_t addr, uint32_t * startAddr, uint32_t * pageSize) {
 // Just pass data through, since we can access flash at the same address we wrote it
 size_t jshFlashGetMemMapAddress(size_t ptr) { return ptr; }
 
-JsfFileName jsfNameFromString(const char *name) {
-	assert(strlen(name)<=8);
-	char nameBuf[sizeof(JsfFileName)+1];
-	memset(nameBuf,0,sizeof(nameBuf));
-	strcpy(nameBuf,name);
-	return *(JsfFileName*)nameBuf;
-}
+//JsfFileName jsfNameFromString(const char *name) {
+//	assert(strlen(name)<=8);
+//	char nameBuf[sizeof(JsfFileName)+1];
+//	memset(nameBuf,0,sizeof(nameBuf));
+//	strcpy(nameBuf,name);
+//	return *(JsfFileName*)nameBuf;
+//}
 
-JsVar *jsfReadFile(JsfFileName name) {
-	return 0;
-}
+//JsVar *jsfReadFile(JsfFileName name) {
+//	return 0;
+//}
