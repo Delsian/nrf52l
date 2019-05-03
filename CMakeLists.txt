@@ -113,9 +113,9 @@ ADD_EXECUTABLE(${CMAKE_PROJECT_NAME}.elf
 	${SDK_BLE_SOURCES}
 	${SDK_MOD_DRV_SOURCES}
 	${NRF52_SYSTEM}
-	${SDK_LOG_SOURCES}
 	${ESPRUINO_FILES}
 	${SDK_EXT_FPRINTF_SOURCES}
+	${SDK_LOG_SOURCES}
 	)
 
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME}.elf 
@@ -141,22 +141,23 @@ ADD_CUSTOM_TARGET(flashsd
 
 SET(S_PARAM --application-version 1 --bootloader-version 1 --bl-settings-version 1)
 ADD_CUSTOM_TARGET(settings
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ${NRFUTIL} settings generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex ${S_PARAM} ${SETTINGS_HEX}  	 
     COMMENT "Generate bootloader settings"
     )
 
 # Create DFU package with version from tag    
-SET(KEY_FILE ../config/private.pem)
-ADD_CUSTOM_TARGET(dfu
-	COMMAND git describe --tags
-	EXECUTE_PROCESS(COMMAND git describe --tags
-		OUTPUT_VARIABLE SW_VER)
+#SET(KEY_FILE ../config/private.pem)
+ADD_CUSTOM_TARGET(dfupkg
+	DEPENDS ${CMAKE_PROJECT_NAME}.elf
+	execute_process(COMMAND git describe --tags --abbrev=0 OUTPUT_VARIABLE VERSION_TXT)
 #    COMMAND ${NRFUTIL} pkg generate --hw-version 52 --application ${CMAKE_PROJECT_NAME}.hex --key-file ${KEY_FILE} --sd-req 0x9D --application-version-string ${SW_VER} dfu.zip  	 
-    COMMENT "Generate DFU package"
+    COMMENT "Generate DFU package ${VERSION_TXT}"
     )
 
 # Derict FW flashing
 ADD_CUSTOM_TARGET(flash
+	DEPENDS ${CMAKE_PROJECT_NAME}.elf
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${CMAKE_PROJECT_NAME}.hex --sectorerase
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} -r
     COMMENT "Flashing program"
