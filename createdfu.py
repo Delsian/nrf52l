@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from firebase import firebase
+#from firebase import firebase
 import os, subprocess
     
 KEY_PEM="../config/private.pem"

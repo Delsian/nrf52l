@@ -153,27 +153,8 @@ static void advertising_init(void)
     ble_uuid_t adv_uuids[] = {
         {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
         //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
-        {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+        //{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
     };
-    #if 0
-    ret_code_t    err_code;
-    ble_advdata_t advdata;
-    ble_advdata_t srdata;
-
-    // Build and set advertising data
-    memset(&advdata, 0, sizeof(advdata));
-
-    advdata.name_type          = BLE_ADVDATA_FULL_NAME;
-    advdata.include_appearance = true;
-    advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
-
-    memset(&srdata, 0, sizeof(srdata));
-    srdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
-    srdata.uuids_complete.p_uuids  = adv_uuids;
-
-    err_code = ble_advdata_set(&advdata, &srdata);
-    APP_ERROR_CHECK(err_code);
-    #else
     ret_code_t             err_code;
     ble_advertising_init_t init;
 
@@ -195,8 +176,6 @@ static void advertising_init(void)
     APP_ERROR_CHECK(err_code);
 
     ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
-
-    #endif
 }
 
 /**@brief Function for starting advertising.
@@ -443,6 +422,13 @@ void ble_stack_init()
     // Fetch the start address of the application RAM.
     uint32_t ram_start = 0;
     err_code = nrf_sdh_ble_default_cfg_set(APP_BLE_CONN_CFG_TAG, &ram_start);
+    APP_ERROR_CHECK(err_code);
+
+    // Enable vendor-specific UUIDs
+    ble_cfg_t ble_cfg;
+        memset(&ble_cfg, 0x00, sizeof(ble_cfg));
+    ble_cfg.common_cfg.vs_uuid_cfg.vs_uuid_count = 2;
+    err_code = sd_ble_cfg_set(BLE_COMMON_CFG_VS_UUID, &ble_cfg, ram_start);
     APP_ERROR_CHECK(err_code);
 
     // Enable BLE stack.
