@@ -126,10 +126,10 @@ TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME}.elf
 
 # Convert elf to hex & bin
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf 
-	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -Oihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.hex
+	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -R .rtt -Oihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.hex
 	)
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf
-	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -Obinary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin
+	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -R .rtt -Obinary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin
 	)
 
 # adds target for erasing and flashing the board
@@ -139,10 +139,14 @@ ADD_CUSTOM_TARGET(flashsd
     COMMENT "Flashing Softdevice"
     )
 
-SET(S_PARAM --application-version 1 --bootloader-version 1 --bl-settings-version 1)
+SET(S_PARAM --application-version 0 --bootloader-version 0 --bl-settings-version 1)
+SET(S_APPCMD generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex)
 ADD_CUSTOM_TARGET(settings
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${NRFUTIL} settings generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex ${S_PARAM} ${SETTINGS_HEX}  	 
+    COMMAND ${NRFUTIL} settings ${S_APPCMD} ${S_PARAM} ${SETTINGS_HEX}  	 
+#    COMMAND ${NRFUTIL} settings ${S_APPCMD} --start-address 0x7E000 ${S_PARAM} ${SETTINGS_HEX}.bak
+    COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${SETTINGS_HEX} --sectorerase
+#    COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${SETTINGS_HEX}.bak --sectorerase
     COMMENT "Generate bootloader settings"
     )
 
