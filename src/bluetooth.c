@@ -21,6 +21,10 @@
 #include "nrf_dfu_types.h"
 #include "rdev_led.h"
 
+#define MANUFACTURER_NAME "EugKrashtan"
+#define MODEL_NAME "r0b1c-v1"
+#define HW_REVISION_STR "00.00.01"
+
 #define APP_BLE_OBSERVER_PRIO           2
 #define APP_BLE_CONN_CFG_TAG            1
 
@@ -119,98 +123,64 @@ static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
     }
 }
 
-BLE_ADVERTISING_DEF(m_advertising);                                 /**< Advertising module instance. */
-
-/**@brief Function for handling advertising events.
- *
- * @details This function will be called for advertising events which are passed to the application.
- *
- * @param[in] ble_adv_evt  Advertising event.
- */
-static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
+static uint8_t m_adv_handle = BLE_GAP_ADV_SET_HANDLE_NOT_SET;                   /**< Advertising handle used to identify an advertising set. */
+static uint8_t m_enc_advdata[BLE_GAP_ADV_SET_DATA_SIZE_MAX];                    /**< Buffer for storing an encoded advertising set. */
+static uint8_t m_enc_scan_response_data[BLE_GAP_ADV_SET_DATA_SIZE_MAX];
+static ble_gap_adv_data_t m_adv_data =
 {
-    //ret_code_t err_code;
-
-    switch (ble_adv_evt)
+    .adv_data =
     {
-        case BLE_ADV_EVT_FAST:
-            NRF_LOG_INFO("Fast advertising.");
-            //err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
-            //APP_ERROR_CHECK(err_code);
-            break;
+        .p_data = m_enc_advdata,
+        .len    = BLE_GAP_ADV_SET_DATA_SIZE_MAX
+    },
+    .scan_rsp_data =
+    {
+        .p_data = m_enc_scan_response_data,
+        .len    = BLE_GAP_ADV_SET_DATA_SIZE_MAX
 
-        case BLE_ADV_EVT_IDLE:
-            //sleep_mode_enter();
-            break;
-
-        default:
-            break;
     }
-}
+};
 
 static void advertising_init(void)
 {
     ble_uuid_t adv_uuids[] = {
         {gtServices.tServices[0]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
         //{gtServices.tServices[1]->ptVars->tUuid.uuid, BLE_UUID_TYPE_VENDOR_BEGIN},
-        //{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+        {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
     };
-    ret_code_t             err_code;
-    ble_advertising_init_t init;
-
-    memset(&init, 0, sizeof(init));
-
-    init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
-    init.advdata.include_appearance      = true;
-    init.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
-    init.advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
-    init.advdata.uuids_complete.p_uuids  = adv_uuids;
-
-    init.config.ble_adv_fast_enabled  = true;
-    init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
-    init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
-
-    init.evt_handler = on_adv_evt;
-
-    err_code = ble_advertising_init(&m_advertising, &init);
-    APP_ERROR_CHECK(err_code);
-
-    ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
-}
-
-/**@brief Function for starting advertising.
- */
-static void advertising_start(bool erase_bonds)
-{
-    #if 0
     ret_code_t           err_code;
+    ble_advdata_t        advdata;
+    ble_advdata_t        srdata;
     ble_gap_adv_params_t adv_params;
 
-    // Start advertising
-    memset(&adv_params, 0, sizeof(adv_params));
+    // Build and set advertising data.
+    memset(&advdata, 0, sizeof(advdata));
+    advdata.name_type             = BLE_ADVDATA_FULL_NAME;
+    advdata.flags              = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 
-    adv_params.type        = BLE_GAP_ADV_TYPE_ADV_IND;
-    adv_params.p_peer_addr = NULL;
-    adv_params.fp          = BLE_GAP_ADV_FP_ANY;
-    adv_params.interval    = APP_ADV_INTERVAL;
-    adv_params.timeout     = BLE_GAP_ADV_TIMEOUT_GENERAL_UNLIMITED;
+    memset(&srdata, 0, sizeof(srdata));
+    srdata.name_type          = BLE_ADVDATA_NO_NAME;
+    srdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
+    srdata.uuids_complete.p_uuids  = adv_uuids;
 
-    err_code = sd_ble_gap_adv_start(&adv_params, APP_BLE_CONN_CFG_TAG);
+    err_code = ble_advdata_encode(&advdata, m_adv_data.adv_data.p_data, &m_adv_data.adv_data.len);
     APP_ERROR_CHECK(err_code);
-    #else
-    if (erase_bonds == true)
-    {
-        //delete_bonds();
-        // Advertising is started by PM_EVT_PEERS_DELETE_SUCCEEDED event.
-    }
-    else
-    {
-        ret_code_t err_code;
 
-        err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
-        APP_ERROR_CHECK(err_code);
-    }
-    #endif
+    err_code = ble_advdata_encode(&srdata, m_adv_data.scan_rsp_data.p_data, &m_adv_data.scan_rsp_data.len);
+    APP_ERROR_CHECK(err_code);
+
+    // Start advertising.
+    memset(&adv_params, 0, sizeof(adv_params));
+    adv_params.p_peer_addr   = NULL;
+    adv_params.filter_policy = BLE_GAP_ADV_FP_ANY;
+    adv_params.interval      = APP_ADV_INTERVAL;
+
+    adv_params.properties.type = BLE_GAP_ADV_TYPE_CONNECTABLE_SCANNABLE_UNDIRECTED;
+    adv_params.duration        = APP_ADV_DURATION;
+    adv_params.primary_phy     = BLE_GAP_PHY_1MBPS;
+
+    err_code = sd_ble_gap_adv_set_configure(&m_adv_handle, &m_adv_data, &adv_params);
+    APP_ERROR_CHECK(err_code);
 }
 
 static void gap_params_init(void)
@@ -255,7 +225,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         	NRF_LOG_INFO("Disconnected");
         	RDevLedClearIndication(LED_IND_BTCONN);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
-            advertising_start(false);
+            sd_ble_gap_adv_start(m_adv_handle, APP_BLE_CONN_CFG_TAG);
             break;
 
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
@@ -385,8 +355,18 @@ static void services_init(void)
 
     // Initialize Device Information Service
     memset(&dis_init, 0, sizeof(dis_init));
-    nrf_dfu_settings_t* ptNrfDfuSettings = (nrf_dfu_settings_t*)BOOTLOADER_SETTINGS_ADDRESS;
 
+    ble_srv_ascii_to_utf8(&dis_init.manufact_name_str, MANUFACTURER_NAME);
+    ble_srv_ascii_to_utf8(&dis_init.model_num_str, MODEL_NAME);
+    ble_srv_ascii_to_utf8(&dis_init.hw_rev_str, HW_REVISION_STR);
+
+    char serial[12];
+    // NRF_FICR->DEVICEADDR[] contains randomly generated address. Use it as serial
+    const uint32_t *addr = (const uint32_t*)NRF_FICR->DEVICEADDR;
+    sprintf(serial, "%lu", *addr);
+    ble_srv_ascii_to_utf8(&dis_init.serial_num_str, serial);
+
+    nrf_dfu_settings_t* ptNrfDfuSettings = (nrf_dfu_settings_t*)BOOTLOADER_SETTINGS_ADDRESS;
     uint32_t ulVer = ptNrfDfuSettings->app_version;
     uint8_t v1 = ulVer/10000;
     uint8_t v2 = (ulVer-v1*10000)/100;
@@ -462,7 +442,7 @@ void ble_stack_init()
     err_code = ble_conn_params_init(&cp_init);
     APP_ERROR_CHECK(err_code);
 
-    advertising_start(false);
+    sd_ble_gap_adv_start(m_adv_handle, APP_BLE_CONN_CFG_TAG);
 
     // Call after service initialization (set callbacks etc)
     if (gtServices.initCompl) {
