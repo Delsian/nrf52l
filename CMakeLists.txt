@@ -24,11 +24,8 @@ ADD_DEFINITIONS(
 	-DuECC_SQUARE_FUNC=0
 	-DuECC_SUPPORT_COMPRESSED_POINT=0
 	-DuECC_VLI_NATIVE_LITTLE_ENDIAN=1
-	-DNRF_CRYPTO_MAX_INSTANCE_COUNT=1
-	-DMBEDTLS_CONFIG_FILE=\"nrf_crypto_mbedtls_config.h\"
 	-D__HEAP_SIZE=8192
 	-D__STACK_SIZE=8192
-	-DNRFX_RNG_ENABLED=1
 #	-DUSE_TWI_MNGR
 	)
 
@@ -125,8 +122,14 @@ TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME}.elf
 	)
 
 # Convert elf to hex & bin
+execute_process(COMMAND git describe --tags --abbrev=0 OUTPUT_VARIABLE VERSION_TXT)
+STRING(REGEX REPLACE "[.\r\n]" "" VERSION ${VERSION_TXT})
+SET(S_PARAM --bootloader-version 0 --bl-settings-version 1)
+SET(S_APPCMD generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.out)
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf 
-	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -R .rtt -Oihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.hex
+	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -R .rtt -Oihex ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.out
+	POST_BUILD COMMAND ${NRFUTIL} settings ${S_APPCMD} --application-version ${VERSION} ${S_PARAM} ${SETTINGS_HEX}
+	POST_BUILD COMMAND ${MERGEHEX} -m ${CMAKE_PROJECT_NAME}.out ${SETTINGS_HEX} -o ${CMAKE_PROJECT_NAME}.hex
 	)
 ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME}.elf
 	POST_BUILD COMMAND ${CMAKE_OBJCOPY} ARGS -R .rtt -Obinary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin
@@ -139,24 +142,18 @@ ADD_CUSTOM_TARGET(flashsd
     COMMENT "Flashing Softdevice"
     )
 
-SET(S_PARAM --application-version 0 --bootloader-version 0 --bl-settings-version 1)
-SET(S_APPCMD generate --family ${TARGET_PLATFORM} --application ${CMAKE_PROJECT_NAME}.hex)
 ADD_CUSTOM_TARGET(settings
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${NRFUTIL} settings ${S_APPCMD} ${S_PARAM} ${SETTINGS_HEX}  	 
-#    COMMAND ${NRFUTIL} settings ${S_APPCMD} --start-address 0x7E000 ${S_PARAM} ${SETTINGS_HEX}.bak
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}	 
     COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${SETTINGS_HEX} --sectorerase
-#    COMMAND ${NRFJPROG} -f ${TARGET_PLATFORM} --program ${SETTINGS_HEX}.bak --sectorerase
     COMMENT "Generate bootloader settings"
     )
 
 # Create DFU package with version from tag    
-#SET(KEY_FILE ../config/private.pem)
+SET(KEY_FILE ../config/private.pem)
 ADD_CUSTOM_TARGET(dfupkg
 	DEPENDS ${CMAKE_PROJECT_NAME}.elf
-	execute_process(COMMAND git describe --tags --abbrev=0 OUTPUT_VARIABLE VERSION_TXT)
-#    COMMAND ${NRFUTIL} pkg generate --hw-version 52 --application ${CMAKE_PROJECT_NAME}.hex --key-file ${KEY_FILE} --sd-req 0x9D --application-version-string ${SW_VER} dfu.zip  	 
-    COMMENT "Generate DFU package ${VERSION_TXT}"
+    COMMAND ${NRFUTIL} pkg generate --hw-version 52 --application ${CMAKE_PROJECT_NAME}.out --key-file ${KEY_FILE} --sd-req 0x9D --application-version-string ${VERSION} dfu.zip  	 
+    COMMENT "Generate DFU package ver.${VERSION}"
     )
 
 # Derict FW flashing
