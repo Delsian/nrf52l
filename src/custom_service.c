@@ -156,7 +156,7 @@ static void ble_custom_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
     }
 }
 
-void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen)
+void CustomServiceSend(uint16_t iusChar, const uint8_t *pubData, uint16_t iusLen)
 {
 	static uint16_t len;
 	nrf_mtx_trylock(&tMtxNotify);

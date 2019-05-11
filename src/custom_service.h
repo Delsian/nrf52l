@@ -60,9 +60,9 @@ typedef struct _CustomService {
 } tCustomService;
 
 typedef struct _DeviceDescription {
-	uint8_t					pubDeviceName[20]; // Size equal to AdvName in DFU
+	const uint8_t*			pubDeviceName;
 	CustServInitComplete*	initCompl; // Custom service init complete callback
-	const tCustomService*	tServices[];
+	const tCustomService*	tServices[2]; // Up to two Custom UUIDS
 } tDevDescription;
 
 // Define this structure in external module
@@ -72,6 +72,6 @@ extern const tDevDescription gtServices;
 
 ret_code_t CustomServiceInit(const tCustomService* itServ);
 uint16_t GetConnectionHandle(void);
-void CustomServiceSend(uint16_t iusChar, uint8_t *pubData, uint16_t iusLen);
+void CustomServiceSend(uint16_t iusChar, const uint8_t *pubData, uint16_t iusLen);
 ret_code_t CustomServiceValueSet(uint16_t iusChar, uint8_t* ipubData, uint8_t iubLen);
 void CustGetDeviceName(uint8_t* opubBuf);
